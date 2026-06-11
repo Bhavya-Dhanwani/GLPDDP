@@ -1,7 +1,7 @@
 // Importing moduels
 import { config } from 'dotenv';
 import z from 'zod/v4';
-import envsConstants from '../constants/db.constants.js';
+import envsConstants from '../constants/env.constants.js';
 
 // Load environment variables from .env file and set debug/quiet mode based on NODE_ENV
 config({
@@ -17,7 +17,9 @@ const envSchema = z.object({
     DB_URI: z.string().default(envsConstants.DB_URI),
     LOG_LEVEL: z.enum(['error', 'warn', 'info', 'debug']).default(envsConstants.LOG_LEVEL),
     API_LIMIT: z.coerce.number().default(envsConstants.API_LIMIT),
-    FRONTEND_URL: z.string().default(envsConstants.FRONTEND_URL)
+    FRONTEND_URL: z.string().default(envsConstants.FRONTEND_URL),
+    JWT_ACCESS_SECRET: z.string(),
+    JWT_REFRESH_SECRET: z.string(),
 }).strip(); // Strip out any extra environment variables that are not defined in the schema
 
 // Validate environment variables

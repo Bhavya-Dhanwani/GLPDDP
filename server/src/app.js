@@ -19,12 +19,13 @@ function createApp() {
     app.get('/health', (req, res) => {
         return ApiResponse(res, 200, 'Service is running smoothly');
     });
+    
+    // adding the main router
+    app.use("/api" ,mainRouter);
 
     // adding the not found handler
     app.use(notFoundHandler);
 
-    // adding the main router
-    app.use("/api" ,mainRouter);
 
     // adding the error middlware
     app.use(errorMiddleware);
