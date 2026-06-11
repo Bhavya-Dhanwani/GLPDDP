@@ -46,6 +46,44 @@ class AuthService {
 
         return { user: sanitizedUser, refreshToken };
     }
+
+    async loginService(email, password) {
+
+        // Find if email exist or not
+        const user = await this.authRepository.findUserByEmail(email);
+
+        if (!user) {
+            throw new ApiError(404, "User not found");
+        }
+
+        // checking the password
+        const isPasswordValid = await user.comparePassword(password);
+
+        if (!isPasswordValid) {
+            throw new ApiError(401, "Invalid credentials");
+        }
+
+        // making the access token
+        const accessToken = generateAccessToken(user);
+
+        // making the session token
+        const sessionId = this.sessionRepository.getSessionId();
+
+        // making the refresh token
+        const refreshToken = generateRefreshToken(sessionId, user._id);
+
+        // creating the session
+        const session = await this.sessionRepository.createSession({
+            _id: sessionId,
+            refreshToken,
+            userId: user._id
+        });
+
+        // sanitizing the user
+        const sanitizedUser = sanitizeUser(user, accessToken);
+
+        return { user: sanitizedUser, refreshToken };
+    }
 }
 
 export default AuthService;

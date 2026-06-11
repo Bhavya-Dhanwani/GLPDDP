@@ -23,4 +23,17 @@ const signupValidator = [
     .withMessage("Password must be at least 8 characters long")
 ];
 
-export { signupValidator };
+const loginValidator = [
+    body("email")
+    .trim()
+    .isEmpty()
+    .withMessage("Email is required")
+    .isEmail()
+    .withMessage("Invalid email format"),
+
+    body("password")
+    .isEmpty()
+    .withMessage("Password is required")
+];
+
+export { signupValidator, loginValidator };
