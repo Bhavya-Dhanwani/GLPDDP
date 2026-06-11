@@ -1,3 +1,5 @@
+import ApiResponse from "../../shared/utils/ApiResponse.utils";
+
 export class SeriesController {
     constructor(seriesService) {
         this.seriesService = seriesService;
@@ -10,20 +12,14 @@ export class SeriesController {
                 req.user.id
             );
 
-        return res.status(201).json({
-            success: true,
-            data: series,
-        });
+        return ApiResponse(res, 201, "Series created successfully", series);
     };
 
     getAllSeries = async (req, res) => {
         const series =
             await this.seriesService.getAllSeries();
 
-        return res.status(200).json({
-            success: true,
-            data: series,
-        });
+        return ApiResponse(res, 200, "Series fetched successfully", series);
     };
 
     getSeriesById = async (req, res) => {
@@ -32,10 +28,7 @@ export class SeriesController {
                 req.params.id
             );
 
-        return res.status(200).json({
-            success: true,
-            data: series,
-        });
+        return ApiResponse(res, 200, "Series fetched successfully", series);
     };
 
     updateSeries = async (req, res) => {
@@ -46,10 +39,7 @@ export class SeriesController {
                 req.user.id
             );
 
-        return res.status(200).json({
-            success: true,
-            data: series,
-        });
+        return ApiResponse(res, 200, "Series updated successfully", series);
     };
 
     deleteSeries = async (req, res) => {
@@ -58,9 +48,6 @@ export class SeriesController {
                 req.params.id
             );
 
-        return res.status(200).json({
-            success: true,
-            data: series,
-        });
+        return ApiResponse(res, 200, "Series deleted successfully", series);
     };
 }

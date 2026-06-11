@@ -4,5 +4,3 @@ export const SERIES_STATUS = {
     LIVE:"LIVE", 
     COMPLETED:"COMPLETED"
 }
-
-// Other model constants can be added here as needed in the future

@@ -1,7 +1,5 @@
-import {
-    ConflictError,
-    NotFoundError,
-} from "../../shared/errors";
+
+import ApiError from '../../shared/utils/ApiError.util';
 
 export class SeriesService {
     constructor(seriesRepository, matchRepository) {
@@ -16,8 +14,9 @@ export class SeriesService {
             );
 
         if (existingName) {
-            throw new ConflictError(
-                "Series name already exists"
+            throw new ApiError(
+                statusCode = 409,
+                message = "Series name already exists"
             );
         }
 
@@ -27,8 +26,9 @@ export class SeriesService {
             );
 
         if (existingSeason) {
-            throw new ConflictError(
-                "Series season already exists"
+            throw new ApiError(
+                statusCode = 409,
+                message = "Series season already exists"
             );
         }
 
@@ -47,8 +47,9 @@ export class SeriesService {
             await this.seriesRepository.findById(id);
 
         if (!series) {
-            throw new NotFoundError(
-                "Series not found"
+            throw new ApiError(
+                statusCode = 404,
+                message = "Series not found"
             );
         }
 
@@ -60,8 +61,9 @@ export class SeriesService {
             await this.seriesRepository.findById(id);
 
         if (!existingSeries) {
-            throw new NotFoundError(
-                "Series not found"
+            throw new ApiError(
+                statusCode = 404,
+                message = "Series not found"
             );
         }
 
@@ -75,8 +77,9 @@ export class SeriesService {
                 );
 
             if (existingName) {
-                throw new ConflictError(
-                    "Series name already exists"
+                throw new ApiError(
+                    statusCode = 409,
+                    message = "Series name already exists"
                 );
             }
         }
@@ -91,8 +94,9 @@ export class SeriesService {
                 );
 
             if (existingSeason) {
-                throw new ConflictError(
-                    "Series season already exists"
+                throw new ApiError(
+                    statusCode = 409,
+                    message = "Series season already exists"
                 );
             }
         }
@@ -111,8 +115,9 @@ export class SeriesService {
             await this.seriesRepository.findById(id);
 
         if (!series) {
-            throw new NotFoundError(
-                "Series not found"
+            throw new ApiError(
+                statusCode = 404,
+                message = "Series not found"
             );
         }
 
@@ -122,8 +127,9 @@ export class SeriesService {
             });
 
         if (matchExists) {
-            throw new ConflictError(
-                "Cannot delete series because matches exist"
+            throw new ApiError(
+                statusCode = 409,
+                message ="Cannot delete series with existing matches"
             );
         }
 

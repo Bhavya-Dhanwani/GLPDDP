@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { SERIES_STATUS } from '../../shared/constants/model.constants';
+import { SERIES_STATUS } from './series.constant.js'
 const seriesSchema = new Schema(
     {
         name: { type: String, required: true, trim: true, unique: true },
