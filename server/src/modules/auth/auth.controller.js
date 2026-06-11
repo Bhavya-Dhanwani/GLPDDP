@@ -52,6 +52,44 @@ class AuthController {
         // returning the response
         return ApiResponse(res, 200, "User logged in successfully", response.user);
     }
+
+    verifyController = async (req, res) => {
+
+        // accepting the data
+        const { otp } = req.body;
+        const userId = req.user._id;
+
+        if (req.user.isVerified) {
+
+            // returning the response
+            return ApiResponse(res, 200, "Email already verified");
+
+        }
+
+        // calling the verify service
+        await this.authService.verifyService(userId, otp);
+
+        // returning the response
+        return ApiResponse(res, 200, "Email verified successfully");
+
+    }
+
+    resendOTPController = async (req, res) => {
+
+        // accepting the data
+        const userId = req.user._id;
+        const email = req.user.email;
+
+        if (req.user.isVerified) {
+            return ApiResponse(res, 400, "Email already verified");
+        }
+
+        // calling the resend otp service
+        await this.authService.resendOtpService(userId, email);
+
+        // returning the response
+        return ApiResponse(res, 200, "OTP sent successfully");
+    }
 }
 
 export default AuthController;

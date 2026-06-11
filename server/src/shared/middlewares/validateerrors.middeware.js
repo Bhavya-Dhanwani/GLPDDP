@@ -2,6 +2,7 @@
 import pkg from 'express-validator';
 const { validationResult } = pkg;
 import ApiError from '../utils/ApiError.util.js';
+import BadRequest from '../errors/badrequest.error.js';
 
 // middleware to handle the validation errors
 function validateErrors(req, res, next) {
@@ -12,7 +13,7 @@ function validateErrors(req, res, next) {
     if (!errors.isEmpty()) {
         
         //if errors send only err number 1
-        throw new ApiError(400, errors.array()[0].msg);
+        throw new BadRequest(errors.array()[0].msg);
     }
     
     next();

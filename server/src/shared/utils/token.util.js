@@ -3,14 +3,15 @@ import jwt from 'jsonwebtoken';
 import env from '../config/env.config.js';
 
 // function to generate the accesss token
-function generateAccessToken({ _id, email, role, name }) {
+function generateAccessToken({ _id, email, role, name, isVerified }) {
 
     const accessToken = jwt.sign(
         {
             id: _id,
             name,
             email,
-            role
+            role,
+            isVerified
         },
         env.JWT_ACCESS_SECRET,
         { expiresIn: '15m' }
@@ -55,10 +56,39 @@ function decodeRefreshToken(token) {
     }
 }
 
+function generateOtp(length = 6) {
+
+    // setting the boundairies for the otp
+    const min = Math.pow(10, length - 1);
+    const max = Math.pow(10, length) - 1;
+
+    // generating the otp
+    const otp = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    return otp;
+}
+
+function generateResetToken(length = 32) {
+
+    // setting the characters for the reset token
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    
+    let resetToken = '';
+
+    // generating the reset token
+    for (let i = 0; i < length; i++) {
+        resetToken += characters[Math.floor(Math.random() * characters.length)];
+    }
+
+    return resetToken;
+}
+
 // exporting the functions
 export {
     generateAccessToken,
     generateRefreshToken,
     decodeAccessToken,
-    decodeRefreshToken
+    decodeRefreshToken,
+    generateOtp,
+    generateResetToken
 }

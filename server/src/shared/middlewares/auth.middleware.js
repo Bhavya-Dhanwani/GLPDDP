@@ -1,6 +1,7 @@
 // Importing modules
 import env from '../config/env.config.js';
 import { decodeAccessToken } from '../utils/token.util.js';
+import Unauthorized from '../errors/unauthorized.error.js';
 
 // making the auth middleware to authenticate the user
 function authMiddleware(req, res, next) {
@@ -8,7 +9,7 @@ function authMiddleware(req, res, next) {
     // checking if bearer token is present in the header or not
     const authHeader = req.headers['authorization'];
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        throw new ApiError(403, "forbidden");
+        throw new Unauthorized("User Unauthorized");
     }
 
     // getting the token from the header
@@ -16,9 +17,9 @@ function authMiddleware(req, res, next) {
 
     // verifying the token
     const decoded = decodeAccessToken(token);
-    
+
     if (decoded == null) {
-        throw new ApiError(401, "Unauthorized");
+        throw new Unauthorized("User Unauthorized");
     }
 
     // setting the user in the request object
@@ -26,3 +27,5 @@ function authMiddleware(req, res, next) {
 
     next();
 }
+
+export default authMiddleware;
