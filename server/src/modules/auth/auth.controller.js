@@ -57,7 +57,7 @@ class AuthController {
 
         // accepting the data
         const { otp } = req.body;
-        const userId = req.user._id;
+        const userId = req.user.id;
 
         if (req.user.isVerified) {
 
@@ -77,7 +77,7 @@ class AuthController {
     resendOTPController = async (req, res) => {
 
         // accepting the data
-        const userId = req.user._id;
+        const userId = req.user.id;
         const email = req.user.email;
 
         if (req.user.isVerified) {

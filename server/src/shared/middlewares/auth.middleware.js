@@ -8,6 +8,7 @@ function authMiddleware(req, res, next) {
 
     // checking if bearer token is present in the header or not
     const authHeader = req.headers['authorization'];
+    
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         throw new Unauthorized("User Unauthorized");
     }

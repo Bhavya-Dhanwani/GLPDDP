@@ -24,7 +24,7 @@ class TokenRepository {
     async findOneToken(data) {
  
         // finding the token
-        const token = await this.tokenModel.findOne(data);
+        const token = await this.tokenModel.findOne(data).populate('userId');
  
         //returning the token
         return token;
@@ -43,7 +43,7 @@ class TokenRepository {
     async updateOneToken(filter, update) {
 
         // updating the token
-        const token = await this.tokenModel.findOneAndUpdate(filter, update, { new: true });
+        const token = await this.tokenModel.findOneAndUpdate(filter, update, { returnDocument: "after" });
 
         // returning the token
         return token;

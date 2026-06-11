@@ -22,6 +22,15 @@ class AuthRepository {
         const user = await this.userModel.create(userData);
         return user;
     }
+
+    async updateUser(filter, update) {
+
+        // updating the user
+        const user = await this.userModel.findOneAndUpdate(filter, update, { returnDocument: "after"  });
+        
+        // returning the updated user
+        return user;
+    }
 }
 
 export default AuthRepository;

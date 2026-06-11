@@ -36,7 +36,7 @@ class TokenService {
     async verifyOtp(userId, otp) {
 
         // finding the token
-        const token = await this.tokenRepository.findOneToken({ userId, type: "otp" }).populate('userId');
+        const token = await this.tokenRepository.findOneToken({ userId, type: "otp" });
 
         // if token not found
         if (!token) {
