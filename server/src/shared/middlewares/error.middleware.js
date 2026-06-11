@@ -9,8 +9,9 @@ function errorMiddleware(err, req, res, next) {
 
     // sending the error response
     res.status(err.statusCode || 500).json({
-        message: err.message || 'Internal Server Error',
         success: false,
+        message: err.message || 'Internal Server Error',
+        details: err.details || null
     });
 }
 

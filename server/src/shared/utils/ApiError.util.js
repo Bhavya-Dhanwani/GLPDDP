@@ -1,6 +1,6 @@
 // extending the default error class to create a custom API error class
 class ApiError extends Error {
-    constructor(statusCode, message) {
+    constructor(statusCode, message, details = null) {
 
         // calling the parent constructor
         super(message);
@@ -8,6 +8,7 @@ class ApiError extends Error {
         // setting the status code and message
         this.statusCode = statusCode;
         this.message = message;
+        this.details = details;
     }
 }
 

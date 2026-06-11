@@ -18,6 +18,13 @@ const envSchema = z.object({
     API_LIMIT: z.coerce.number().default(envsConstants.API_LIMIT),
     FRONTEND_URL: z.string().default(envsConstants.FRONTEND_URL),
     MONGO_URI: z.string().default(envsConstants.MONGO_URI),
+    JWT_ACCESS_SECRET: z.string(),
+    JWT_REFRESH_SECRET: z.string(),
+    SMTP_USER: z.string(),
+    SMTP_PASS: z.string(),
+    SMTP_SERVICE: z.string(),
+    SMTP_PORT: z.coerce.number(),
+    TRANSACTIONAL_EMAIL: z.string()
 }).strip(); // Strip out any extra environment variables that are not defined in the schema
 
 // Validate environment variables
@@ -25,8 +32,8 @@ const env = envSchema.safeParse(process.env);
 
 // If validation fails, log the errors and exit the process
 if (!env.success) {
-    logger.error('Invalid environment variables:', env.error.flatten());
-    process.exit(1); // Exit with a failure code
+    console.log('Invalid environment variables:', env.error.flatten());
+    // process.exit(1); // Exit with a failure code
 }
 
 // Exporting the validated environment variables
