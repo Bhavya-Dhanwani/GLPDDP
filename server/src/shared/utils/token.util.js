@@ -15,7 +15,7 @@ function generateAccessToken({ _id, email, role, name }) {
         env.JWT_ACCESS_SECRET,
         { expiresIn: '15m' }
     );
-    
+
     return accessToken;
 }
 
@@ -33,4 +33,32 @@ function generateRefreshToken(sessionId, userId) {
     );
 
     return refreshToken;
+}
+
+// funciton to decode the access token
+function decodeAccessToken(token) {
+    try {
+        const decoded = jwt.verify(token, env.JWT_ACCESS_SECRET);
+        return decoded;
+    } catch (err) {
+        return null;
+    }
+}
+
+// function to decode the refresh token
+function decodeRefreshToken(token) {
+    try {
+        const decoded = jwt.verify(token, env.JWT_REFRESH_SECRET);
+        return decoded;
+    } catch (err) {
+        return null;
+    }
+}
+
+// exporting the functions
+export {
+    generateAccessToken,
+    generateRefreshToken,
+    decodeAccessToken,
+    decodeRefreshToken
 }

@@ -1,5 +1,6 @@
 // Importing modules 
 import Session from './session.model.js';
+import mongoose from 'mongoose';
 
 // class to communicate with the sessions from database 
 class SessionRepository {
@@ -9,6 +10,13 @@ class SessionRepository {
         // setting the session model
         this.sessionModel = Session;
 
+    }
+
+    // method to get a session id
+    getSessionId() {
+
+        // return a session id
+        return new mongoose.Types.ObjectId();
     }
 
     // method to create a session
@@ -54,8 +62,10 @@ class SessionRepository {
     async deleteManySessions(data) {
         // deleting the sessions
         const sessions = await this.sessionModel.deleteMany(data);
-        
+
         // returning the deleted sessions
         return sessions;
     }
 }
+
+export default SessionRepository;

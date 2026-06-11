@@ -27,8 +27,8 @@ const env = envSchema.safeParse(process.env);
 
 // If validation fails, log the errors and exit the process
 if (!env.success) {
-    logger.error('Invalid environment variables:', env.error.flatten());
-    process.exit(1); // Exit with a failure code
+    console.log('Invalid environment variables:', env.error.flatten());
+    // process.exit(1); // Exit with a failure code
 }
 
 // Exporting the validated environment variables
