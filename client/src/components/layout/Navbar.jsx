@@ -1,22 +1,41 @@
+"use client";
+
+import { useState } from "react";
 import styles from "./Navbar.module.css";
+import Button from "@/features/shared/ui/jsx/Button";
 
 export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <header className={styles.navbar}>
-      <div className={styles.logo}><img src="./logo.jpeg" alt="" /></div>
+      <div className={styles.logo}>
+        <img src="/logo.png" alt="GLPDDP Logo" />
+      </div>
 
-      <nav className={styles.links}>
+      <button
+        className={styles.menuButton}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        ☰
+      </button>
+
+      <nav className={`${styles.links} ${isOpen ? styles.showMenu : ""}`}>
         <a>Home</a>
         <a>Matches</a>
         <a>Series</a>
         <a>Teams</a>
         <a>Players</a>
-        <a>News</a>
+
+        <div className={styles.mobileActions}>
+           <Button variant="secondary">Sign In</Button>
+           <Button variant="primary">Get Started </Button>
+        </div>
       </nav>
 
       <div className={styles.actions}>
-        <button className={styles.signIn}>Sign In</button>
-        <button className={styles.getStarted}>Get Started</button>
+       <Button variant="secondary">Sign In</Button>
+         <Button variant="primary">Get Started </Button>
       </div>
     </header>
   );

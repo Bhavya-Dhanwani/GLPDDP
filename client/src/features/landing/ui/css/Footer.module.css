@@ -1,0 +1,390 @@
+.ctaBanner {
+  position: relative;
+  overflow: hidden;
+
+  min-height: 320px;
+
+  padding: 70px 80px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-radius: 32px;
+
+  background: linear-gradient(
+    135deg,
+    #047857 0%,
+    #059669 45%,
+    #34d399 100%
+  );
+
+  color: white;
+
+  margin-bottom: 80px;
+
+  animation: fadeUp 0.8s ease;
+}
+
+.ctaBanner::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    radial-gradient(
+      circle at 85% 60%,
+      transparent 0,
+      transparent 180px,
+      rgba(255,255,255,.08) 181px,
+      transparent 184px
+    ),
+    radial-gradient(
+      circle at 85% 60%,
+      transparent 0,
+      transparent 260px,
+      rgba(255,255,255,.06) 261px,
+      transparent 264px
+    ),
+    radial-gradient(
+      circle at 85% 60%,
+      transparent 0,
+      transparent 340px,
+      rgba(255,255,255,.05) 341px,
+      transparent 344px
+    );
+
+  z-index: 0;
+}
+
+.ctaBanner::after {
+  content: "";
+
+  position: absolute;
+
+  right: -30px;
+  bottom: -170px;
+
+  width: 550px;
+  height: 550px;
+
+  background-image: url("/cricket-player.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  opacity: 0.18;
+
+  z-index: 1;
+
+  animation: floatPlayer 6s ease-in-out infinite;
+}
+
+.ctaBanner > * {
+  position: relative;
+  z-index: 3;
+}
+
+.ctaBanner h2 {
+  font-size: 68px;
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 22px;
+}
+
+.ctaBanner p {
+  max-width: 650px;
+
+  font-size: 22px;
+  line-height: 1.7;
+
+  color: rgba(255,255,255,.92);
+}
+
+.ctaButton {
+  background: white;
+  color: #111827;
+
+  border: none;
+
+  padding: 22px 44px;
+
+  border-radius: 18px;
+
+  font-size: 22px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all .3s ease;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.15);
+}
+
+.ctaButton:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 20px 40px rgba(0,0,0,.2);
+}
+
+@keyframes floatPlayer {
+  0%,100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@media (max-width: 900px) {
+  .ctaBanner {
+    flex-direction: column;
+    gap: 30px;
+    text-align: center;
+
+    padding: 50px 35px;
+  }
+
+  .ctaBanner h2 {
+    font-size: 48px;
+  }
+
+  .ctaBanner p {
+    font-size: 18px;
+  }
+
+  .ctaBanner::after {
+    width: 300px;
+    height: 300px;
+    opacity: 0.12;
+  }
+}
+
+@media (max-width: 600px) {
+  .ctaBanner {
+    min-height: auto;
+
+    padding: 40px 24px;
+
+    flex-direction: column;
+    text-align: center;
+
+    gap: 24px;
+  }
+
+  .ctaBanner h2 {
+    font-size: 38px;
+    line-height: 1.2;
+  }
+
+  .ctaBanner p {
+    font-size: 16px;
+  }
+
+  .ctaButton {
+    width: 100%;
+
+    padding: 18px;
+    font-size: 18px;
+  }
+
+  .ctaBanner::after {
+    width: 220px;
+    height: 220px;
+
+    right: -40px;
+    bottom: -30px;
+
+    opacity: 0.08;
+  }
+}
+
+.footer {
+  padding: 60px;
+  background: #ffffff;
+}
+
+
+.footerContent {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.2fr;
+  gap: 40px;
+  margin-bottom: 50px;
+}
+
+.brand h2 {
+  color: #059669;
+  margin-bottom: 18px;
+  width: 100px;
+}
+
+.brand h2 img{
+    width: 100%;
+}
+
+.brand p {
+  color: #64748b;
+  margin-bottom: 24px;
+}
+
+.socials {
+  display: flex;
+  gap: 12px;
+  font-size: 24px;
+  color: black;
+}
+
+.socials span{
+    background: rgb(184, 183, 183);
+    padding: 5px 6px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footerContent h4 {
+  font-size: 14px;
+  color: gray;
+  margin-bottom: 20px;
+}
+
+.footerContent ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footerContent li {
+  margin-bottom: 14px;
+  cursor: pointer;
+  color: #334155;
+}
+
+.appButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 18px;
+  
+}
+
+.coming{
+    color: gray;
+}
+
+.appButtons button {
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  cursor: pointer;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  font-size: 14px;
+}
+
+.bottom {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 24px;
+  color: gray;
+}
+
+.socials span {
+  background: rgb(184, 183, 183);
+  padding: 5px 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.socials span:hover {
+  background: #059669;
+  color: white;
+  transform: translateY(-3px);
+}
+
+.footerContent li {
+  margin-bottom: 14px;
+  cursor: pointer;
+  color: #334155;
+  transition: all 0.3s ease;
+}
+
+.footerContent li:hover {
+  color: #059669;
+}
+
+.appButtons button {
+  transition: all 0.3s ease;
+}
+
+.appButtons button:hover {
+  background: #059669;
+  color: white;
+  transform: translateY(-3px);
+}
+
+@media (max-width: 900px) {
+  .ctaBanner {
+    flex-direction: column;
+    gap: 30px;
+    text-align: center;
+  }
+
+  .footerContent {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer {
+    padding: 30px 20px;
+    text-align: center;
+  }
+
+  .footerContent {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    gap: 30px;
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .brand h2 {
+    margin: 0 auto 18px;
+  }
+
+  .socials {
+    justify-content: center;
+  }
+
+  .footerContent ul {
+    text-align: center;
+  }
+
+  .appButtons {
+    align-items: center;
+  }
+
+  .appButtons button {
+    width: 220px;
+  }
+
+  .bottom {
+    text-align: center;
+  }
+}

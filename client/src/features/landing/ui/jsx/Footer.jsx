@@ -1,4 +1,4 @@
-import styles from "./Footer.module.css";
+import styles from "../css/Footer.module.css";
 import {
   FaApple,
   FaGooglePlay,
@@ -7,6 +7,7 @@ import {
   FaYoutube,
   FaTwitter,
 } from "react-icons/fa6";
+import Button from "@/features/shared/ui/jsx/Button";
 
 export default function Footer() {
   return (
@@ -21,15 +22,13 @@ export default function Footer() {
           </p>
         </div>
 
-        <button className={styles.ctaButton}>
-          Join Now — It's Free →
-        </button>
+        <Button variant="secondary"> Join Now - It's Free →</Button>
       </div>
 
       {/* Footer Content */}
       <div className={styles.footerContent}>
         <div className={styles.brand}>
-          <h2><img src="/logo.jpeg" alt="" /></h2>
+          <h2><img src="/logo.png" alt="" /></h2>
           <p>Live Cricket. Real Time.</p>
 
           <div className={styles.socials}>
@@ -46,14 +45,12 @@ export default function Footer() {
             <li>About Us</li>
             <li>Careers</li>
             <li>Contact</li>
-            <li>Privacy Policy</li>
           </ul>
         </div>
 
         <div>
           <h4>SUPPORT</h4>
           <ul>
-            <li>Help Center</li>
             <li>FAQs</li>
             <li>Feedback</li>
             <li>Terms of Service</li>
@@ -74,10 +71,7 @@ export default function Footer() {
           <h4>GET THE APP</h4>
           <p className={styles.coming}>Coming Soon</p>
 
-          <div className={styles.appButtons}>
-            <button>{<FaApple size={20} />}  App Store</button>
-            <button>{<FaGooglePlay size={20} />}   Google Play</button>
-          </div>
+          
         </div>
       </div>
 
