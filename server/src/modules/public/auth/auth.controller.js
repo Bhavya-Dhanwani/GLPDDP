@@ -1,6 +1,7 @@
 // Importing modules
-import ApiResponse from "../../shared/utils/ApiResponse.utils.js";
-import { generateAccessToken } from "../../shared/utils/token.util.js";
+import { refreshConstants } from "../../../shared/constants/cookies.constants.js";
+import ApiResponse from "../../../shared/utils/ApiResponse.utils.js";
+import { generateAccessToken } from "../../../shared/utils/token.util.js";
 import AuthService from "./auth.service.js";
 
 // class to handle all the controller logic of the auth module
@@ -21,13 +22,7 @@ class AuthController {
         const response = await this.authService.signupService(name, email, password);
 
         // setting the cookies in the response 
-        res.cookie("glpddp_refreshToken", response.refreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            // sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-            path: "/api/auth"
-        });
+        res.cookie("glpddp_refreshToken", response.refreshToken, refreshConstants);
 
         // returing the response 
         return ApiResponse(res, 201, "User created successfully", response.user);
@@ -42,13 +37,7 @@ class AuthController {
         const response = await this.authService.loginService(email, password);
 
         // setting the cookies in the response
-        res.cookie("glpddp_refreshToken", response.refreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            // sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-            path: "/api/auth"
-        });
+        res.cookie("glpddp_refreshToken", response.refreshToken, refreshConstants);
 
         // returning the response
         return ApiResponse(res, 200, "User logged in successfully", response.user);
@@ -106,12 +95,7 @@ class AuthController {
         await this.authService.logoutService(userId, refreshToken, sessionId);
 
         // clearing the cookies in the response
-        res.clearCookie("glpddp_refreshToken", {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            // sameSite: "strict",
-            path: "/api/auth"
-        });
+        res.clearCookie("glpddp_refreshToken", refreshConstants);
 
         // returning the response
         return ApiResponse(res, 204, "");
@@ -140,13 +124,7 @@ class AuthController {
         const response = await this.authService.refreshService(userId, refreshToken, sessionId);
 
         // setting the cookies in the response
-        res.cookie("glpddp_refreshToken", response.newrefreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            // sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-            path: "/api/auth"
-        });
+        res.cookie("glpddp_refreshToken", response.newrefreshToken, refreshConstants);
 
         // returning the response
         return ApiResponse(res, 200, "Token refreshed successfully", { accessToken: response.newaccessToken });

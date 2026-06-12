@@ -1,10 +1,11 @@
 // Importing modules 
-import BadRequest from "../../shared/errors/badrequest.error.js";
-import NotFound from "../../shared/errors/notfound.error.js";
-import sendMail from "../../shared/utils/sendMail.util.js";
-import { generateOtp, generateResetToken } from "../../shared/utils/token.util.js";
-import TokenRepository from "./token.repository.js";
-import envs from "../../shared/config/env.config.js";
+import BadRequest from "../../../shared/errors/badrequest.error.js";
+import NotFound from "../../../shared/errors/notfound.error.js";
+import sendMail from "../../../shared/utils/sendMail.util.js";
+import { generateOtp, generateResetToken } from "../../../shared/utils/token.util.js";
+import TokenRepository from "../../../shared/repositories/token.repository.js";
+import envs from "../../../shared/config/env.config.js";
+import EXPIRY_CONSTANTS from "../../../shared/constants/expiry.constants.js";
 
 // class to handle the token services
 class TokenService {
@@ -26,7 +27,7 @@ class TokenService {
             userId,
             token: otp,
             type: "otp",
-            expiresAt: new Date(Date.now() + 10 * 60 * 1000) // expires in 10 minutes
+            expiresAt: new Date(Date.now() + EXPIRY_CONSTANTS.otpToken) // expires in 10 minutes
         });
 
         sendMail(email, "Your OTP for GLPDDP", `Your OTP for GLPDDP is ${otp}. It will expire in 10 minutes.`);
@@ -94,7 +95,7 @@ class TokenService {
             userId,
             token: resetToken,
             type: "reset",
-            expiresAt: new Date(Date.now() + 10 * 60 * 1000) // expires in 10 minutes
+            expiresAt: new Date(Date.now() + EXPIRY_CONSTANTS.resetToken)
         });
 
         sendMail(email, "Your Password Reset Token for GLPDDP", `Click to reset your password <a href="${envs.FRONTEND_URL}/resetpassword/${resetToken}">Click here</a>`);
