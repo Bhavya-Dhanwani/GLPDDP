@@ -86,6 +86,13 @@ class AuthService {
             userId: user._id
         });
 
+        if (!user.isVerified) {
+
+            // sending otp to verify 
+            await this.tokenService.createAndSendOTP(user._id, user.email);
+
+        }
+
         // sanitizing the user
         const sanitizedUser = sanitizeUser(user, accessToken);
 
@@ -108,6 +115,74 @@ class AuthService {
 
         // generating a new OTP and sending it to the user email
         await this.tokenService.createAndSendOTP(userId, email);
+    }
+
+    async logoutService(userId, refreshToken, sessionId) {
+
+        // deleting the session
+        await this.sessionRepository.deleteSessions({ userId, refreshToken, _id: sessionId });
+
+    }
+
+    async logoutAllService(userId) {
+
+        // deleting all the sessions of the user
+        await this.sessionRepository.deleteManySessions({ userId });
+
+    }
+
+    async refreshService(userId, refreshToken, sessionId) {
+
+        // finding the session
+        const session = await this.sessionRepository.findOneSession({ userId, refreshToken, _id: sessionId });
+
+        // if session not found then throw error
+        if (!session) {
+            throw new Unauthorized("Invalid refresh token");
+        }
+
+        // generating new refresh token
+        const newrefreshToken = generateRefreshToken(sessionId, userId);
+
+        // updating the session with the new refresh token
+        session.refreshToken = newrefreshToken;
+
+        // saving the session
+        await session.save();
+
+        // generating new access token
+        const newaccessToken = generateAccessToken(session.userId);
+
+        // returning the new tokens
+        return { newaccessToken, newrefreshToken };
+    }
+
+    async forgetService(email) {
+
+        // finding the user by email
+        const user = await this.authRepository.findUserByEmail(email);
+
+        // if user not found then throw error
+        if (!user) {
+            throw new NotFound("User not found");
+        }
+
+        // generating the reset token and sending it to the user email
+        const token = await this.tokenService.createAndSendResetToken(user._id, user.email);
+
+    }
+
+    async resetService(token, password) {
+
+        // verifying the reset token
+        const user = await this.tokenService.verifyResetToken(token);
+
+        // updating the user password
+        await this.authRepository.updateUser({ _id: user._id }, { password });
+
+        // deleting the reset token
+        await this.tokenService.deleteResetToken(user._id);
+
     }
 }
 

@@ -17,9 +17,9 @@ async function sendMail(to, subject, html) {
 
         // sending the mail
         await transporter.sendMail(mailOptions);
-        
+
     } catch (error) {
-        logger.error('Error sending email:', error);
+        logger.error({ error }, 'Error sending email:');
     }
 }
 

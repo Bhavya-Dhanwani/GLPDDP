@@ -69,8 +69,11 @@ class AuthController {
         // calling the verify service
         await this.authService.verifyService(userId, otp);
 
+        // Change the access token to reflect the change in the isVerified field
+        const accessToken = await this.authService.generateAccessToken(userId);
+
         // returning the response
-        return ApiResponse(res, 200, "Email verified successfully");
+        return ApiResponse(res, 200, "Email verified successfully", { accessToken });
 
     }
 
@@ -89,6 +92,87 @@ class AuthController {
 
         // returning the response
         return ApiResponse(res, 200, "OTP sent successfully");
+    }
+
+    logoutController = async (req, res) => {
+
+        // accepting the data
+        const userId = req.user.id;
+        const refreshToken = req.refreshToken;
+        const sessionId = req.sessionId;
+
+        // calling the logout service
+        await this.authService.logoutService(userId, refreshToken, sessionId);
+
+        // clearing the cookies in the response
+        res.clearCookie("glpddp_refreshToken", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            // sameSite: "strict",
+            path: "/api/auth"
+        });
+
+        // returning the response
+        return ApiResponse(res, 204, "");
+    }
+
+    logoutAllController = async (req, res) => {
+
+        // accepting the data
+        const userId = req.userId;
+
+        // calling the logout all service
+        await this.authService.logoutAllService(userId);
+
+        // returning the response
+        return ApiResponse(res, 204, "");
+    }
+
+    refreshController = async (req, res) => {
+
+        // accepting the data
+        const refreshToken = req.refreshToken;
+        const sessionId = req.sessionId;
+        const userId = req.userId;
+
+        // calling the refresh service
+        const response = await this.authService.refreshService(userId, refreshToken, sessionId);
+
+        // setting the cookies in the response
+        res.cookie("glpddp_refreshToken", response.newrefreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            // sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+            path: "/api/auth"
+        });
+
+        // returning the response
+        return ApiResponse(res, 200, "Token refreshed successfully", { accessToken: response.newaccessToken });
+    }
+
+    forgetController = async (req, res) => {
+
+        // accepting the data
+        const { email } = req.body;
+
+        // calling the forget service
+        await this.authService.forgetService(email);
+
+        // returning the response
+        return ApiResponse(res, 200, "Password reset link sent successfully");
+    }
+
+    resetController = async (req, res) => {
+
+        // accepting the data
+        const { token, password } = req.body;
+
+        // calling the reset service
+        await this.authService.resetService(token, password);
+
+        // returning the response
+        return ApiResponse(res, 200, "Password reset successfully");
     }
 }
 
