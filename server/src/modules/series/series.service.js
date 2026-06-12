@@ -1,12 +1,18 @@
+import ApiError from '../../shared/utils/ApiError.util.js';
+import Conflict from "../../shared/errors/conflict.error.js";
+import NotFound from "../../shared/errors/notfound.error.js";
+import Unauthorized from "../../shared/errors/unauthorized.error.js";
+import SeriesRepository from './series.repository.js';
 
-import ApiError from '../../shared/utils/ApiError.util';
-
-export class SeriesService {
-    constructor(seriesRepository, matchRepository) {
-        this.seriesRepository = seriesRepository;
-        this.matchRepository = matchRepository;
+// Service handling Series business logic and validation
+export default class SeriesService {
+    constructor() {
+        // Repository for data operations
+        this.seriesRepository = new SeriesRepository();
+        // this.matchRepository = matchRepository;
     }
 
+    // Create a new series after validating uniqueness of name and season
     async createSeries(data, userId) {
         const existingName =
             await this.seriesRepository.findByName(
@@ -14,10 +20,7 @@ export class SeriesService {
             );
 
         if (existingName) {
-            throw new ApiError(
-                statusCode = 409,
-                message = "Series name already exists"
-            );
+            throw new Conflict("Series name already exists");
         }
 
         const existingSeason =
@@ -26,10 +29,7 @@ export class SeriesService {
             );
 
         if (existingSeason) {
-            throw new ApiError(
-                statusCode = 409,
-                message = "Series season already exists"
-            );
+            throw new Conflict("Series season already exists");
         }
 
         return this.seriesRepository.create({
@@ -38,49 +38,46 @@ export class SeriesService {
         });
     }
 
-    async getAllSeries() {
-        return this.seriesRepository.findAll();
+    // Retrieve all series, applying optional filters for name and season
+    async getAllSeries(queryParams) {
+        const filters = {
+            name: queryParams.name?.trim(),
+            season: queryParams.season?.trim()
+        }
+        return this.seriesRepository.findAll(filters);
     }
 
+    // Retrieve a single series by id, throw NotFound if missing
     async getSeriesById(id) {
         const series =
             await this.seriesRepository.findById(id);
 
         if (!series) {
-            throw new ApiError(
-                statusCode = 404,
-                message = "Series not found"
-            );
+            throw new NotFound("Series not found");
         }
 
         return series;
     }
 
+    // Update an existing series after uniqueness checks
     async updateSeries(id, data, userId) {
         const existingSeries =
             await this.seriesRepository.findById(id);
 
         if (!existingSeries) {
-            throw new ApiError(
-                statusCode = 404,
-                message = "Series not found"
-            );
+            throw new NotFound("Series not found");
         }
 
         if (
             data.name &&
             data.name !== existingSeries.name
         ) {
-            const existingName =
-                await this.seriesRepository.findByName(
-                    data.name
-                );
+            const existingName = await this.seriesRepository.findByName(
+                data.name
+            );
 
             if (existingName) {
-                throw new ApiError(
-                    statusCode = 409,
-                    message = "Series name already exists"
-                );
+                throw new Conflict("Series name already exists");
             }
         }
 
@@ -94,10 +91,7 @@ export class SeriesService {
                 );
 
             if (existingSeason) {
-                throw new ApiError(
-                    statusCode = 409,
-                    message = "Series season already exists"
-                );
+                throw new Conflict("Series season already exists");
             }
         }
 
@@ -110,28 +104,23 @@ export class SeriesService {
         );
     }
 
+    // Soft-delete a series after verifying it exists
     async deleteSeries(id) {
         const series =
             await this.seriesRepository.findById(id);
 
         if (!series) {
-            throw new ApiError(
-                statusCode = 404,
-                message = "Series not found"
-            );
+            throw new NotFound("Series not found");
         }
 
-        const matchExists =
-            await this.matchRepository.exists({
-                seriesId: id,
-            });
+        // const matchExists =
+        //     await this.matchRepository.exists({
+        //         seriesId: id,
+        //     });
 
-        if (matchExists) {
-            throw new ApiError(
-                statusCode = 409,
-                message ="Cannot delete series with existing matches"
-            );
-        }
+        // if (matchExists) {
+        //     throw new throw new Conflict("Cannot delete series with existing matches");
+        // }
 
         return this.seriesRepository.delete(id);
     }

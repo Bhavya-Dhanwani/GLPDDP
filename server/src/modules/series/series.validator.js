@@ -1,5 +1,5 @@
 import { body, param } from "express-validator";
-import { SERIES_STATUS } from "./series.constant.js";
+import { SERIES_STATUS } from "../../shared/constants/series.constants.js";
 
 // Validation rules for series routes
 // For create, all fields except status and logo are required
@@ -10,9 +10,7 @@ export const createSeriesValidator = [
         .withMessage("Series name is required"),
 
     body("shortName")
-        .trim()
-        .notEmpty()
-        .withMessage("Series short name is required"),
+        .optional(),
 
     body("season")
         .trim()
