@@ -156,6 +156,34 @@ class AuthService {
         // returning the new tokens
         return { newaccessToken, newrefreshToken };
     }
+
+    async forgetService(email) {
+
+        // finding the user by email
+        const user = await this.authRepository.findUserByEmail(email);
+
+        // if user not found then throw error
+        if (!user) {
+            throw new NotFound("User not found");
+        }
+
+        // generating the reset token and sending it to the user email
+        const token = await this.tokenService.createAndSendResetToken(user._id, user.email);
+
+    }
+
+    async resetService(token, password) {
+
+        // verifying the reset token
+        const user = await this.tokenService.verifyResetToken(token);
+
+        // updating the user password
+        await this.authRepository.updateUser({ _id: user._id }, { password });
+
+        // deleting the reset token
+        await this.tokenService.deleteResetToken(user._id);
+
+    }
 }
 
 export default AuthService;

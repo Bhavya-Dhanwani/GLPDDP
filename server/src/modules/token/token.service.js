@@ -2,8 +2,9 @@
 import BadRequest from "../../shared/errors/badrequest.error.js";
 import NotFound from "../../shared/errors/notfound.error.js";
 import sendMail from "../../shared/utils/sendMail.util.js";
-import { generateOtp } from "../../shared/utils/token.util.js";
+import { generateOtp, generateResetToken } from "../../shared/utils/token.util.js";
 import TokenRepository from "./token.repository.js";
+import envs from "../../shared/config/env.config.js";
 
 // class to handle the token services
 class TokenService {
@@ -78,6 +79,56 @@ class TokenService {
         // returning the token
         return token;
 
+    }
+
+    async createAndSendResetToken(userId, email) {
+
+        // deleting the existing reset token
+        await this.tokenRepository.deleteToken({ userId, type: "reset" });
+
+        // generating the reset token
+        const resetToken = generateResetToken();
+
+        // creating the token
+        const token = await this.tokenRepository.createToken({
+            userId,
+            token: resetToken,
+            type: "reset",
+            expiresAt: new Date(Date.now() + 10 * 60 * 1000) // expires in 10 minutes
+        });
+
+        sendMail(email, "Your Password Reset Token for GLPDDP", `Click to reset your password <a href="${envs.FRONTEND_URL}/resetpassword/${resetToken}">Click here</a>`);
+
+        return token;
+    }
+
+    async verifyResetToken(resetToken) {
+
+        // finding the token
+        const token = await this.tokenRepository.findOneToken({ token: resetToken, type: "reset" });
+      
+        // if token not found
+        if (!token) {
+            throw new NotFound("Invalid reset token");
+        }
+      
+        // verifying the token
+        if (token.token !== resetToken) {
+
+            // throwing the error
+            throw new BadRequest("Invalid reset token");
+        }
+
+        return token.userId;
+    }
+
+    async deleteResetToken(userId) {
+
+        // deleting the token
+        const token = await this.tokenRepository.deleteToken({ userId, type: "reset" });
+
+        // returning the token
+        return token;
     }
 }
 
