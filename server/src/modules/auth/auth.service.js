@@ -86,6 +86,13 @@ class AuthService {
             userId: user._id
         });
 
+        if (!user.isVerified) {
+            
+            // sending otp to verify 
+            await this.tokenService.createAndSendOTP(user._id, user.email);
+
+        }
+
         // sanitizing the user
         const sanitizedUser = sanitizeUser(user, accessToken);
 
@@ -109,6 +116,20 @@ class AuthService {
         // generating a new OTP and sending it to the user email
         await this.tokenService.createAndSendOTP(userId, email);
     }
-}
+
+    async logoutService(userId, refreshToken, sessionId) {
+
+        // deleting the session
+        await this.sessionRepository.deleteSessions({ userId, refreshToken, _id: sessionId });
+
+    }
+
+    async logoutAllService(userId) {
+
+        // deleting all the sessions of the user
+        await this.sessionRepository.deleteManySessions({ userId });
+        
+    }
+} 
 
 export default AuthService;

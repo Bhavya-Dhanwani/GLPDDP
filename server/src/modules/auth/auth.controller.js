@@ -69,8 +69,11 @@ class AuthController {
         // calling the verify service
         await this.authService.verifyService(userId, otp);
 
+        // Change the access token to reflect the change in the isVerified field
+        const accessToken = await this.authService.generateAccessToken(userId);
+
         // returning the response
-        return ApiResponse(res, 200, "Email verified successfully");
+        return ApiResponse(res, 200, "Email verified successfully", { accessToken });
 
     }
 
@@ -89,6 +92,40 @@ class AuthController {
 
         // returning the response
         return ApiResponse(res, 200, "OTP sent successfully");
+    }
+
+    logoutController = async (req, res) => {
+
+        // accepting the data
+        const userId = req.user.id;
+        const refreshToken = req.refreshToken;
+        const sessionId = req.sessionId;
+
+        // calling the logout service
+        await this.authService.logoutService(userId, refreshToken, sessionId);
+
+        // clearing the cookies in the response
+        res.clearCookie("glpddp_refreshToken", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            // sameSite: "strict",
+            path: "/api/auth"
+        });
+
+        // returning the response
+        return ApiResponse(res, 204, "");
+    }
+
+    logoutAllController = async (req, res) => {
+
+        // accepting the data
+        const userId = req.userId;
+
+        // calling the logout all service
+        await this.authService.logoutAllService(userId);
+
+        // returning the response
+        return ApiResponse(res, 204, "");
     }
 }
 

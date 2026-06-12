@@ -5,6 +5,7 @@ import validateErrors from '../../shared/middlewares/validateerrors.middeware.js
 import { loginValidator, signupValidator  } from './auth.validators.js';
 import asyncHandler from '../../shared/utils/asynchandler.util.js';
 import authMiddleware from '../../shared/middlewares/auth.middleware.js';
+import getRefreshToken from '../../shared/middlewares/getRefresh.middleware.js';
 
 // creating the auth controller
 const authController = new AuthController();
@@ -17,6 +18,8 @@ router.post('/signup', signupValidator, validateErrors, asyncHandler(authControl
 router.post('/login', loginValidator, validateErrors, asyncHandler(authController.loginController));
 router.post("/verify",authMiddleware, asyncHandler(authController.verifyController));
 router.post("/resend-otp", authMiddleware, asyncHandler(authController.resendOTPController));
+router.post("/logout", authMiddleware, getRefreshToken, asyncHandler(authController.logoutController));
+router.post("/logout-all", authMiddleware, getRefreshToken, asyncHandler(authController.logoutAllController));
 
 // exporting the auth router
 export default router;

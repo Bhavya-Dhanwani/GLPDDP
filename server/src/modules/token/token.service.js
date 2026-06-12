@@ -28,7 +28,7 @@ class TokenService {
             expiresAt: new Date(Date.now() + 10 * 60 * 1000) // expires in 10 minutes
         });
 
-        await sendMail(email, "Your OTP for GLPDDP", `Your OTP for GLPDDP is ${otp}. It will expire in 10 minutes.`);
+        sendMail(email, "Your OTP for GLPDDP", `Your OTP for GLPDDP is ${otp}. It will expire in 10 minutes.`);
 
         return token;
     }
