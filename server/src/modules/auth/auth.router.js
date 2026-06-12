@@ -2,7 +2,7 @@
 import express from 'express';
 import AuthController from './auth.controller.js';
 import validateErrors from '../../shared/middlewares/validateErrors.middeware.js';
-import { loginValidator, signupValidator  } from './auth.validators.js';
+import { forgotPasswordValidator, loginValidator, resetPasswordValidator, signupValidator  } from './auth.validators.js';
 import asyncHandler from '../../shared/utils/asynchandler.util.js';
 import authMiddleware from '../../shared/middlewares/auth.middleware.js';
 import getRefreshToken from '../../shared/middlewares/getRefresh.middleware.js';
@@ -21,7 +21,7 @@ router.post("/resend-otp", authMiddleware, asyncHandler(authController.resendOTP
 router.post("/logout", authMiddleware, getRefreshToken, asyncHandler(authController.logoutController));
 router.post("/logout-all", authMiddleware, getRefreshToken, asyncHandler(authController.logoutAllController));
 router.post("/refresh", getRefreshToken, asyncHandler(authController.refreshController));
-router.post("/forgot-password", forgotPasswordValidator, validateErrors, asyncHandler(authController.forgetController));
+router.post("/forgot-password", forgotPasswordValidatorr, validateErrors, asyncHandler(authController.forgetController));
 router.post("/reset-password", resetPasswordValidator, validateErrors, asyncHandler(authController.resetController));
 
 
