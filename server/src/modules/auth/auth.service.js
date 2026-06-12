@@ -87,7 +87,7 @@ class AuthService {
         });
 
         if (!user.isVerified) {
-            
+
             // sending otp to verify 
             await this.tokenService.createAndSendOTP(user._id, user.email);
 
@@ -128,8 +128,34 @@ class AuthService {
 
         // deleting all the sessions of the user
         await this.sessionRepository.deleteManySessions({ userId });
-        
+
     }
-} 
+
+    async refreshService(userId, refreshToken, sessionId) {
+
+        // finding the session
+        const session = await this.sessionRepository.findOneSession({ userId, refreshToken, _id: sessionId });
+
+        // if session not found then throw error
+        if (!session) {
+            throw new Unauthorized("Invalid refresh token");
+        }
+
+        // generating new refresh token
+        const newrefreshToken = generateRefreshToken(sessionId, userId);
+
+        // updating the session with the new refresh token
+        session.refreshToken = newrefreshToken;
+
+        // saving the session
+        await session.save();
+
+        // generating new access token
+        const newaccessToken = generateAccessToken(session.userId);
+
+        // returning the new tokens
+        return { newaccessToken, newrefreshToken };
+    }
+}
 
 export default AuthService;

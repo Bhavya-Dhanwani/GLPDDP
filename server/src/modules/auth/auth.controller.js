@@ -127,6 +127,29 @@ class AuthController {
         // returning the response
         return ApiResponse(res, 204, "");
     }
+
+    refreshController = async (req, res) => {
+
+        // accepting the data
+        const refreshToken = req.refreshToken;
+        const sessionId = req.sessionId;
+        const userId = req.userId;
+       
+        // calling the refresh service
+        const response = await this.authService.refreshService(userId, refreshToken, sessionId);
+       
+        // setting the cookies in the response
+        res.cookie("glpddp_refreshToken", response.newrefreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            // sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+            path: "/api/auth"
+        });
+
+        // returning the response
+        return ApiResponse(res, 200, "Token refreshed successfully", { accessToken: response.newaccessToken });
+    }
 }
 
 export default AuthController;

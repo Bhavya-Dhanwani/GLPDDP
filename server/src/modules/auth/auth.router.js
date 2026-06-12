@@ -20,6 +20,7 @@ router.post("/verify",authMiddleware, asyncHandler(authController.verifyControll
 router.post("/resend-otp", authMiddleware, asyncHandler(authController.resendOTPController));
 router.post("/logout", authMiddleware, getRefreshToken, asyncHandler(authController.logoutController));
 router.post("/logout-all", authMiddleware, getRefreshToken, asyncHandler(authController.logoutAllController));
+router.get("/refresh", getRefreshToken, asyncHandler(authController.refreshController));
 
 // exporting the auth router
 export default router;
