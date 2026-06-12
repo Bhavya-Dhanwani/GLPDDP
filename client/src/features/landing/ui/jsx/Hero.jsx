@@ -1,10 +1,11 @@
-import styles from "./Hero.module.css";
+import styles from "../css/Hero.module.css";
 import {
   Route,
   BarChart3,
   Trophy,
   Users,
 } from "lucide-react";
+import Button from "@/features/shared/ui/jsx/Button";
 
 
 export default function Hero() {
@@ -25,8 +26,8 @@ export default function Hero() {
         </p>
 
         <div className={styles.buttons}>
-          <button className={styles.primary}>Explore Live Matches →</button>
-          <button className={styles.secondary}>View Series →</button>
+          <Button variant="primary">Explore Live Matches </Button>
+          <Button variant="secondary">View Series</Button>
         </div>
 
         <div className={styles.features}>

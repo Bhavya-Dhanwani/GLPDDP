@@ -1,8 +1,8 @@
 import Navbar from "@/components/layout/Navbar";
-import Hero from "@/components/landing/Hero";
-import PopularSeries from "@/components/landing/PopularSeries";
-import LiveMatches from "@/components/landing/LiveMatches";
-import Footer from "@/components/landing/Footer";
+import Hero from "@/features/landing/ui/jsx/Hero";
+import PopularSeries from "@/features/landing/ui/jsx/PopularSeries";
+import LiveMatches from "@/features/landing/ui/jsx/LiveMatches";
+import Footer from "@/features/landing/ui/jsx/Footer";
 
 export default function Home() {
   return (

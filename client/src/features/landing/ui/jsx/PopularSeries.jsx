@@ -1,4 +1,4 @@
-import styles from "./PopularSeries.module.css";
+import styles from "../css/PopularSeries.module.css";
 
 const seriesList = [
   {
@@ -33,7 +33,7 @@ export default function PopularSeries() {
       <div className={styles.header}>
         <div>
           <p className={styles.label}>POPULAR SERIES</p>
-          <h2>Follow Your Favorite Series</h2>
+          <h2 className={styles.desc}>Follow Your Favorite Series</h2>
         </div>
 
         <button className={styles.viewButton}>View All Series →</button>
