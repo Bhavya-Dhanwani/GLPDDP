@@ -1,5 +1,5 @@
 // Importing modules 
-import Session from './session.model.js';
+import Session from '../models/session.model.js';
 import mongoose from 'mongoose';
 
 // class to communicate with the sessions from database 

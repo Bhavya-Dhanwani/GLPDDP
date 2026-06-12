@@ -1,11 +1,11 @@
 // Importing the modules
-import { generateAccessToken, generateRefreshToken } from "../../shared/utils/token.util.js";
-import AuthRepository from "./auth.repository.js";
-import sessionRepository from "../sessions/session.repository.js";
-import { sanitizeUser } from "../../shared/utils/sanitizer.util.js";
-import Conflict from "../../shared/errors/conflict.error.js";
-import NotFound from "../../shared/errors/notfound.error.js";
-import Unauthorized from "../../shared/errors/unauthorized.error.js";
+import { generateAccessToken, generateRefreshToken } from "../../../shared/utils/token.util.js";
+import AuthRepository from "../../../shared/repositories/auth.repository.js";
+import sessionRepository from "../../../shared/repositories/session.repository.js";
+import { sanitizeUser } from "../../../shared/utils/sanitizer.util.js";
+import Conflict from "../../../shared/errors/conflict.error.js";
+import NotFound from "../../../shared/errors/notfound.error.js";
+import Unauthorized from "../../../shared/errors/unauthorized.error.js";
 import TokenService from "../token/token.service.js";
 
 // class to handle the service logic of the auth module

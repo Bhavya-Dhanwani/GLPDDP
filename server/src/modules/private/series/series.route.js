@@ -1,8 +1,8 @@
 import express from 'express'
 import SeriesController from './series.controller.js';
-import authMiddleware from '../../shared/middlewares/auth.middleware.js';
-import asyncHandler from '../../shared/utils/asynchandler.util.js';
-import validateErrors from '../../shared/middlewares/validateErrors.middeware.js';
+import authMiddleware from '../../../shared/middlewares/auth.middleware.js';
+import asyncHandler from '../../../shared/utils/asynchandler.util.js';
+import validateErrors from '../../../shared/middlewares/validateErrors.middeware.js';
 import { createSeriesValidator, updateSeriesValidator } from './series.validator.js';
 const router = express.Router();
 
@@ -15,20 +15,6 @@ const seriesController = new SeriesController();
  * @params { name: String, shortName: String, season: String, status: String, logo: String }
  */
 router.post("/", createSeriesValidator, authMiddleware, validateErrors, asyncHandler(seriesController.createSeries))
-
-/**
- * @route GET /api/series 
- * @desc Get all series
- * @access Private
- */
-router.get("/", authMiddleware, asyncHandler(seriesController.getAllSeries))
-
-/**
- * @route GET /api/series/:id
- * @desc Get series by id
- * @access Private
- */
-router.get("/:id", authMiddleware, asyncHandler(seriesController.getSeriesById))
 
 /**
  * @route PUT /api/series/:id

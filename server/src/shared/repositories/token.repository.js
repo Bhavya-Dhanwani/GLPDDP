@@ -1,5 +1,5 @@
 // Importing modules
-import Token from './token.model.js';
+import Token from '../models/token.model.js';
 
 // class to communicate with the tokens from database 
 class TokenRepository {

@@ -1,6 +1,7 @@
 // work of tokens will be done here 
 import jwt from 'jsonwebtoken';
 import env from '../config/env.config.js';
+import EXPIRY_CONSTANTS from '../constants/expiry.constants.js';
 
 // function to generate the accesss token
 function generateAccessToken({ _id, email, role, name, isVerified }) {
@@ -14,7 +15,7 @@ function generateAccessToken({ _id, email, role, name, isVerified }) {
             isVerified
         },
         env.JWT_ACCESS_SECRET,
-        { expiresIn: '1h' }
+        { expiresIn: EXPIRY_CONSTANTS.accessToken }
     );
 
     return accessToken;
@@ -30,7 +31,7 @@ function generateRefreshToken(sessionId, userId) {
             userId
         },
         env.JWT_REFRESH_SECRET,
-        { expiresIn: '7d' }
+        { expiresIn: EXPIRY_CONSTANTS.refreshToken }
     );
 
     return refreshToken;

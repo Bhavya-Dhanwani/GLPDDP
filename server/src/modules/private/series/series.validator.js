@@ -1,5 +1,5 @@
 import { body, param } from "express-validator";
-import { SERIES_STATUS } from "../../shared/constants/series.constants.js";
+import { SERIES_STATUS } from "../../../shared/constants/series.constants.js";
 
 // Validation rules for series routes
 // For create, all fields except status and logo are required
@@ -61,13 +61,6 @@ export const updateSeriesValidator = [
         .optional()
         .isURL()
         .withMessage("Logo must be a valid URL"),
-];
-
-// Validation for getting and deleting series by id
-export const getSeriesByIdValidator = [
-    param("id")
-        .isMongoId()
-        .withMessage("Invalid series id"),
 ];
 
 // Same validation for delete as get by id since we just need the id to delete

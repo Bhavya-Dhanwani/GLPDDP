@@ -1,4 +1,4 @@
-import Series from "./series.model.js";
+import Series from "../models/series.model.js";
 
 // Repository for Series collection data access
 export default class SeriesRepository {

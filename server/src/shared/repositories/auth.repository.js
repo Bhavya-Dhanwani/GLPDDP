@@ -1,6 +1,6 @@
 // using the oops to follow lld's strucurture
 // importing the user model
-import User from '../user/user.model.js';
+import User from '../models/user.model.js';
 
 // making a auth repositary class
 class AuthRepository {

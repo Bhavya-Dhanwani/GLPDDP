@@ -1,7 +1,7 @@
 // importing modules 
 import express from 'express';
-import authRouter from '../../modules/auth/auth.router.js';
-import seriesRouter from '../../modules/series/series.route.js';
+import authRouter from '../../modules/public/auth/auth.router.js';
+import seriesRouter from './series.router.js';
 
 // making the main router
 const router = express.Router();
