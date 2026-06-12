@@ -33,7 +33,7 @@ class SessionRepository {
     async findOneSession(data) {
 
         // finding a session
-        const sessions = await this.sessionModel.findOne(data);
+        const sessions = await this.sessionModel.findOne(data).populate("userId");
 
         //returning the session
         return sessions;

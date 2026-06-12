@@ -7,6 +7,8 @@ function errorMiddleware(err, req, res, next) {
     // logging the error stack
     logger.error(err.stack);
 
+    console.error(err);
+
     // sending the error response
     res.status(err.statusCode || 500).json({
         success: false,

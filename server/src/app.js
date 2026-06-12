@@ -27,7 +27,7 @@ function createApp() {
     // adding the main router
     app.use("/api" ,mainRouter);
 
-    // adding the not found handler
+    // adding the not found handler 
     app.use(notFoundHandler);
 
 
