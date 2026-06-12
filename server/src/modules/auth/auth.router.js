@@ -21,7 +21,7 @@ router.post("/resend-otp", authMiddleware, asyncHandler(authController.resendOTP
 router.post("/logout", authMiddleware, getRefreshToken, asyncHandler(authController.logoutController));
 router.post("/logout-all", authMiddleware, getRefreshToken, asyncHandler(authController.logoutAllController));
 router.post("/refresh", getRefreshToken, asyncHandler(authController.refreshController));
-router.post("/forgot-password", forgotPasswordValidatorr, validateErrors, asyncHandler(authController.forgetController));
+router.post("/forgot-password", forgotPasswordValidator, validateErrors, asyncHandler(authController.forgetController));
 router.post("/reset-password", resetPasswordValidator, validateErrors, asyncHandler(authController.resetController));
 
 
