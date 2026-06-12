@@ -105,7 +105,9 @@ class AuthService {
         await this.tokenService.verifyOtp(userId, otp);
 
         // updating the user as verified
-        await this.authRepository.updateUser({ _id: userId }, { isVerified: true });
+        const user = await this.authRepository.updateUser({ _id: userId }, { isVerified: true });
+
+        return user;
 
     }
 

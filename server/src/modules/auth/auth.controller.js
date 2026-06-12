@@ -1,5 +1,6 @@
 // Importing modules
 import ApiResponse from "../../shared/utils/ApiResponse.utils.js";
+import { generateAccessToken } from "../../shared/utils/token.util.js";
 import AuthService from "./auth.service.js";
 
 // class to handle all the controller logic of the auth module
@@ -67,10 +68,10 @@ class AuthController {
         }
 
         // calling the verify service
-        await this.authService.verifyService(userId, otp);
+        const user =await this.authService.verifyService(userId, otp);
 
         // Change the access token to reflect the change in the isVerified field
-        const accessToken = await this.authService.generateAccessToken(userId);
+        const accessToken = generateAccessToken(user);
 
         // returning the response
         return ApiResponse(res, 200, "Email verified successfully", { accessToken });
