@@ -17,12 +17,12 @@ const seriesController = new SeriesController();
 router.post("/", createSeriesValidator, authMiddleware, validateErrors, asyncHandler(seriesController.createSeries))
 
 /**
- * @route PUT /api/series/:id
+ * @route PATCH /api/series/:id
  * @desc Update series by id
  * @access Private
  * @params { name: String, shortName: String, season: String, status: String, logo: String }
  */
-router.put("/:id", updateSeriesValidator, authMiddleware, validateErrors, asyncHandler(seriesController.updateSeries))
+router.patch("/:id", updateSeriesValidator, authMiddleware, validateErrors, asyncHandler(seriesController.updateSeries))
 
 /**
  * @route DELETE /api/series/:id

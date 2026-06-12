@@ -66,10 +66,13 @@ export default class SeriesRepository {
     }
 
     // Soft-delete by setting isDeleted flag
-    delete(id) {
+    delete(id,userId) {
         return this.seriesModel.findOneAndUpdate(
             { _id: id },
-            { isDeleted: true },
+            {
+                isDeleted: true,
+                updatedBy: userId,
+            },
             {
                 returnDocument: "after",
             }

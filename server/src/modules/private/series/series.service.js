@@ -83,7 +83,7 @@ export default class SeriesService {
     }
 
     // Soft-delete a series after verifying it exists
-    async deleteSeries(id) {
+    async deleteSeries(id,userId) {
         const series =
             await this.seriesRepository.findById(id);
 
@@ -100,6 +100,6 @@ export default class SeriesService {
         //     throw new throw new Conflict("Cannot delete series with existing matches");
         // }
 
-        return this.seriesRepository.delete(id);
+        return this.seriesRepository.delete(id,userId);
     }
 }
