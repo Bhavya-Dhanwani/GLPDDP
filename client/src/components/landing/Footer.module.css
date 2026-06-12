@@ -1,0 +1,158 @@
+.footer {
+  padding: 60px;
+  background: #ffffff;
+}
+
+.ctaBanner {
+  background: linear-gradient(
+    135deg,
+    #047857,
+    #059669,
+    #10b981
+  );
+
+  border-radius: 24px;
+  padding: 60px;
+  color: white;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 80px;
+}
+
+.ctaBanner h2 {
+  font-size: 54px;
+  margin-bottom: 18px;
+}
+
+.ctaBanner p {
+  font-size: 20px;
+  line-height: 1.6;
+  max-width: 550px;
+}
+
+.ctaButton {
+  background: white;
+  color: #111827;
+  border: none;
+  padding: 18px 36px;
+  border-radius: 14px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.footerContent {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.2fr;
+  gap: 40px;
+  margin-bottom: 50px;
+}
+
+.brand h2 {
+  color: #059669;
+  margin-bottom: 18px;
+  width: 100px;
+}
+
+.brand h2 img{
+    width: 100%;
+}
+
+.brand p {
+  color: #64748b;
+  margin-bottom: 24px;
+}
+
+.socials {
+  display: flex;
+  gap: 12px;
+  font-size: 24px;
+  color: black;
+}
+
+.socials span{
+    background: rgb(184, 183, 183);
+    padding: 5px 6px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footerContent h4 {
+  font-size: 14px;
+  color: gray;
+  margin-bottom: 20px;
+}
+
+.footerContent ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footerContent li {
+  margin-bottom: 14px;
+  cursor: pointer;
+  color: #334155;
+}
+
+.appButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 18px;
+  
+}
+
+.coming{
+    color: gray;
+}
+
+.appButtons button {
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  cursor: pointer;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  font-size: 14px;
+}
+
+.bottom {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 24px;
+  color: gray;
+}
+
+@media (max-width: 900px) {
+  .ctaBanner {
+    flex-direction: column;
+    gap: 30px;
+    text-align: center;
+  }
+
+  .footerContent {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer {
+    padding: 30px 20px;
+  }
+
+  .footerContent {
+    grid-template-columns: 1fr;
+  }
+
+  .ctaBanner h2 {
+    font-size: 38px;
+  }
+}
