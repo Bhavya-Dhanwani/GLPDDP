@@ -1,6 +1,6 @@
 // Importing the modules
 import { generateAccessToken, generateRefreshToken } from "../../../shared/utils/token.util.js";
-import AuthRepository from "../../../shared/repositories/auth.repository.js";
+import UserRepository from "../../../shared/repositories/user.repository.js";
 import sessionRepository from "../../../shared/repositories/session.repository.js";
 import { sanitizeUser } from "../../../shared/utils/sanitizer.util.js";
 import Conflict from "../../../shared/errors/conflict.error.js";
@@ -11,23 +11,27 @@ import TokenService from "../token/token.service.js";
 // class to handle the service logic of the auth module
 class AuthService {
     constructor() {
-        // initializing the auth repository
-        this.authRepository = new AuthRepository();
+        // initializing the user repository
+        this.userRepository = new UserRepository();
+
+        // initializing the session repository
         this.sessionRepository = new sessionRepository();
+
+        // initializing the token service
         this.tokenService = new TokenService();
     }
 
     async signupService(name, email, password) {
 
         // Find if email exist or not 
-        const exisitingUser = await this.authRepository.findUserByEmail(email);
+        const exisitingUser = await this.userRepository.findUserByEmail(email);
 
         if (exisitingUser) {
             throw new Conflict("Email already exist");
         }
 
         // creating the user
-        const user = await this.authRepository.createUser({ name, email, password });
+        const user = await this.userRepository.createUser({ name, email, password });
 
         // making the access token
         const accessToken = generateAccessToken(user);
@@ -57,7 +61,7 @@ class AuthService {
     async loginService(email, password) {
 
         // Find if email exist or not
-        const user = await this.authRepository.findUserByEmail(email);
+        const user = await this.userRepository.findUserByEmail(email);
 
         if (!user) {
             throw new NotFound("User not found");
@@ -105,7 +109,7 @@ class AuthService {
         await this.tokenService.verifyOtp(userId, otp);
 
         // updating the user as verified
-        const user = await this.authRepository.updateUser({ _id: userId }, { isVerified: true });
+        const user = await this.userRepository.updateUser({ _id: userId }, { isVerified: true });
 
         return user;
 
@@ -162,7 +166,7 @@ class AuthService {
     async forgetService(email) {
 
         // finding the user by email
-        const user = await this.authRepository.findUserByEmail(email);
+        const user = await this.userRepository.findUserByEmail(email);
 
         // if user not found then throw error
         if (!user) {
@@ -180,7 +184,7 @@ class AuthService {
         const user = await this.tokenService.verifyResetToken(token);
 
         // updating the user password
-        await this.authRepository.updateUser({ _id: user._id }, { password });
+        await this.userRepository.updateUser({ _id: user._id }, { password });
 
         // deleting the reset token
         await this.tokenService.deleteResetToken(user._id);

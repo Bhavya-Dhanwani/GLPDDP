@@ -1,5 +1,4 @@
 // Importing modules
-import env from '../config/env.config.js';
 import { decodeAccessToken } from '../utils/token.util.js';
 import Unauthorized from '../errors/unauthorized.error.js';
 

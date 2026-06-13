@@ -3,7 +3,10 @@ import SeriesController from './series.controller.js';
 import authMiddleware from '../../../shared/middlewares/auth.middleware.js';
 import asyncHandler from '../../../shared/utils/asynchandler.util.js';
 import validateErrors from '../../../shared/middlewares/validateErrors.middeware.js';
-import { createSeriesValidator, updateSeriesValidator } from './series.validator.js';
+import { createSeriesValidator, deleteSeriesValidator, updateSeriesValidator } from './series.validator.js';
+import ROLES from '../../../shared/constants/roles.constants.js';
+import authorize from '../../../shared/middlewares/authorize.middleware.js';
+
 const router = express.Router();
 
 const seriesController = new SeriesController();
@@ -14,7 +17,7 @@ const seriesController = new SeriesController();
  * @access Private
  * @params { name: String, shortName: String, season: String, status: String, logo: String }
  */
-router.post("/", createSeriesValidator, authMiddleware, validateErrors, asyncHandler(seriesController.createSeries))
+router.post("/", createSeriesValidator, validateErrors, authMiddleware, authorize(ROLES.SUPER_ADMIN, ROLES.ADMIN), asyncHandler(seriesController.createSeries))
 
 /**
  * @route PATCH /api/series/:id
@@ -22,14 +25,14 @@ router.post("/", createSeriesValidator, authMiddleware, validateErrors, asyncHan
  * @access Private
  * @params { name: String, shortName: String, season: String, status: String, logo: String }
  */
-router.patch("/:id", updateSeriesValidator, authMiddleware, validateErrors, asyncHandler(seriesController.updateSeries))
+router.put("/:id", updateSeriesValidator, validateErrors, authMiddleware, authorize(ROLES.SUPER_ADMIN, ROLES.ADMIN), asyncHandler(seriesController.updateSeries))
 
 /**
  * @route DELETE /api/series/:id
  * @desc Delete series by id
  * @access Private
  */
-router.delete("/:id", authMiddleware, asyncHandler(seriesController.deleteSeries))
+router.delete("/:id", deleteSeriesValidator, validateErrors, authMiddleware, authorize(ROLES.SUPER_ADMIN, ROLES.ADMIN), asyncHandler(seriesController.deleteSeries))
 
 
 export default router;
