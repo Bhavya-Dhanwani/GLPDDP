@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styles from "../css/PopularSeries.module.css";
 
 const seriesList = [
@@ -43,7 +44,12 @@ export default function PopularSeries() {
         {seriesList.map((item, index) => (
           <div className={styles.card} key={index}>
             <div className={styles.imageBox}>
-              <img src={item.image} alt={item.title} />
+              <Image
+                src={item.image}
+                alt={item.title}
+                fill
+                style={{ objectFit: "cover" }}
+              />
               <span
                 className={
                   item.status === "LIVE"

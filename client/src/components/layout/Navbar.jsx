@@ -14,10 +14,12 @@ export default function Navbar() {
       </div>
 
       <button
-        className={styles.menuButton}
+        className={`${styles.menuButton} ${isOpen ? styles.open : ""}`}
         onClick={() => setIsOpen(!isOpen)}
       >
-        ☰
+        <span className={styles.line}></span>
+        <span className={styles.line}></span>
+        <span className={styles.line}></span>
       </button>
 
       <nav className={`${styles.links} ${isOpen ? styles.showMenu : ""}`}>

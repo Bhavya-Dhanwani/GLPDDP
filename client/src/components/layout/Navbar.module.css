@@ -151,42 +151,67 @@
     padding: 0 20px;
   }
 
-  .menuButton {
-    display: block;
-    z-index: 10000;
-  }
-
   .actions {
     display: none;
+  }
+
+  .menuButton {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    width: 28px;
+    height: 22px;
+    z-index: 10000;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .menuButton .line {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #111827;
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .menuButton.open .line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .menuButton.open .line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  .menuButton.open .line:nth-child(2) {
+    opacity: 0;
   }
 
   .links {
     position: fixed;
     top: 0;
     right: 0;
-    height: 100vh;
-    width: 0;
-    overflow: hidden;
-    display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    height: 100vh;
+    justify-content: start;
     padding-top: 20vh;
-    padding-left: 0;
+    font-size: 2rem;
     gap: 2rem;
     background: #ffffff;
-    box-shadow: -10px 0 40px rgba(15, 23, 42, 0.12);
+    width: 0vw;
+    overflow: hidden;
     transition: width 0.35s ease;
   }
 
+  .menuButton.open ~ .links,
   .showMenu {
-    width: 80vw;
-    padding-left: 32px;
-    animation: none;
+    width: 100vw;
   }
 
   .links a {
-    font-size: 1rem;
     white-space: nowrap;
   }
 
@@ -195,5 +220,11 @@
     flex-direction: column;
     gap: 12px;
     margin-top: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .links {
+    gap: 1rem;
   }
 }

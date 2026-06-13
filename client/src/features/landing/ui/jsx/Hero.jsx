@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styles from "../css/Hero.module.css";
 import {
   Route,
@@ -94,7 +95,9 @@ export default function Hero() {
           <p>That's out of the ground!</p>
         </div>
 
-        <div className={styles.ball}><img src="/heroimage.png" alt="" /></div>
+        <div className={styles.ball}>
+          <Image src="/heroimage.png" alt="" fill style={{ objectFit: "contain" }} />
+        </div>
       </div>
     </section>
   );
