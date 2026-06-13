@@ -1,5 +1,6 @@
 "use client";
-
+import Image from "next/image";
+import logo from "../../assets/images/logo.png";
 import { useState } from "react";
 import styles from "./Navbar.module.css";
 import Button from "@/features/shared/ui/jsx/Button";
@@ -10,7 +11,7 @@ export default function Navbar() {
   return (
     <header className={styles.navbar}>
       <div className={styles.logo}>
-        <img src="/logo.png" alt="GLPDDP Logo" />
+        <Image src={logo} alt="Logo" />
       </div>
 
       <button

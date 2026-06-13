@@ -8,6 +8,8 @@ import {
   FaTwitter,
 } from "react-icons/fa6";
 import Button from "@/features/shared/ui/jsx/Button";
+import Image from "next/image";
+import logo from "@/assets/images/logo.png";
 
 export default function Footer() {
   return (
@@ -28,7 +30,7 @@ export default function Footer() {
       {/* Footer Content */}
       <div className={styles.footerContent}>
         <div className={styles.brand}>
-          <h2><img src="/logo.png" alt="" /></h2>
+          <h2><Image src={logo} alt="Logo" width={100} /></h2>
           <p>Live Cricket. Real Time.</p>
 
           <div className={styles.socials}>
