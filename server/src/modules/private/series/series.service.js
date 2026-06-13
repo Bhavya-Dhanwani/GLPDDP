@@ -2,6 +2,7 @@
 import Conflict from "../../../shared/errors/conflict.error.js";
 import NotFound from "../../../shared/errors/notfound.error.js";
 import SeriesRepository from '../../../shared/repositories/series.repository.js';
+import { sanitizeSeries } from "../../../shared/utils/sanitizer.util.js";
 
 // Service handling Series business logic and validation
 export default class SeriesService {
@@ -31,10 +32,13 @@ export default class SeriesService {
             throw new Conflict("Series season already exists");
         }
 
-        return this.seriesRepository.create({
+        let series = await this.seriesRepository.create({
             ...data,
             createdBy: userId,
         });
+
+        let sanitizedSeries = sanitizeSeries(series);
+        return sanitizedSeries;
     }
 
     // Update an existing series after uniqueness checks
@@ -73,17 +77,20 @@ export default class SeriesService {
             }
         }
 
-        return this.seriesRepository.update(
+        let series = await this.seriesRepository.update(
             id,
             {
                 ...data,
                 updatedBy: userId,
             }
         );
+
+        let sanitizedSeries = sanitizeSeries(series);
+        return sanitizedSeries;
     }
 
     // Soft-delete a series after verifying it exists
-    async deleteSeries(id) {
+    async deleteSeries(id,userId) {
         const series =
             await this.seriesRepository.findById(id);
 
@@ -100,6 +107,9 @@ export default class SeriesService {
         //     throw new throw new Conflict("Cannot delete series with existing matches");
         // }
 
-        return this.seriesRepository.delete(id);
+        let deletedSeries = await this.seriesRepository.delete(id,userId);
+
+        let sanitizedSeries = sanitizeSeries(deletedSeries);
+        return sanitizedSeries;
     }
 }

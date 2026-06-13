@@ -1,6 +1,7 @@
 // Importing modules
 import NotFound from "../../../shared/errors/notfound.error.js";
 import SeriesRepository from '../../../shared/repositories/series.repository.js';
+import { sanitizeSeries, sanitizeSeriesList } from "../../../shared/utils/sanitizer.util.js";
 
 // Service handling Series business logic and validation
 export default class SeriesService {
@@ -13,13 +14,16 @@ export default class SeriesService {
     // Retrieve all series, applying optional filters for name and season
     async getAllSeries(queryParams) {
 
-        console.log("Query Params:", queryParams); // Debug log to check incoming query parameters
-
         const filters = {
             name: queryParams.name?.trim(),
             season: queryParams.season?.trim()
         }
-        return this.seriesRepository.findAll(filters);
+
+        let series = await this.seriesRepository.findAll(filters);
+
+        let sanitizedSeries = sanitizeSeriesList(series);
+
+        return sanitizedSeries;
     }
 
     // Retrieve a single series by id, throw NotFound if missing
@@ -31,7 +35,7 @@ export default class SeriesService {
             throw new NotFound("Series not found");
         }
 
-        return series;
+        return sanitizeSeries(series);
     }
 
 }

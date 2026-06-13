@@ -35,7 +35,8 @@ export default class SeriesController {
     deleteSeries = async (req, res) => {
         const series =
             await this.seriesService.deleteSeries(
-                req.params.id
+                req.params.id,
+                req.user.id
             );
 
         return ApiResponse(res, 200, "Series deleted successfully", series);
