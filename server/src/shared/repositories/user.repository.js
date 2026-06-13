@@ -2,8 +2,8 @@
 // importing the user model
 import User from '../models/user.model.js';
 
-// making a auth repositary class
-class AuthRepository {
+// making a user repository class
+class UserRepository {
     constructor() {
         // initializing the user model
         this.userModel = User;
@@ -33,4 +33,4 @@ class AuthRepository {
     }
 }
 
-export default AuthRepository;
+export default UserRepository;
