@@ -8,7 +8,7 @@
 
 .heading {
   font-size: 44px;
-  font-weight: 6\00;
+  font-weight: 600;
   line-height: 1.05;
   color: var(--color-text);
   margin-bottom: 10px;
@@ -43,14 +43,62 @@
 .imageWrap {
   flex: 1;
   min-height: 0;
-  position: relative;   /* required for Next Image fill */
+  position: relative;
   margin-top: 12px;
   width: 100%;
 }
 
-/* Next Image fill target */
 .playerImage {
   object-fit: contain;
   object-position: bottom left;
   transform: scale(1.2);
+}
+
+/* ── Tablet (≤ 768px) ── */
+@media (max-width: 768px) {
+  .heading {
+    font-size: 34px;
+  }
+
+  .tagline {
+    max-width: 180px;
+    font-size: 12.5px;
+  }
+}
+
+/* ── Mobile (≤ 640px): compact banner ── */
+@media (max-width: 640px) {
+  .hero {
+    flex: none;
+    padding-top: 16px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background: linear-gradient(135deg, #e8f5e9 0%, #f4faf4 100%);
+    border-radius: var(--radius-lg);
+    margin-bottom: 16px;
+    min-height: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .heading {
+    font-size: 28px;
+    margin-bottom: 6px;
+  }
+
+  .divider {
+    width: 24px;
+    margin-bottom: 8px;
+  }
+
+  .tagline {
+    font-size: 12px;
+    max-width: 100%;
+  }
+
+  /* Hide the player image on mobile — saves space */
+  .imageWrap {
+    display: none;
+  }
 }

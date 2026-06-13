@@ -14,15 +14,17 @@
   display: flex;
   justify-content: center;
   align-items: stretch;
-  padding: 0 24px 20px 24px;
+  padding: 0 24px 0 24px;
+  overflow: visible;
 }
 
 .inner {
   display: flex;
-  align-items: stretch;
+  align-items: flex-start;
   gap: 16px;
   width: 100%;
   max-width: 800px;
+  overflow: visible;
 }
 
 .heroCol {
@@ -30,6 +32,8 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
+  overflow: visible;
+  position: relative;
 }
 
 .formCol {
@@ -43,7 +47,8 @@
 
 /* ── Loading skeletons ── */
 .heroSkeleton {
-  flex: 1;
+  height: 100%;
+  min-height: 300px;
   border-radius: var(--radius-lg);
   background: linear-gradient(90deg, #e8f5e9 25%, #d4edd4 50%, #e8f5e9 75%);
   background-size: 200% 100%;
@@ -52,6 +57,7 @@
 
 .formSkeleton {
   flex: 1;
+  min-height: 300px;
   border-radius: var(--radius-lg);
   background: linear-gradient(90deg, #f0f0f0 25%, #e4e4e4 50%, #f0f0f0 75%);
   background-size: 200% 100%;
@@ -63,14 +69,14 @@
   100% { background-position: -200% 0; }
 }
 
-/* ── Tablet (≤ 768px) ── */
+/* ── Tablet (≤ 768px): tighten spacing ── */
 @media (max-width: 768px) {
   .inner {
     gap: 12px;
   }
 
   .heroCol {
-    flex: 0 0 200px;
+    flex: 0 0 220px;
   }
 }
 
@@ -79,7 +85,7 @@
   .page {
     height: auto;
     max-height: none;
-    overflow: visible;
+    overflow: visible;        /* allow page to scroll */
     min-height: 100vh;
   }
 
@@ -87,10 +93,11 @@
     flex: none;
     align-items: flex-start;
     padding: 0 16px 32px 16px;
+    overflow: visible;
   }
 
   .inner {
-    flex-direction: column;
+    flex-direction: column;   /* stack: hero banner → form */
     align-items: stretch;
     gap: 0;
     max-width: 100%;
@@ -99,6 +106,7 @@
   .heroCol {
     flex: none;
     width: 100%;
+    overflow: visible;
   }
 
   .formCol {
@@ -112,6 +120,6 @@
   }
 
   .formSkeleton {
-    min-height: 480px;
+    min-height: 420px;
   }
 }

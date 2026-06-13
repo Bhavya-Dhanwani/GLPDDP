@@ -13,7 +13,7 @@
   object-fit: contain;
 }
 
-.signinBadge {
+.signupBadge {
   display: flex;
   align-items: center;
   gap: 7px;
@@ -29,7 +29,7 @@
   transition: box-shadow 0.15s;
 }
 
-.signinBadge:hover {
+.signupBadge:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
@@ -39,7 +39,7 @@
   flex-shrink: 0;
 }
 
-.signinLink {
+.signupLink {
   color: var(--color-primary);
   font-weight: 600;
 }
@@ -55,12 +55,12 @@
     height: 36px;
   }
 
-  /* Hide the descriptive "Already have an account?" text, keep only "Sign in" */
-  .signinBadge span:first-of-type {
+  /* Hide the descriptive "New here?" text, keep only "Sign up" */
+  .signupBadge span:first-of-type {
     display: none;
   }
 
-  .signinBadge {
+  .signupBadge {
     padding: 7px 14px;
     font-size: 12px;
     gap: 5px;
