@@ -9,20 +9,20 @@ export default class MatchController {
 
     // Get all matches with optional filters - seriesId, teamId, status
     getAllMatches = async (req, res) => {
-        const matches = await this.matchService.getMatches(filters);
+        const matches = await this.matchService.getMatches(req.query);
         return ApiResponse(res, 200, "Matches fetched successfully", matches)
     }
 
     // Get match by matchId
     getMatchById = async (req, res) => {
-        const { matchId } = req.params.id;
-        const match = await this.matchService.getMatchById(matchId);
+        const { id } = req.params;
+        const match = await this.matchService.getMatchById(id);
         return ApiResponse(res, 200, "Match fetched successfully", match)
     }
 
     // Get all matches for a given seriesId
     getMatchesBySeriesId = async (req, res) => {
-        const { seriesId } = req.params.id;
+        const { seriesId } = req.params;
         const matches = await this.matchService.getMatchesBySeriesId(seriesId)
         return ApiResponse(res, 200, "Matches fetched successfully", matches)
     }

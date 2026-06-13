@@ -9,7 +9,7 @@ function authMiddleware(req, res, next) {
     const authHeader = req.headers['authorization'];
     
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        throw new Unauthorized("User Unauthorized");
+        throw new Unauthorized("User Unauthenticated");
     }
 
     // getting the token from the header
@@ -19,7 +19,7 @@ function authMiddleware(req, res, next) {
     const decoded = decodeAccessToken(token);
 
     if (decoded == null) {
-        throw new Unauthorized("User Unauthorized");
+        throw new Unauthorized("User Unauthenticated");
     }
 
     // setting the user in the request object
