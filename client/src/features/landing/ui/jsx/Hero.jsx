@@ -7,6 +7,7 @@ import {
   Users,
 } from "lucide-react";
 import Button from "@/features/shared/ui/jsx/Button";
+import heroimage from "@/assets/images/heroimage.png";
 
 
 export default function Hero() {
@@ -96,7 +97,7 @@ export default function Hero() {
         </div>
 
         <div className={styles.ball}>
-          <Image src="/heroimage.png" alt="" fill style={{ objectFit: "contain" }} />
+          <Image src={heroimage} alt="Hero Image" fill style={{ objectFit: "contain" }} />
         </div>
       </div>
     </section>
