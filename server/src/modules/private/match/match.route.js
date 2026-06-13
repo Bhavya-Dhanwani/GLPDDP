@@ -1,7 +1,5 @@
 import express from "express";
-
 import MatchController from "./match.controller.js";
-
 import asyncHandler from "../../../shared/utils/asynchandler.util.js";
 import validateErrors from "../../../shared/middlewares/validateErrors.middeware.js";
 

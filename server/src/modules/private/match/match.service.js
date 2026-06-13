@@ -1,6 +1,8 @@
 import NotFoundError from "../../../shared/errors/notfound.error.js";
 import ConflictError from "../../../shared/errors/conflict.error.js";
 import { MatchRepository } from "../../../shared/repositories/match.repository.js";
+import { sanitizeMatch } from "./match.sanitize.js";
+import { MATCH_STATUS } from "../../../shared/constants/match.constatnts.js";
 
 
 export class MatchService {
@@ -14,7 +16,13 @@ export class MatchService {
             ...payload,
             createdBy: userId,
         }
-        return this.matchRepository.create(matchData);
+
+        let match = await this.matchRepository.create(matchData);
+
+        // sanitizing match data
+        let sanitizedMatch = sanitizeMatch(match);
+
+        return sanitizedMatch;
     }
 
     //   Update an existing match by its ID
@@ -30,7 +38,12 @@ export class MatchService {
             updatedBy: userId,
         }
 
-        return this.matchRepository.updateById(matchId, updateData);
+        let updatedMatch = await this.matchRepository.updateById(matchId, updateData);
+
+        // sanitizing match data
+        let sanitizedMatch = sanitizeMatch(updatedMatch);
+
+        return sanitizedMatch;
     }
 
     //   Delete a match by its ID (soft delete)
@@ -41,7 +54,12 @@ export class MatchService {
             throw new NotFoundError("Match not found");
         }
 
-        return this.matchRepository.softDelete(matchId, userId);
+        let deletedMatch = await this.matchRepository.softDelete(matchId, userId);
+
+        // sanitizing match data
+        let sanitizedMatch = sanitizeMatch(deletedMatch);
+
+        return sanitizedMatch;
     }
 
     //  Publish a match by changing its status from "DRAFT" to "UPCOMING"
@@ -52,16 +70,21 @@ export class MatchService {
             throw new NotFoundError("Match not found");
         }
 
-        if (match.status !== "DRAFT") {
+        if (match.status !== MATCH_STATUS.DRAFT) {
             throw new ConflictError(
                 "Only draft matches can be published"
             );
         }
 
-        return this.matchRepository.updateById(matchId, {
-            status: "UPCOMING",
+        let updatedMatch = await this.matchRepository.updateById(matchId, {
+            status: MATCH_STATUS.UPCOMING,
             updatedBy: userId
         });
+
+        // sanitizing match data
+        let sanitizedMatch = sanitizeMatch(updatedMatch);
+
+        return sanitizedMatch;
     }
 
     //   Update the toss information for a match with toss winner and toss Decision
@@ -72,18 +95,23 @@ export class MatchService {
             throw new NotFoundError("Match not found");
         }
 
-        if (match.status !== "UPCOMING") {
+        if (match.status !== MATCH_STATUS.UPCOMING) {
             throw new ConflictError(
                 "Toss can only be updated for upcoming matches"
             );
         }
 
-        return this.matchRepository.updateById(matchId, {
+        let updatedMatch = await this.matchRepository.updateById(matchId, {
             tossWinner: payload.tossWinner,
             tossDecision: payload.tossDecision,
-            status: "TOSS_COMPLETED",
+            status: MATCH_STATUS.TOSS_COMPLETED,
             updatedBy: userId
         });
+
+        // sanitizing match data
+        let sanitizedMatch = sanitizeMatch(updatedMatch);
+
+        return sanitizedMatch;
     }
 
     // Update Match status from "TOSS_COMPLETED" to "PLAYING_XI_SELECTED" along with both teams 
@@ -94,20 +122,25 @@ export class MatchService {
             throw new NotFoundError("Match not found");
         }
 
-        if (match.status !== "TOSS_COMPLETED") {
+        if (match.status !== MATCH_STATUS.TOSS_COMPLETED) {
             throw new ConflictError(
                 "Playing XI can only be selected after the toss is completed"
             );
         }
 
-        return this.matchRepository.updateById(matchId, {
+        let updatedMatch = await this.matchRepository.updateById(matchId, {
             playingXI: {
                 team1: payload.team1,
                 team2: payload.team2,
             },
-            status: "PLAYING_XI_SELECTED",
+            status: MATCH_STATUS.PLAYING_XI_SELECTED,
             updatedBy: userId
         });
+
+        // sanitizing match data
+        let sanitizedMatch = sanitizeMatch(updatedMatch);
+
+        return sanitizedMatch;
     }
 
     //   Update the status of a match to "LIVE" after the playing XI has been selected
@@ -118,17 +151,21 @@ export class MatchService {
             throw new NotFoundError("Match not found");
         }
 
-        if (match.status !== "PLAYING_XI_SELECTED") {
+        if (match.status !== MATCH_STATUS.PLAYING_XI_SELECTED) {
             throw new ConflictError(
                 "Playing XI must be selected before starting the match"
             );
         }
 
-        return this.matchRepository.updateById(matchId, {
-            status: "LIVE",
+        let updatedMatch = await this.matchRepository.updateById(matchId, {
+            status: MATCH_STATUS.LIVE,
             currentInnings: 1,
             updateById: userId
         });
+        // sanitizing match data
+        let sanitizedMatch = sanitizeMatch(updatedMatch);
+
+        return sanitizedMatch;
     }
 
     //  Update the status of a match to "INNINGS_BREAK" during the match
@@ -139,16 +176,21 @@ export class MatchService {
             throw new NotFoundError("Match not found");
         }
 
-        if (match.status !== "LIVE") {
+        if (match.status !== MATCH_STATUS.LIVE) {
             throw new ConflictError(
                 "Only live matches can enter innings break"
             );
         }
 
-        return this.matchRepository.updateById(matchId, {
-            status: "INNINGS_BREAK",
+        let updatedMatch = await this.matchRepository.updateById(matchId, {
+            status: MATCH_STATUS.INNINGS_BREAK,
             updatedBy: userId
         });
+
+        // sanitizing match data
+        let sanitizedMatch = sanitizeMatch(updatedMatch);
+
+        return sanitizedMatch;
     }
 
     //  Update the status of a match to "LIVE" and set the current innings to 2 after the innings break
@@ -159,17 +201,22 @@ export class MatchService {
             throw new NotFoundError("Match not found");
         }
 
-        if (match.status !== "INNINGS_BREAK" && match.currentInnings !== 1) {
+        if (match.status !== MATCH_STATUS.INNINGS_BREAK && match.currentInnings !== 1) {
             throw new ConflictError(
                 "Match is not currently in innings break"
             );
         }
 
-        return this.matchRepository.updateById(matchId, {
-            status: "LIVE",
+        let updatedMatch = await this.matchRepository.updateById(matchId, {
+            status: MATCH_STATUS.LIVE,
             currentInnings: 2,
             updatedBy: userId
         });
+
+        // sanitizing match data
+        let sanitizedMatch = sanitizeMatch(updatedMatch);
+
+        return sanitizedMatch;
     }
 
     // Update the status of a match to "ABANDONED" if it cannot be completed or cancelled due to unforeseen circumstances
@@ -181,18 +228,23 @@ export class MatchService {
         }
 
         if (
-            match.status === "COMPLETED" ||
-            match.status === "ABANDONED"
+            match.status === MATCH_STATUS.COMPLETED ||
+            match.status === MATCH_STATUS.ABANDONED
         ) {
             throw new ConflictError(
                 "Match cannot be abandoned"
             );
         }
 
-        return this.matchRepository.updateById(matchId, {
-            status: "ABANDONED",
+        let updatedMatch = await this.matchRepository.updateById(matchId, {
+            status: MATCH_STATUS.ABANDONED,
             updatedBy: userId
         });
+
+        // sanitizing match data
+        let sanitizedMatch = sanitizeMatch(updatedMatch);
+
+        return sanitizedMatch;
     }
 
     // Update the status of a match to "NO_RESULT" if it cannot be completed due to unforeseen circumstances
@@ -204,18 +256,23 @@ export class MatchService {
         }
 
         if (
-            match.status === "COMPLETED" ||
-            match.status === "ABANDONED"
+            match.status === MATCH_STATUS.COMPLETED ||
+            match.status === MATCH_STATUS.ABANDONED
         ) {
             throw new ConflictError(
                 "Cannot mark completed match as no result"
             );
         }
 
-        return this.matchRepository.updateById(matchId, {
-            status: "NO_RESULT",
+        let updatedMatch = await this.matchRepository.updateById(matchId, {
+            status: MATCH_STATUS.NO_RESULT,
             updatedBy: userId
         });
+
+        // sanitizing match data
+        let sanitizedMatch = sanitizeMatch(updatedMatch);
+
+        return sanitizedMatch;
     }
 
     //   Update the status of a match to "COMPLETED" and record the result, winner
@@ -227,20 +284,25 @@ export class MatchService {
         }
 
         if (
-            match.status !== "LIVE" &&
-            match.status !== "INNINGS_BREAK"
+            match.status !== MATCH_STATUS.LIVE &&
+            match.status !== MATCH_STATUS.INNINGS_BREAK
         ) {
             throw new ConflictError(
                 "Only live matches can be completed"
             );
         }
 
-        return this.matchRepository.updateById(matchId, {
+        let updatedMatch = await this.matchRepository.updateById(matchId, {
             winner: payload.winner,
             result: payload.result,
             manOfTheMatch: payload.manOfTheMatch,
-            status: "COMPLETED",
+            status: MATCH_STATUS.COMPLETED,
             updatedBy: userId
         });
+
+        // sanitizing match data
+        let sanitizedMatch = sanitizeMatch(updatedMatch);
+
+        return sanitizedMatch;
     }
 }

@@ -27,7 +27,7 @@ export class MatchRepository {
   }
 
   // Soft delete a Match document by its ID by setting isDeleted to true
-  async softDelete(id,userId) {
+  async softDelete(id, userId) {
     return this.matchModel.findOneAndUpdate(
       {
         _id: id,
@@ -35,7 +35,7 @@ export class MatchRepository {
       },
       {
         isDeleted: true,
-        updatedBy:userId
+        updatedBy: userId
       },
       {
         returnDocument: 'after',
@@ -43,19 +43,32 @@ export class MatchRepository {
     );
   }
 
-  // Find all Matches that are not soft deleted with optional filters like seriesId, teamId 
-  async findAll(filter = {}) {
+  // Find all Matches that are not soft deleted with optional filters - title, city, country, venue, matchType, status, matchNumber and Result
+  async findAll(filters = {}) {
+    const query = {
+      isDeleted: false,
+    };
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (!value) return;
+
+      query[key] =
+        typeof value === "string"
+          ? {
+            $regex: value,
+            $options: "i",
+          }
+          : value;
+    });
+
     return this.matchModel
-      .find({
-        isDeleted: false,
-        ...filter,
-      })
+      .find(query)
       .populate("seriesId", "name shortName season")
-      // .populate("team1", "name shortName logo")
-      // .populate("team2", "name shortName logo");
+    // .populate("team1", "name shortName logo")
+    // .populate("team2", "name shortName logo");
   }
-  
-// Find a Match by its ID 
+
+  // Find a Match by its ID 
   async findById(id) {
     return this.matchModel
       .findOne({
@@ -63,10 +76,10 @@ export class MatchRepository {
         isDeleted: false,
       })
       .populate("seriesId", "name shortName season")
-      // .populate("team1", "name shortName logo")
-      // .populate("team2", "name shortName logo")
-      // .populate("tossWinner", "name shortName")
-      // .populate("winner", "name shortName");
+    // .populate("team1", "name shortName logo")
+    // .populate("team2", "name shortName logo")
+    // .populate("tossWinner", "name shortName")
+    // .populate("winner", "name shortName");
   }
 
   // Find Matches by seriesId
@@ -76,7 +89,7 @@ export class MatchRepository {
       isDeleted: false,
     });
   }
-  
+
   // Find Matches by status (LIVE, UPCOMING, COMPLETED, etc.)
   async findByStatus(status) {
     return this.matchModel.find({

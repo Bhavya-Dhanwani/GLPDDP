@@ -1,5 +1,6 @@
 import NotFoundError from "../../../shared/errors/notfound.error.js";
 import { MatchRepository } from "../../../shared/repositories/match.repository.js";
+import { sanitizeMatch, sanitizeMatchList } from "./match.sanitize.js";
 
 // Service class for getting match details for public routes 
 export class MatchService {
@@ -7,9 +8,11 @@ export class MatchService {
     this.matchRepository = new MatchRepository();
   }
 
-  // Get all matche with optional filters - seriesId, teamId, status
+  // Get all matche with optional filters - title, city, country, venue, matchType, status, matchNumber and Result
   async getMatches(filters = {}) {
-    return this.matchRepository.findAll(filters);
+    let matches = await this.matchRepository.findAll(filters);
+    let sanitizedMatches = sanitizeMatchList(matches)
+    return sanitizedMatches
   }
 
   // Get match by matchId
@@ -20,31 +23,15 @@ export class MatchService {
       throw new NotFoundError("Match not found");
     }
 
-    return match;
+    let sanitizedMatch = sanitizeMatch(match)
+    return sanitizedMatch;
   }
 
   // Get all matches for a given seriesId
   async getMatchesBySeriesId(seriesId) {
-    return this.matchRepository.findBySeriesId(seriesId);
+    let matches = await this.matchRepository.findBySeriesId(seriesId);
+    let sanitizedMatches = sanitizeMatchList(matches)
+    return sanitizedMatches;
   }
 
-  // Get all matches whose status is LIVE
-  async getLiveMatches() {
-    return this.matchRepository.findByStatus("LIVE");
-  }
-
-  // Get all matches whose status is UPCOMING
-  async getUpcomingMatches() {
-    return this.matchRepository.findByStatus("UPCOMING");
-  }
-
-  // Get all matches whose status is COMPLETED
-  async getCompletedMatches() {
-    return this.matchRepository.findByStatus("COMPLETED");
-  }
-
-  // Get matches by status (LIVE, UPCOMING, TOSS_COMPLETED, COMPLETED, etc.)
-  async getMatchesByStatus(status) {
-    return this.matchRepository.findByStatus(status);
-  }
 }

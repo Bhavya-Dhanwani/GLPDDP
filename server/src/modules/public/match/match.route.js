@@ -20,10 +20,7 @@ const matchController = new MatchController();
  * @desc Get all matches with optional filters
  * @access Public
  *
- * Query Params:
- * ?status=LIVE
- * ?seriesId=<seriesId>
- * ?teamId=<teamId>
+ * Query Params: (title, city, country, venue, matchType, status, matchNumber and Result)
  */
 router.get(
   "/",
@@ -35,7 +32,7 @@ router.get(
 /**
  * @route GET /api/matches/:id
  * @desc Get match by id
- * @access Public
+ * @access Public 
  */
 router.get(
   "/:id",
