@@ -225,6 +225,10 @@
 
 @media (max-width: 768px) {
   .links {
-    gap: 1rem;
+    gap: 2rem;
+  }
+
+  .links a {
+    font-size: 1.5rem;
   }
 }
