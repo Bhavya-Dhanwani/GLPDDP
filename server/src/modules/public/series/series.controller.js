@@ -1,13 +1,16 @@
 import ApiResponse from "../../../shared/utils/ApiResponse.utils.js";
 import SeriesService from "./series.service.js";
 
-// Controller for Series endpoints - delegates requests to the service and formats HTTP responses
+// Controller for Series endpoints - delegates requests to the service and formats HTTP responses 
 export default class SeriesController {
     constructor() {
+
         // Initialize SeriesService instance used by handlers
         this.seriesService = new SeriesService();
+
     }
- 
+
+
     // Get all series - supports optional name and season query filters
     getAllSeries = async (req, res) => {
         const series =

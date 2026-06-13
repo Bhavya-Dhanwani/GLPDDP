@@ -9,34 +9,43 @@ export class MatchService {
     }
 
     //   Create a new match
-    async createMatch(payload) {
-        return this.matchRepository.create(payload);
+    async createMatch(payload, userId) {
+        const matchData = {
+            ...payload,
+            createdBy: userId,
+        }
+        return this.matchRepository.create(matchData);
     }
 
     //   Update an existing match by its ID
-    async updateMatch(matchId, payload) {
+    async updateMatch(matchId, payload, userId) {
         const match = await this.matchRepository.findById(matchId);
 
         if (!match) {
             throw new NotFoundError("Match not found");
         }
 
-        return this.matchRepository.updateById(matchId, payload);
+        const updateData = {
+            ...payload,
+            updatedBy: userId,
+        }
+
+        return this.matchRepository.updateById(matchId, updateData);
     }
 
     //   Delete a match by its ID (soft delete)
-    async deleteMatch(matchId) {
+    async deleteMatch(matchId, userId) {
         const match = await this.matchRepository.findById(matchId);
 
         if (!match) {
             throw new NotFoundError("Match not found");
         }
 
-        return this.matchRepository.softDelete(matchId);
+        return this.matchRepository.softDelete(matchId, userId);
     }
 
     //  Publish a match by changing its status from "DRAFT" to "UPCOMING"
-    async publishMatch(matchId) {
+    async publishMatch(matchId, userId) {
         const match = await this.matchRepository.findById(matchId);
 
         if (!match) {
@@ -51,11 +60,12 @@ export class MatchService {
 
         return this.matchRepository.updateById(matchId, {
             status: "UPCOMING",
+            updatedBy: userId
         });
     }
 
-    //   Update the toss information for a match
-    async updateToss(matchId, payload) {
+    //   Update the toss information for a match with toss winner and toss Decision
+    async updateToss(matchId, payload, userId) {
         const match = await this.matchRepository.findById(matchId);
 
         if (!match) {
@@ -72,10 +82,12 @@ export class MatchService {
             tossWinner: payload.tossWinner,
             tossDecision: payload.tossDecision,
             status: "TOSS_COMPLETED",
+            updatedBy: userId
         });
     }
 
-    async selectPlayingXI(matchId, payload) {
+    // Update Match status from "TOSS_COMPLETED" to "PLAYING_XI_SELECTED" along with both teams 
+    async selectPlayingXI(matchId, payload, userId) {
         const match = await this.matchRepository.findById(matchId);
 
         if (!match) {
@@ -89,14 +101,17 @@ export class MatchService {
         }
 
         return this.matchRepository.updateById(matchId, {
-            team1PlayingXI: payload.team1PlayingXI,
-            team2PlayingXI: payload.team2PlayingXI,
+            playingXI: {
+                team1: payload.team1,
+                team2: payload.team2,
+            },
             status: "PLAYING_XI_SELECTED",
+            updatedBy: userId
         });
     }
 
     //   Update the status of a match to "LIVE" after the playing XI has been selected
-    async startMatch(matchId) {
+    async startMatch(matchId, userId) {
         const match = await this.matchRepository.findById(matchId);
 
         if (!match) {
@@ -112,11 +127,12 @@ export class MatchService {
         return this.matchRepository.updateById(matchId, {
             status: "LIVE",
             currentInnings: 1,
+            updateById: userId
         });
     }
 
     //  Update the status of a match to "INNINGS_BREAK" during the match
-    async pauseForInningsBreak(matchId) {
+    async pauseForInningsBreak(matchId,userId) {
         const match = await this.matchRepository.findById(matchId);
 
         if (!match) {
@@ -131,11 +147,12 @@ export class MatchService {
 
         return this.matchRepository.updateById(matchId, {
             status: "INNINGS_BREAK",
+            updatedBy: userId
         });
     }
 
     //  Update the status of a match to "LIVE" and set the current innings to 2 after the innings break
-    async startSecondInnings(matchId) {
+    async startSecondInnings(matchId,userId) {
         const match = await this.matchRepository.findById(matchId);
 
         if (!match) {
@@ -151,11 +168,12 @@ export class MatchService {
         return this.matchRepository.updateById(matchId, {
             status: "LIVE",
             currentInnings: 2,
+            updatedBy: userId
         });
     }
 
     // Update the status of a match to "ABANDONED" if it cannot be completed or cancelled due to unforeseen circumstances
-    async abandonMatch(matchId) {
+    async abandonMatch(matchId, userId) {
         const match = await this.matchRepository.findById(matchId);
 
         if (!match) {
@@ -173,11 +191,12 @@ export class MatchService {
 
         return this.matchRepository.updateById(matchId, {
             status: "ABANDONED",
+            updatedBy: userId
         });
     }
 
     // Update the status of a match to "NO_RESULT" if it cannot be completed due to unforeseen circumstances
-    async markNoResult(matchId) {
+    async markNoResult(matchId,userId) {
         const match = await this.matchRepository.findById(matchId);
 
         if (!match) {
@@ -195,11 +214,12 @@ export class MatchService {
 
         return this.matchRepository.updateById(matchId, {
             status: "NO_RESULT",
+            updatedBy: userId
         });
     }
 
     //   Update the status of a match to "COMPLETED" and record the result, winner
-    async completeMatch(matchId, payload) {
+    async completeMatch(matchId, payload,userId) {
         const match = await this.matchRepository.findById(matchId);
 
         if (!match) {
@@ -220,6 +240,7 @@ export class MatchService {
             result: payload.result,
             manOfTheMatch: payload.manOfTheMatch,
             status: "COMPLETED",
+            updatedBy: userId
         });
     }
 }

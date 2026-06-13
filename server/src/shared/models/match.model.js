@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { MATCH_STATUS, MATCH_TYPES } from "../constants/match.constatnts";
+import { MATCH_STATUS, MATCH_TYPES } from "../constants/match.constatnts.js";
 
 const playingXIPlayerSchema = new mongoose.Schema(
   {
