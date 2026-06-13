@@ -1,0 +1,56 @@
+.hero {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding-top: 24px;
+}
+
+.heading {
+  font-size: 44px;
+  font-weight: 6\00;
+  line-height: 1.05;
+  color: var(--color-text);
+  margin-bottom: 10px;
+  font-family: var(--font-sans);
+  flex-shrink: 0;
+}
+
+.divider {
+  width: 36px;
+  height: 3px;
+  background: var(--color-primary);
+  border-radius: 2px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.tagline {
+  font-size: 13.5px;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  max-width: 220px;
+  font-family: var(--font-sans);
+  flex-shrink: 0;
+}
+
+.tagline strong {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* Wrapper grows to fill leftover vertical space */
+.imageWrap {
+  flex: 1;
+  min-height: 0;
+  position: relative;   /* required for Next Image fill */
+  margin-top: 12px;
+  width: 100%;
+}
+
+/* Next Image fill target */
+.playerImage {
+  object-fit: contain;
+  object-position: bottom left;
+  transform: scale(1.2);
+}
