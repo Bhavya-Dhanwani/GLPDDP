@@ -535,9 +535,18 @@
 }
 
 .floatCard {
-  animation: floatMove 3s ease-in-out infinite;
+  position: absolute;
+  z-index: 4;
+  padding: 18px 24px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+  transition: all 0.3s ease;
 }
 
+.floatCard:hover {
+  transform: translateY(-5px);
+}
 .four {
   animation-delay: 0.3s;
 }
