@@ -31,6 +31,42 @@ class UserRepository {
         // returning the updated user
         return user;
     }
+
+    async getAllusers() {
+
+        // getting all the non deleted users
+        const users = await this.userModel.find({ isDeleted: false });
+        
+        return users;
+
+    }
+
+    async getUserById(userId) {
+
+        // getting the user by id
+        const user = await this.userModel.findOne({ _id: userId, isDeleted: false });
+
+
+        return user;
+
+    }
+
+    async deleteUser(filter) {
+
+        // deleting the user
+        const user = await this.userModel.findOneAndUpdate(filter, { isDeleted: true }, { returnDocument: "after" });
+
+        return user;
+    }
+
+    async getUser(data) {
+
+        // getting the user by email or id
+        const user = await this.userModel.find(data);
+
+        return user;
+
+    }
 }
 
 export default UserRepository;
