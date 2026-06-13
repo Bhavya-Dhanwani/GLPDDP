@@ -1,0 +1,92 @@
+.primary,
+.secondary,
+.outline {
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Primary Button */
+.primary {
+  background: var(--primary, #059669);
+  color: white;
+  box-shadow: 0 10px 25px rgba(5, 150, 105, 0.25);
+}
+
+.primary:hover {
+  background: var(--secondary, #047857);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px rgba(5, 150, 105, 0.35);
+}
+
+/* Secondary Button */
+.secondary {
+  background: white;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+}
+
+.secondary:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary, #059669);
+  color: var(--primary, #059669);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+}
+
+/* Outline Button */
+.outline {
+  background: transparent;
+  border: 2px solid var(--primary, #059669);
+  color: var(--primary, #059669);
+}
+
+.outline:hover {
+  background: var(--primary, #059669);
+  color: white;
+  transform: translateY(-3px);
+}
+
+/* Disabled State */
+.primary:disabled,
+.secondary:disabled,
+.outline:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Active Click Effect */
+.primary:active,
+.secondary:active,
+.outline:active {
+  transform: scale(0.98);
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .primary,
+  .secondary,
+  .outline {
+    padding: 12px 22px;
+    font-size: 14px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .primary,
+  .secondary,
+  .outline {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 14px;
+  }
+}

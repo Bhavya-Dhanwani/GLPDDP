@@ -1,0 +1,241 @@
+.section {
+  padding: 80px 60px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 42px;
+  animation: fadeUp 0.8s ease forwards;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 800;
+  color: #059669;
+  margin-bottom: 12px;
+}
+
+.header h2 {
+  font-size: 42px;
+  color: #020617;
+  letter-spacing: -1px;
+}
+
+.viewButton {
+  background: white;
+  border: 1px solid #e5e7eb;
+  padding: 16px 26px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  color: black;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.viewButton:hover {
+  background: #059669;
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(5, 150, 105, 0.25);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 34px;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  transition: all 0.35s ease;
+  animation: fadeUp 0.8s ease forwards;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.15);
+}
+
+.imageBox {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.imageBox img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.card:hover .imageBox img {
+  transform: scale(1.08);
+}
+
+.liveBadge,
+.upcomingBadge {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  z-index: 2;
+}
+
+.liveBadge {
+  background: #10b981;
+  color: white;
+  animation: pulse 1.8s infinite;
+}
+
+.upcomingBadge {
+  background: white;
+  color: #64748b;
+}
+
+.content {
+  padding: 24px;
+}
+
+.content h3 {
+  font-size: 18px;
+  color: #020617;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.content p {
+  color: #64748b;
+  font-size: 16px;
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+  }
+}
+
+/* Tablet */
+@media (max-width: 1100px) {
+  .section {
+    padding: 70px 40px;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile */
+@media (max-width: 650px) {
+  .section {
+    padding: 55px 20px;
+  }
+
+  .label {
+    text-align: center;
+}
+
+.desc{
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 32px;
+  }
+
+  .header h2 {
+    font-size: 32px;
+    line-height: 1.2;
+  }
+
+  .viewButton {
+    width: 100%;
+    text-align: center;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .imageBox {
+    height: 230px;
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .content h3 {
+    font-size: 17px;
+  }
+
+  .content p {
+    font-size: 14px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 380px) {
+  .header h2 {
+    font-size: 28px;
+  }
+
+    .label {
+    text-align: center;
+}
+
+.desc{
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+  .imageBox {
+    height: 200px;
+  }
+
+  .liveBadge,
+  .upcomingBadge {
+    top: 16px;
+    left: 16px;
+    font-size: 11px;
+  }
+}

@@ -1,0 +1,284 @@
+.section {
+  padding: 70px 60px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 36px;
+  animation: fadeUp 0.8s ease forwards;
+}
+
+.label {
+  color: #059669;
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.header h2 {
+  font-size: 42px;
+  color: #020617;
+  letter-spacing: -1px;
+}
+
+.viewButton {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  padding: 16px 26px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  color: black;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.viewButton:hover {
+  background: #059669;
+  color: white;
+  transform: translateY(-3px);
+}
+
+.matchCard {
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 34px 40px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  transition: all 0.35s ease;
+  animation: fadeUp 0.9s ease forwards;
+}
+
+.matchCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.12);
+}
+
+.matchInfo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 30px;
+}
+
+.liveBadge {
+  color: #ef4444;
+  background: #fee2e2;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-weight: 800;
+  animation: livePulse 1.8s infinite;
+}
+
+.scoreRow {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1.5fr 1fr 1.2fr;
+  align-items: center;
+  gap: 20px;
+}
+
+.team {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 34px;
+  color: #64748b;
+}
+
+.flag {
+  font-size: 42px;
+}
+
+.score {
+  text-align: center;
+}
+
+.score h3 {
+  font-size: 44px;
+  color: #020617;
+}
+
+.score p {
+  color: #64748b;
+  margin-top: 8px;
+  font-size: 16px;
+}
+
+.result {
+  text-align: center;
+  color: #059669;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.statsBox {
+  margin-top: 90px;
+  padding: 60px 40px;
+  border-radius: 24px;
+  background: linear-gradient(90deg, #f8fffb, #effdf5, #f8fffb);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  animation: fadeUp 1s ease forwards;
+}
+
+.statItem {
+  text-align: center;
+  border-right: 1px solid #d8e6dd;
+  transition: all 0.3s ease;
+}
+
+.statItem:hover {
+  transform: translateY(-8px);
+}
+
+.statItem:last-child {
+  border-right: none;
+}
+
+.icon {
+  font-size: 42px;
+  margin-bottom: 20px;
+  color: green;
+}
+
+.statItem h3 {
+  font-size: 54px;
+  color: #059669;
+  margin-bottom: 12px;
+}
+
+.statItem p {
+  color: #111827;
+  font-size: 18px;
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes livePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+}
+
+/* Tablet */
+@media (max-width: 1000px) {
+  .section {
+    padding: 60px 36px;
+  }
+
+  .scoreRow {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .team {
+    justify-content: center;
+  }
+
+  .statsBox {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 36px;
+  }
+
+  .statItem {
+    border-right: none;
+  }
+}
+
+/* Mobile */
+@media (max-width: 650px) {
+  .section {
+    padding: 55px 20px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+    .label {
+    text-align: center;
+}
+
+.desc{
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+  .header h2 {
+    font-size: 32px;
+    line-height: 1.2;
+  }
+
+  .viewButton {
+    width: 100%;
+  }
+
+  .matchCard {
+    padding: 26px 18px;
+  }
+
+  .matchInfo {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .team {
+    font-size: 28px;
+  }
+
+  .flag {
+    font-size: 34px;
+  }
+
+  .score h3 {
+    font-size: 34px;
+  }
+
+  .score p {
+    font-size: 14px;
+  }
+
+  .result {
+    font-size: 16px;
+  }
+
+  .statsBox {
+    margin-top: 60px;
+    padding: 40px 24px;
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .statItem h3 {
+    font-size: 42px;
+  }
+
+  .statItem p {
+    font-size: 16px;
+  }
+}
