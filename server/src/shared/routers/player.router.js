@@ -7,8 +7,8 @@ import privatePlayerRouter from "../../modules/private/player/player.route.js";
 const router = express.Router();
 
 // Defining routes
-router.use("/players", publicPlayerRouter);
-router.use("/players", privatePlayerRouter);
+router.use("/", publicPlayerRouter);
+router.use("/", privatePlayerRouter);
 
 // Exporting the router
 export default router;

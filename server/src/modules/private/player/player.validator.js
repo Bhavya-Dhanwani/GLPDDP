@@ -17,12 +17,11 @@ const PlayerDataValidator = [
         .withMessage("Player name is required")
         .isString()
         .withMessage("Player name must be a string")
-        .isLength({ min: 2, max: 30 })
-        .withMessage("Player name must be between 2 and 30 characters"),
+        .isLength({ min: 2, max: 100 })
+        .withMessage("Player name must be between 2 and 100 characters"),
 
     body("image")
-        .notEmpty()
-        .withMessage("Player image is required")
+        .optional({ values: "falsy" })
         .isURL()
         .withMessage("Player image must be a valid URL"),
 

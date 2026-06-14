@@ -16,11 +16,11 @@ class TeamController {
     createController = async (req, res) => {
 
         // accepting the data 
-        const { name, shortName, logo, primaryColor } = req.body;
+        const { name, shortName, logo, primaryColor, squadPlayers } = req.body;
         const userId = req.user.id;
 
         // creating a team
-        const team = await this.teamService.createTeam({ name, shortName, logo, primaryColor, createdBy: userId });
+        const team = await this.teamService.createTeam({ name, shortName, logo, primaryColor, squadPlayers, createdBy: userId });
 
         // sending the response
         return ApiResponse(res, 201, "Team created successfully", team);
