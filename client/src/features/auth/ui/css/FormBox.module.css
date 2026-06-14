@@ -1,0 +1,32 @@
+.formBox {
+    width: 100%;
+    max-width: 520px;
+
+    background: #ffffff;
+
+    border: 1px solid #ececec;
+
+    border-radius: 28px;
+
+    padding: 42px;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.03),
+        0 16px 40px rgba(0, 0, 0, 0.04);
+
+    backdrop-filter: blur(10px);
+}
+
+@media (max-width: 768px) {
+    .formBox {
+        max-width: 100%;
+        padding: 28px;
+        border-radius: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .formBox {
+        padding: 22px;
+    }
+}

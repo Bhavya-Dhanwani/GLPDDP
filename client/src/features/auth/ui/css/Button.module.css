@@ -1,0 +1,47 @@
+.button {
+    width: 100%;
+
+    height: 60px;
+
+    border-radius: 12px;
+
+    border: none;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    font-size: 1rem;
+    font-weight: 600;
+
+    transition: 0.25s ease;
+}
+
+.primary {
+    background: #0c9c41;
+    color: white;
+}
+
+.primary:hover {
+    transform: translateY(-2px);
+}
+
+.secondary {
+    background: white;
+
+    border: 1px solid #e5e7eb;
+
+    color: #111827;
+}
+
+.secondary:hover {
+    background: #fafafa;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+}

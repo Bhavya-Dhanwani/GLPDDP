@@ -1,0 +1,21 @@
+.form {
+    width: 100%;
+}
+
+.terms {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    margin-bottom: 24px;
+
+    color: #667085;
+
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.terms input {
+    margin-top: 4px;
+    accent-color: #0c9c41;
+}

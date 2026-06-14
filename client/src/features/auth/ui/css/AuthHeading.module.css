@@ -1,0 +1,25 @@
+.heading {
+    font-size: 72px;
+    font-weight: 800;
+    line-height: 0.95;
+    color: #09090b;
+    letter-spacing: -2px;
+}
+
+@media (max-width: 1200px) {
+    .heading {
+        font-size: 60px;
+    }
+}
+
+@media (max-width: 768px) {
+    .heading {
+        font-size: 48px;
+    }
+}
+
+@media (max-width: 480px) {
+    .heading {
+        font-size: 40px;
+    }
+}
