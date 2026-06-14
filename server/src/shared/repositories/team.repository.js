@@ -22,10 +22,10 @@ class TeamRepository {
     }
 
     // function to get all teams
-    async getAllTeams() {
+    async getAllTeams(filters) {
 
         // getting all teams
-        const teams = await this.teamModel.find({ isDeleted: false }).populate('squadPlayers', 'name position');
+        const teams = await this.teamModel.find({ ...filters, isDeleted: false }).populate('squadPlayers', 'name position');
 
         // returning the teams
         return teams;

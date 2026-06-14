@@ -17,7 +17,7 @@ class TeamController {
     getAllController = async (req, res) => {
 
         // getting all teams
-        const teams = await this.teamService.getAllTeams();
+        const teams = await this.teamService.getAllTeams(req.query);
 
         // sending the response
         return ApiResponse(res, 200, "Teams retrieved successfully", teams);

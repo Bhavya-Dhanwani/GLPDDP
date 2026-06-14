@@ -13,20 +13,30 @@ class PlayerService {
     }
 
     // Method to create a new player
-    async createPlayer(playerData) {
+    async createPlayer(playerData, userId) {
+
+        const data = {
+            ...playerData,
+            createdBy: userId,
+        };
 
         // Creating a new player using the repository
-        const player = await this.playerRepository.createPlayer(playerData);
+        const player = await this.playerRepository.createPlayer(data);
 
         return player;
     }
 
     // Method to update a player by ID
 
-    async updatePlayer(id, updateData) {
+    async updatePlayer(id, updateData, userId) {
+
+        const data = {
+            ...updateData,
+            updatedBy: userId
+        };
 
         // Updating a player by ID using the repository
-        const updatedPlayer = await this.playerRepository.updatePlayer(id, updateData);
+        const updatedPlayer = await this.playerRepository.updatePlayer(id, data);
 
         if (!updatedPlayer) {
             throw new NotFound(`Player with ID ${id} not found`);
