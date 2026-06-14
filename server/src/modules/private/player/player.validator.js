@@ -1,12 +1,12 @@
 // Importing modules
-import { params, body } from "express-validator";
+import { param, body } from "express-validator";
 import PLAYER_ROLES from "../../../shared/constants/playerRoles.constants.js";
 import BATTING_STYLES from "../../../shared/constants/batting.constants.js";
 import BOWLING_STYLES from "../../../shared/constants/bowling.constants.js";
 
 // Validator for player ID
 const idValidator = [
-    params("id")
+    param("id")
         .isMongoId()
         .withMessage("Invalid player ID")
 ];

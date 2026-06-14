@@ -1,8 +1,8 @@
 // Importing modules 
-import { params } from "express-validator";
+import { param } from "express-validator";
 
 const idValidator = [
-    params("id")
+    param("id")
     .isMongoId()
     .withMessage("Invalid player ID")
 ];

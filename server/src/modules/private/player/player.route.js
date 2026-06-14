@@ -2,8 +2,8 @@
 import express from "express";
 import PlayerController from "./player.controller.js";
 import { idValidator, PlayerDataValidator } from "./player.validator.js";
-import validateErrors from "../../../shared/middlewares/validateErrors.middeware.js";
-import asyncHandler from "../../../shared/utils/asyncHandler.utils.js";
+import validateErrors from "../../../shared/middlewares/validateErrors.middleware.js";
+import asyncHandler from "../../../shared/utils/asynchandler.util.js";
 import authMiddleware from "../../../shared/middlewares/auth.middleware.js";
 import ROLES from "../../../shared/constants/roles.constants.js";
 import authorize from "../../../shared/middlewares/authorize.middleware.js";

@@ -3,7 +3,7 @@ import express from "express";
 import PlayerController from "./player.controller.js";
 import idValidator from "./player.validator.js";
 import validateErrors from "../../../shared/middlewares/validateErrors.middleware.js";
-import asyncHandler from "../../../shared/utils/asyncHandler.utils.js";
+import asyncHandler from "../../../shared/utils/asynchandler.util.js";
 
 // Creating a router
 const router = express.Router();

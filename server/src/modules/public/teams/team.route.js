@@ -1,9 +1,9 @@
 // Importing modules 
 import express from 'express';
 import TeamController from './team.controller.js';
-import asyncHandler from '../../../shared/middlewares/asyncHandler.middleware.js';
+import asyncHandler from '../../../shared/utils/asynchandler.util.js';
 import getTeamByIdValidationRules from './team.validator.js';
-import validateErrors from '../../../shared/middlewares/validateErrors.middeware.js';
+import validateErrors from '../../../shared/middlewares/validateErrors.middleware.js';
 
 // Initializing the router
 const router = express.Router();
