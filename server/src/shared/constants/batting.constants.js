@@ -1,0 +1,6 @@
+const BATTING_STYLES = {
+    RIGHT_HAND: "RIGHT_HAND",
+    LEFT_HAND: "LEFT_HAND"
+};
+
+export default BATTING_STYLES;

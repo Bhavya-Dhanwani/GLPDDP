@@ -1,0 +1,16 @@
+.wrapper {
+    margin-bottom: 32px;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #667085;
+    line-height: 1.6;
+}

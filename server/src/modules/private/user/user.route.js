@@ -6,7 +6,7 @@ import ROLES from "../../../shared/constants/roles.constants.js";
 import authorize from "../../../shared/middlewares/authorize.middleware.js";
 import asyncHandler from "../../../shared/utils/asynchandler.util.js";
 import idValidator from "./user.validator.js";
-import validateErrors from "../../../shared/middlewares/validateErrors.middeware.js";
+import validateErrors from "../../../shared/middlewares/validateErrors.middleware.js";
 
 // creating the user router
 const userRouter = express.Router();

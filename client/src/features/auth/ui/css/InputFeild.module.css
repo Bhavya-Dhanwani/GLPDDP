@@ -1,0 +1,85 @@
+.field {
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.label {
+    display: block;
+    margin-bottom: 10px;
+
+    font-size: 0.95rem;
+    font-weight: 600;
+
+    color: #111827;
+}
+
+.inputWrapper {
+    position: relative;
+    width: 100%;
+}
+
+.leadingIcon {
+    position: absolute;
+
+    left: 18px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #98a2b3;
+}
+
+.input {
+    width: 100%;
+
+    height: 58px;
+
+    padding-left: 52px;
+    padding-right: 52px;
+
+    border: 1px solid #dcdfe4;
+
+    border-radius: 12px;
+
+    background: #fff;
+
+    font-size: 1rem;
+
+    transition: 0.2s ease;
+
+    color: black;
+}
+
+.input:focus {
+    outline: none;
+
+    border-color: #0c9c41;
+
+    box-shadow: 0 0 0 4px
+        rgba(12, 156, 65, 0.12);
+}
+
+.input::placeholder {
+    color: #98a2b3;
+}
+
+.eyeButton {
+    position: absolute;
+
+    right: 18px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: transparent;
+
+    border: none;
+
+    cursor: pointer;
+
+    color: #98a2b3;
+}
