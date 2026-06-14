@@ -13,14 +13,14 @@ const seriesController = new SeriesController();
 /**
  * @route GET /api/series 
  * @desc Get all series
- * @access Private
+ * @access Public
  */
 router.get("/", asyncHandler(seriesController.getAllSeries))
 
 /**
  * @route GET /api/series/:id
  * @desc Get series by id
- * @access Private
+ * @access Public
  */
 router.get("/:id", getSeriesByIdValidator, validateErrors, asyncHandler(seriesController.getSeriesById))
 

@@ -8,11 +8,10 @@ export default class SeriesService {
     constructor() {
         // Repository for data operations
         this.seriesRepository = new SeriesRepository();
-        // this.matchRepository = matchRepository;
     }
 
     // Retrieve all series, applying optional filters for name and season
-    async getAllSeries(queryParams) {
+    async getAllSeries(queryParams = {}) {
 
         const filters = {
             name: queryParams.name?.trim(),
