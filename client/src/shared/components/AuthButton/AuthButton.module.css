@@ -1,0 +1,31 @@
+.btn {
+  width: 100%;
+  padding: 13px;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+  margin-bottom: 14px;
+  font-family: var(--font-sans);
+  letter-spacing: 0.3px;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .btn {
+    padding: 14px;
+    font-size: 15px;
+  }
+}

@@ -1,0 +1,85 @@
+/* Body fills space below navbar */
+.body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  padding: 0 24px 0 24px;
+  overflow: visible;
+}
+
+/* Two-column inner wrapper */
+.inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+  max-width: 800px;
+  overflow: visible;
+}
+
+/* Left — fixed-width hero */
+.heroCol {
+  flex: 0 0 290px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Allow helmet to bleed past the column (Login page) */
+.heroColOverflow {
+  overflow: visible;
+}
+
+/* Right — form card */
+.formCol {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 4px;
+}
+
+/* ── Tablet ── */
+@media (max-width: 768px) {
+  .inner {
+    gap: 12px;
+  }
+
+  .heroCol {
+    flex: 0 0 220px;
+  }
+}
+
+/* ── Mobile — stack vertically ── */
+@media (max-width: 640px) {
+  .body {
+    flex: none;
+    align-items: flex-start;
+    padding: 0 16px 32px 16px;
+    overflow: visible;
+  }
+
+  .inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    max-width: 100%;
+  }
+
+  .heroCol,
+  .heroColOverflow {
+    flex: none;
+    width: 100%;
+    overflow: visible;
+  }
+
+  .formCol {
+    width: 100%;
+    padding-top: 0;
+  }
+}

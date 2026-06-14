@@ -1,4 +1,4 @@
-import LoginPageClient from "@/features/auth/ui/jsx/LoginPageClient";
+import LoginPageClient from "@/features/auth/login/LoginPageClient";
 
 export const metadata = {
   title: "Sign In — GLPDDP",
