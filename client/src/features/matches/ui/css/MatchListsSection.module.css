@@ -1,0 +1,429 @@
+.section {
+  padding: 32px 60px 70px;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 28px;
+  background: #ffffff;
+}
+
+.main {
+  min-width: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 28px 0 22px;
+}
+
+.sectionHeader h2 {
+  font-size: 28px;
+  color: #020617;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sectionHeader h2 span {
+  width: 12px;
+  height: 12px;
+  background: #059669;
+  border-radius: 50%;
+  box-shadow: 0 0 0 6px #dcfce7;
+}
+
+.sectionHeader button,
+.sideHeader button {
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #111827;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.sectionHeader button:hover,
+.sideHeader button:hover {
+  background: #059669;
+  color: #ffffff;
+  transform: translateY(-3px);
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+}
+
+.liveCard,
+.upcomingCard,
+.sidebar {
+  background: #ffffff;
+  border: 1px solid #eef2f7;
+  border-radius: 24px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
+  animation: fadeUp 0.7s ease;
+}
+
+.liveCard,
+.upcomingCard {
+  position: relative;
+  overflow: hidden;
+  padding: 22px;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfffd 100%);
+  transition: all 0.35s ease;
+}
+
+.liveCard::before,
+.upcomingCard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top right,
+    rgba(5, 150, 105, 0.08),
+    transparent 35%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.liveCard:hover,
+.upcomingCard:hover {
+  transform: translateY(-8px);
+  border-color: #bbf7d0;
+  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.08);
+}
+
+.liveCard:hover::before,
+.upcomingCard:hover::before {
+  opacity: 1;
+}
+
+.liveCard > *,
+.upcomingCard > * {
+  position: relative;
+  z-index: 2;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.liveBadge {
+  background: #fee2e2;
+  color: #ef4444;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  margin-right: 8px;
+  animation: pulseRed 1.8s infinite;
+}
+
+.upcomingBadge {
+  background: #eff6ff;
+  color: #2563eb;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  margin-right: 8px;
+}
+
+.typeBadge {
+  background: #ecfdf5;
+  color: #059669;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  margin-right: 8px;
+}
+
+.arrow {
+  font-size: 24px;
+  color: #020617;
+}
+
+.seriesName {
+  color: #64748b;
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.scoreRow,
+.upcomingTeams {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: 1fr 38px 1fr;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.flag,
+.upcomingTeams span {
+  font-size: 30px;
+}
+
+.scoreRow h3,
+.upcomingTeams h3 {
+  font-size: 18px;
+  color: #020617;
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+.scoreRow h2 {
+  font-size: 32px;
+  color: #020617;
+  margin-top: 10px;
+  letter-spacing: -1px;
+}
+
+.scoreRow p {
+  color: #64748b;
+  margin-top: 5px;
+  font-size: 13px;
+}
+
+.vs {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 50%;
+  background: white;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.upcomingTeams .vs {
+    width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 50%;
+  background: white;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.result {
+  margin-top: 20px;
+  color: #059669;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.stats {
+  margin: 22px -22px -22px;
+  padding: 14px 22px;
+  border-top: 1px solid #eef2f7;
+  display: flex;
+  justify-content: space-around;
+  color: #64748b;
+  background: #fbfffd;
+  font-size: 13px;
+}
+
+.stats b {
+  color: #020617;
+  margin-left: 6px;
+}
+
+.time,
+.venue {
+  color: #64748b;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.notify {
+  width: 100%;
+  margin-top: 18px;
+  padding: 13px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #059669;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.calendarIcon{
+    color: #059669;
+}
+
+.notify:hover {
+  background: #059669;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.sidebar {
+  padding: 28px;
+  height: fit-content;
+  margin-top: 78px;
+  animation: fadeRight 0.8s ease;
+}
+
+.sideHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sideHeader h3 {
+  color: #020617;
+}
+
+.sideHeader button {
+  border: none;
+  color: #059669;
+}
+
+.seriesItem {
+  display: flex;
+  gap: 18px;
+  padding: 22px 0;
+  border-bottom: 1px solid #e5e7eb;
+  transition: 0.3s ease;
+}
+
+.seriesItem:hover {
+  transform: translateX(6px);
+  background: #f8fffb;
+}
+
+.seriesItem span {
+  font-size: 34px;
+}
+
+.seriesItem h4 {
+  color: #020617;
+  margin-bottom: 6px;
+}
+
+.seriesItem p {
+  color: #64748b;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeRight {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulseRed {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.35);
+  }
+
+  100% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+}
+
+@media (max-width: 1200px) {
+  .section {
+    grid-template-columns: 1fr;
+    padding: 30px 36px 60px;
+  }
+
+  .sidebar {
+    margin-top: 20px;
+  }
+
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 22px 16px 50px;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .sectionHeader button {
+    display: none;
+  }
+
+  .sectionHeader h2 {
+    font-size: 22px;
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .liveCard,
+  .upcomingCard {
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .scoreRow,
+  .upcomingTeams {
+    grid-template-columns: 1fr 36px 1fr;
+  }
+
+  .scoreRow h2 {
+    font-size: 26px;
+  }
+
+  .scoreRow h3,
+  .upcomingTeams h3 {
+    font-size: 16px;
+  }
+
+  .flag,
+  .upcomingTeams span {
+    font-size: 26px;
+  }
+
+  .stats {
+    margin: 18px -18px -18px;
+    padding: 12px 18px;
+  }
+}
