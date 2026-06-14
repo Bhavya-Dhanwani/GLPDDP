@@ -2,7 +2,7 @@
 import express from 'express'
 import SeriesController from './series.controller.js';
 import asyncHandler from '../../../shared/utils/asynchandler.util.js';
-import validateErrors from '../../../shared/middlewares/validateErrors.middeware.js';
+import validateErrors from '../../../shared/middlewares/validateErrors.middleware.js';
 import { getSeriesByIdValidator } from './series.validator.js';
 
 

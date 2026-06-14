@@ -1,0 +1,8 @@
+const PLAYER_ROLES = {
+    BATSMAN: "BATSMAN",
+    BOWLER: "BOWLER",
+    ALL_ROUNDER: "ALL_ROUNDER",
+    WICKET_KEEPER: "WICKET_KEEPER"
+};
+
+export default PLAYER_ROLES;
