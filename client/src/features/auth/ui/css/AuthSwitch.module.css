@@ -1,0 +1,23 @@
+.text {
+    margin-top: 32px;
+
+    text-align: center;
+
+    color: #667085;
+
+    font-size: 1rem;
+}
+
+.link {
+    margin-left: 8px;
+
+    color: #0c9c41;
+
+    text-decoration: none;
+
+    font-weight: 600;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
