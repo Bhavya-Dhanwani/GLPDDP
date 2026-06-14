@@ -2,59 +2,40 @@
 import { body, param } from 'express-validator';
 
 // Validation rules for creating a team
-export const createTeamValidationRules = [
+export const validateTeam = [
     body('name')
-    .notEmpty()
-    .withMessage('Name is required'),
+        .notEmpty()
+        .withMessage('Name is required'),
 
     body('shortName')
-    .notEmpty()
-    .withMessage('Short name is required'),
+        .notEmpty()
+        .withMessage('Short name is required'),
 
     body('logo')
-    .notEmpty()
-    .withMessage('Logo is required'),
-    
+        .notEmpty()
+        .withMessage('Logo is required'),
+
     body('primaryColor')
-    .optional()
-    .isString()
-    .withMessage('Primary color must be a string'),
-];
+        .optional()
+        .isString()
+        .withMessage('Primary color must be a string'),
 
-// Validation rules for updating a team
-export const updateTeamValidationRules = [
-    param('id')
-    .notEmpty()
-    .withMessage('Team ID is required')
-    .isMongoId()
-    .withMessage('Invalid Team ID'),
+    body("squadPlayers")
+        .isArray({ min: 11, max: 15 })
+        .withMessage("Squad must contain between 11 and 15 players"),
 
-    body('name')
-    .optional()
-    .notEmpty()
-    .withMessage('Name cannot be empty'),
+    body("squadPlayers.*")
+        .isMongoId()
+        .withMessage("Each squad player must be a valid player ID"),
 
-    body('shortName')
-    .optional()
-    .notEmpty()
-    .withMessage('Short name cannot be empty'),
-    
-    body('logo')
-    .optional()
-    .notEmpty()
-    .withMessage('Logo cannot be empty'),
-    
-    body('primaryColor')
-    .optional()
-    .isString()
-    .withMessage('Primary color must be a string'),
+
 ];
 
 // Validation rules for deleting a team
-export const deleteTeamValidationRules = [
+export const validateID = [
     param('id')
-    .notEmpty()
-    .withMessage('Team ID is required')
-    .isMongoId()
-    .withMessage('Invalid Team ID'),
+        .notEmpty()
+        .withMessage('Team ID is required')
+        .isMongoId()
+        .withMessage('Invalid Team ID'),
 ];
