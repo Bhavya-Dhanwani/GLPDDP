@@ -7,7 +7,6 @@
   font-family: var(--font-sans);
 }
 
-/* ── Header ── */
 .title {
   font-size: 20px;
   font-weight: 600;
@@ -23,77 +22,13 @@
   font-family: var(--font-sans);
 }
 
-/* ── Field ── */
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin-bottom: 12px;
-}
-
-.label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--color-text);
-  font-family: var(--font-sans);
-}
-
-.inputWrapper {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: 9px 12px;
-  background: var(--color-surface);
-  transition: border-color 0.15s;
-}
-
-.inputWrapper:focus-within {
-  border-color: var(--color-primary);
-}
-
-.inputIcon {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-}
-
-.input {
-  border: none;
-  outline: none;
-  flex: 1;
-  font-size: 13px;
-  color: var(--color-text);
-  background: transparent;
-  font-family: var(--font-sans);
-}
-
-.input::placeholder {
-  color: #b0b8c1;
-}
-
-.eyeBtn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-}
-
-.eyeIcon {
-  width: 15px;
-  height: 15px;
-}
-
-/* ── Password hints ── */
 .hints {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 5px;
   margin-bottom: 16px;
+  margin-top: -6px; 
 }
 
 .hint {
@@ -103,15 +38,20 @@
   font-size: 12px;
   color: var(--color-text-muted);
   font-family: var(--font-sans);
+  transition: color 0.2s;
+}
+
+.hintMet {
+  color: var(--color-primary);
 }
 
 .hintIcon {
   width: 14px;
   height: 14px;
   flex-shrink: 0;
+  transition: none; 
 }
 
-/* ── Submit ── */
 .submitBtn {
   width: 100%;
   padding: 12px;
@@ -122,16 +62,20 @@
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, opacity 0.15s;
   margin-bottom: 14px;
   font-family: var(--font-sans);
 }
 
-.submitBtn:hover {
+.submitBtn:hover:not(:disabled) {
   background: var(--color-primary-dark);
 }
 
-/* ── OR divider ── */
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .orDivider {
   display: flex;
   align-items: center;
@@ -150,7 +94,6 @@
   background: var(--color-border);
 }
 
-/* ── Google button ── */
 .googleBtn {
   width: 100%;
   display: flex;
@@ -166,7 +109,7 @@
   color: var(--color-text);
   cursor: pointer;
   transition: background 0.15s;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   font-family: var(--font-sans);
 }
 
@@ -180,7 +123,6 @@
   flex-shrink: 0;
 }
 
-/* ── Privacy ── */
 .privacy {
   display: flex;
   align-items: center;
@@ -197,7 +139,6 @@
   flex-shrink: 0;
 }
 
-/* ── Mobile (≤ 640px) ── */
 @media (max-width: 640px) {
   .card {
     padding: 22px 20px 20px 20px;
@@ -214,15 +155,6 @@
     margin-bottom: 16px;
   }
 
-  /* Prevent iOS auto-zoom on input focus */
-  .input {
-    font-size: 16px;
-  }
-
-  .inputWrapper {
-    padding: 11px 12px;
-  }
-
   .submitBtn {
     padding: 14px;
     font-size: 15px;
@@ -233,7 +165,6 @@
     font-size: 13px;
   }
 
-  /* Collapse hints to 2 columns to save vertical space */
   .hints {
     display: grid;
     grid-template-columns: 1fr 1fr;

@@ -5,8 +5,6 @@ export const metadata = {
   description: "Login to your GLPDDP cricket league account.",
 };
 
-// Server Component — renders the client shell.
-// Hero and Form are dynamically imported inside LoginPageClient.
 export default function LoginPage() {
   return <LoginPageClient />;
 }

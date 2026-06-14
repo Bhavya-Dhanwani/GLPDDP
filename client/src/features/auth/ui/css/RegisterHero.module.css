@@ -39,7 +39,6 @@
   font-weight: 700;
 }
 
-/* Wrapper grows to fill leftover vertical space */
 .imageWrap {
   flex: 1;
   min-height: 0;
@@ -54,7 +53,6 @@
   transform: scale(1.2);
 }
 
-/* ── Tablet (≤ 768px) ── */
 @media (max-width: 768px) {
   .heading {
     font-size: 34px;
@@ -66,7 +64,6 @@
   }
 }
 
-/* ── Mobile (≤ 640px): compact banner ── */
 @media (max-width: 640px) {
   .hero {
     flex: none;
@@ -97,7 +94,6 @@
     max-width: 100%;
   }
 
-  /* Hide the player image on mobile — saves space */
   .imageWrap {
     display: none;
   }

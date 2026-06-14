@@ -1,11 +1,9 @@
 "use client";
 
-import styles from "../css/RegisterForm.module.css";
-
-export default function GoogleG() {
+export default function GoogleG({ className }) {
   return (
     <svg
-      className={styles.googleIcon}
+      className={className}
       viewBox="0 0 24 24"
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"

@@ -3,10 +3,8 @@
 import dynamic from "next/dynamic";
 import styles from "../css/LoginLayout.module.css";
 
-// LoginNavbar — eager, above the fold
 import LoginNavbar from "./LoginNavbar";
 
-// LoginHero — lazy chunk (has Next Image + helmet asset)
 const LoginHero = dynamic(() => import("./LoginHero"), {
   ssr: false,
   loading: () => <div className={styles.heroSkeleton} aria-hidden="true" />,

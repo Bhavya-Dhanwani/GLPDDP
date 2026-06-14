@@ -1,157 +1,140 @@
 "use client";
 
-import dynamic from "next/dynamic";
+
+
+import { useRegister, REGISTER_RULES } from "@/features/auth/hooks";
+import {
+  hasMinLength,
+  hasNumberOrSymbol,
+  hasUpperAndLowerCase,
+} from "@/features/auth/utils/passwordValidation";
 import styles from "../css/RegisterForm.module.css";
+import InputField from "./InputField";
+import PasswordField from "./PasswordField";
+import FormDivider from "./FormDivider";
+import GoogleButton from "./GoogleButton";
+import AuthSwitcher from "./AuthSwitcher";
+import PrivacyNote from "./PrivacyNote";
+import { EmailIcon, LockIcon, PersonIcon } from "./icons";
 
-// Code-split the Google icon — it's below the fold and not needed for initial paint
-const GoogleG = dynamic(() => import("./GoogleG"), { ssr: false });
+// ── Password hint definitions ─────────────────────────────────────────────
+// Each entry maps a label to the shared utility function.
+// The component stays declarative — no inline logic.
 
-const PASSWORD_HINTS = [
-  "At least 8 characters",
-  "Includes number or symbol",
-  "Mix of uppercase and lowercase",
+const HINTS = [
+  { label: "At least 8 characters",        check: hasMinLength },
+  { label: "Includes number or symbol",    check: hasNumberOrSymbol },
+  { label: "Includes uppercase & lowercase", check: hasUpperAndLowerCase },
 ];
 
-export default function RegisterForm() {
+// ── PasswordHints ─────────────────────────────────────────────────────────
+// `password`  — current value from watch()
+// `touched`   — true once the user has typed at least one character
+//               (keeps all hints neutral on initial load)
+
+function CheckIcon({ met }) {
+  // Green filled circle with checkmark when met, plain gray ring when not
+  return met ? (
+    <svg className={styles.hintIcon} viewBox="0 0 16 16" aria-hidden="true">
+      <circle cx="8" cy="8" r="8" fill="#2e7d32" />
+      <path
+        d="M5 8.5l2 2 4-4"
+        stroke="#fff"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  ) : (
+    <svg className={styles.hintIcon} viewBox="0 0 16 16" aria-hidden="true">
+      <circle cx="8" cy="8" r="7" stroke="#d1d5db" strokeWidth="1.5" fill="none" />
+    </svg>
+  );
+}
+
+function PasswordHints({ password }) {
+  // Show neutral state until the user starts typing
+  const touched = password.length > 0;
+
   return (
-    <div className={styles.card}>
+    <ul className={styles.hints} aria-label="Password requirements">
+      {HINTS.map(({ label, check }) => {
+        const met = touched && check(password);
+        return (
+          <li
+            key={label}
+            className={[styles.hint, met ? styles.hintMet : ""].join(" ").trim()}
+          >
+            <CheckIcon met={met} />
+            {label}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+// ── RegisterForm ──────────────────────────────────────────────────────────
+
+export default function RegisterForm() {
+  const { register, handleSubmit, watch, errors, isSubmitting } = useRegister();
+
+  // watch() re-renders only this component when "password" changes.
+  // Default to "" so hints are neutral before the user focuses the field.
+  const passwordValue = watch("password") ?? "";
+
+  return (
+    <form className={styles.card} onSubmit={handleSubmit} noValidate>
       <h2 className={styles.title}>Create your account</h2>
       <p className={styles.subtitle}>Fill in the details below to get started</p>
 
-      {/* Full Name */}
-      <div className={styles.field}>
-        <label htmlFor="reg-fullname" className={styles.label}>
-          Full Name
-        </label>
-        <div className={styles.inputWrapper}>
-          {/* person icon */}
-          <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <circle cx="10" cy="7" r="3.5" stroke="#b0b8c1" strokeWidth="1.5" />
-            <path
-              d="M3 17c0-3.314 3.134-6 7-6s7 2.686 7 6"
-              stroke="#b0b8c1"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
-          <input
-            id="reg-fullname"
-            type="text"
-            placeholder="Enter your full name"
-            className={styles.input}
-            autoComplete="name"
-          />
-        </div>
-      </div>
+      <InputField
+        label="Full Name"
+        name="fullName"
+        type="text"
+        placeholder="Enter your full name"
+        icon={PersonIcon}
+        autoComplete="name"
+        error={errors.fullName?.message}
+        register={register("fullName", REGISTER_RULES.fullName)}
+      />
 
-      {/* Email */}
-      <div className={styles.field}>
-        <label htmlFor="reg-email" className={styles.label}>
-          Email Address
-        </label>
-        <div className={styles.inputWrapper}>
-          {/* envelope icon */}
-          <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <rect x="2" y="5" width="16" height="11" rx="2" stroke="#b0b8c1" strokeWidth="1.5" />
-            <path d="M2 7l8 5 8-5" stroke="#b0b8c1" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
-          <input
-            id="reg-email"
-            type="email"
-            placeholder="Enter your email"
-            className={styles.input}
-            autoComplete="email"
-          />
-        </div>
-      </div>
+      <InputField
+        label="Email Address"
+        name="email"
+        type="email"
+        placeholder="Enter your email"
+        icon={EmailIcon}
+        autoComplete="email"
+        error={errors.email?.message}
+        register={register("email", REGISTER_RULES.email)}
+      />
 
-      {/* Password */}
-      <div className={styles.field}>
-        <label htmlFor="reg-password" className={styles.label}>
-          Password
-        </label>
-        <div className={styles.inputWrapper}>
-          {/* lock icon */}
-          <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <rect x="4" y="9" width="12" height="8" rx="2" stroke="#b0b8c1" strokeWidth="1.5" />
-            <path
-              d="M7 9V7a3 3 0 016 0v2"
-              stroke="#b0b8c1"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
-          <input
-            id="reg-password"
-            type="password"
-            placeholder="Create a password"
-            className={styles.input}
-            autoComplete="new-password"
-          />
-          {/* eye icon */}
-          <button
-            type="button"
-            className={styles.eyeBtn}
-            aria-label="Toggle password visibility"
-          >
-            <svg viewBox="0 0 20 20" fill="none" className={styles.eyeIcon} aria-hidden="true">
-              <path
-                d="M1 10s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"
-                stroke="#b0b8c1"
-                strokeWidth="1.5"
-              />
-              <circle cx="10" cy="10" r="2.5" stroke="#b0b8c1" strokeWidth="1.5" />
-            </svg>
-          </button>
-        </div>
-      </div>
+      <PasswordField
+        label="Password"
+        name="password"
+        placeholder="Create a password"
+        icon={LockIcon}
+        autoComplete="new-password"
+        error={errors.password?.message}
+        register={register("password", REGISTER_RULES.password)}
+      />
 
-      {/* Password hints */}
-      <ul className={styles.hints} aria-label="Password requirements">
-        {PASSWORD_HINTS.map((hint) => (
-          <li key={hint} className={styles.hint}>
-            {/* filled check circle */}
-            <svg className={styles.hintIcon} viewBox="0 0 16 16" aria-hidden="true">
-              <circle cx="8" cy="8" r="8" fill="#2e7d32" />
-              <path
-                d="M5 8.5l2 2 4-4"
-                stroke="#fff"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            {hint}
-          </li>
-        ))}
-      </ul>
+      {/* Live password strength indicators */}
+      <PasswordHints password={passwordValue} />
 
-      {/* Submit */}
-      <button type="submit" className={styles.submitBtn}>
-        Create Account
+      <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
+        {isSubmitting ? "Creating account…" : "Create Account"}
       </button>
 
-      {/* OR divider */}
-      <div className={styles.orDivider}>OR</div>
-
-      {/* Google sign-up — lazily loaded */}
-      <button type="button" className={styles.googleBtn}>
-        <GoogleG />
-        Sign up with Google
-      </button>
-
-      {/* Privacy note */}
-      <p className={styles.privacy}>
-        {/* shield icon */}
-        <svg className={styles.privacyIcon} viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path
-            d="M8 1.5L2 4v4.5c0 3.5 2.5 6.8 6 7.5 3.5-.7 6-4 6-7.5V4L8 1.5z"
-            stroke="#b0b8c1"
-            strokeWidth="1.2"
-          />
-        </svg>
-        We respect your privacy. Your data is safe with us.
-      </p>
-    </div>
+      <FormDivider styles={styles} />
+      <GoogleButton styles={styles} label="Sign up with Google" />
+      <AuthSwitcher
+        questionText="Already have an account?"
+        actionText="Sign in"
+        href="/login"
+      />
+      <PrivacyNote styles={styles} />
+    </form>
   );
 }

@@ -1,4 +1,3 @@
-/* ── Desktop: full viewport, no scroll ── */
 .page {
   height: 100vh;
   max-height: 100vh;
@@ -41,7 +40,6 @@
   padding-top: 4px;
 }
 
-/* ── Loading skeletons ── */
 .heroSkeleton {
   flex: 1;
   border-radius: var(--radius-lg);
@@ -63,7 +61,6 @@
   100% { background-position: -200% 0; }
 }
 
-/* ── Tablet (≤ 768px) ── */
 @media (max-width: 768px) {
   .inner {
     gap: 12px;
@@ -74,7 +71,6 @@
   }
 }
 
-/* ── Mobile (≤ 640px): stack vertically, allow scroll ── */
 @media (max-width: 640px) {
   .page {
     height: auto;

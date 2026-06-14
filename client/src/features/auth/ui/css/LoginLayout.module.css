@@ -1,4 +1,3 @@
-/* ── Desktop: full viewport, no scroll ── */
 .page {
   height: 100vh;
   max-height: 100vh;
@@ -45,7 +44,6 @@
   padding-top: 4px;
 }
 
-/* ── Loading skeletons ── */
 .heroSkeleton {
   height: 100%;
   min-height: 300px;
@@ -69,7 +67,6 @@
   100% { background-position: -200% 0; }
 }
 
-/* ── Tablet (≤ 768px): tighten spacing ── */
 @media (max-width: 768px) {
   .inner {
     gap: 12px;
@@ -80,12 +77,11 @@
   }
 }
 
-/* ── Mobile (≤ 640px): stack vertically, allow scroll ── */
 @media (max-width: 640px) {
   .page {
     height: auto;
     max-height: none;
-    overflow: visible;        /* allow page to scroll */
+    overflow: visible;      
     min-height: 100vh;
   }
 
@@ -97,7 +93,7 @@
   }
 
   .inner {
-    flex-direction: column;   /* stack: hero banner → form */
+    flex-direction: column;   
     align-items: stretch;
     gap: 0;
     max-width: 100%;
