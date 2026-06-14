@@ -24,7 +24,7 @@ const teamSchema = new mongoose.Schema(
         squadPlayers: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "Player"
+                ref: "players"
             }
         ],
         isDeleted: {
@@ -33,11 +33,11 @@ const teamSchema = new mongoose.Schema(
         },
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User"
+            ref: "users"
         },
         updatedBy: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User"
+            ref: "users"
         },
     },
     {
