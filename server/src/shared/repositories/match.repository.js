@@ -64,8 +64,8 @@ export class MatchRepository {
     return this.matchModel
       .find(query)
       .populate("seriesId", "name shortName season")
-    // .populate("team1", "name shortName logo")
-    // .populate("team2", "name shortName logo");
+      .populate("team1", "name shortName logo")
+      .populate("team2", "name shortName logo");
   }
 
   // Find a Match by its ID 
@@ -76,16 +76,17 @@ export class MatchRepository {
         isDeleted: false,
       })
       .populate("seriesId", "name shortName season")
-    // .populate("team1", "name shortName logo")
-    // .populate("team2", "name shortName logo")
-    // .populate("tossWinner", "name shortName")
-    // .populate("winner", "name shortName");
+      .populate("team1", "name shortName logo")
+      .populate("team2", "name shortName logo")
+      .populate("tossWinner", "name shortName")
+      .populate("winner", "name shortName");
   }
 
   // Find Matches by seriesId
   async findBySeriesId(seriesId) {
+    let { id } = seriesId;
     return this.matchModel.find({
-      seriesId,
+      id,
       isDeleted: false,
     });
   }

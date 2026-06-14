@@ -1,7 +1,6 @@
 // Importing modules
 import pkg from 'express-validator';
 const { validationResult } = pkg;
-import ApiError from '../utils/ApiError.util.js';
 import BadRequest from '../errors/badrequest.error.js';
 
 // middleware to handle the validation errors

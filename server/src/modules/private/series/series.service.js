@@ -1,6 +1,7 @@
 // Importing modules
 import Conflict from "../../../shared/errors/conflict.error.js";
 import NotFound from "../../../shared/errors/notfound.error.js";
+import { MatchRepository } from "../../../shared/repositories/match.repository.js";
 import SeriesRepository from '../../../shared/repositories/series.repository.js';
 import { sanitizeSeries } from "../../../shared/utils/sanitizer.util.js";
 
@@ -9,7 +10,7 @@ export default class SeriesService {
     constructor() {
         // Repository for data operations
         this.seriesRepository = new SeriesRepository();
-        // this.matchRepository = matchRepository;
+        this.matchRepository = new MatchRepository();
     }
 
     // Create a new series after validating uniqueness of name and season
@@ -98,14 +99,15 @@ export default class SeriesService {
             throw new NotFound("Series not found");
         }
 
-        // const matchExists =
-        //     await this.matchRepository.exists({
-        //         seriesId: id,
-        //     });
+        // Check if any match exists in this series
+        const matchExists =
+            await this.matchRepository.findBySeriesId({
+                id,
+            });
 
-        // if (matchExists) {
-        //     throw new throw new Conflict("Cannot delete series with existing matches");
-        // }
+        if (matchExists) {
+            throw new Conflict("Cannot delete series with existing matches");
+        }
 
         let deletedSeries = await this.seriesRepository.delete(id,userId);
 

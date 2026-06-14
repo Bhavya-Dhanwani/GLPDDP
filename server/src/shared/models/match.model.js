@@ -79,19 +79,19 @@ const matchSchema = new mongoose.Schema(
 
     team1: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Team",
+      ref: "teams",
       required: true,
     },
 
     team2: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Team",
+      ref: "teams",
       required: true,
     },
 
     tossWinner: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Team",
+      ref: "teams",
     },
 
     tossDecision: {
@@ -106,7 +106,7 @@ const matchSchema = new mongoose.Schema(
 
     winner: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Team",
+      ref: "teams",
     },
 
     result: {

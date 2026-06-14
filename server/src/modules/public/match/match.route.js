@@ -3,13 +3,13 @@ import express from "express";
 import MatchController from "./match.controller.js";
 
 import asyncHandler from "../../../shared/utils/asynchandler.util.js";
-import validateErrors from "../../../shared/middlewares/validateErrors.middeware.js";
 
 import {
   getMatchesValidator,
   getMatchByIdValidator,
   getMatchesBySeriesValidator,
 } from "./match.validator.js";
+import validateErrors from "../../../shared/middlewares/validateErrors.middleware.js";
 
 const router = express.Router();
 
