@@ -207,6 +207,19 @@
   font-weight: 800;
 }
 
+.upcomingTeams .vs {
+    width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 50%;
+  background: white;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+}
+
 .result {
   margin-top: 20px;
   color: #059669;
