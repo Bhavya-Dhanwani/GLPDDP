@@ -1,7 +1,7 @@
 // Importing modules
 import express from 'express';
 import AuthController from './auth.controller.js';
-import validateErrors from '../../../shared/middlewares/validateErrors.middeware.js';
+import validateErrors from '../../../shared/middlewares/validateErrors.middleware.js';
 import { forgotPasswordValidator, loginValidator, resetPasswordValidator, signupValidator  } from './auth.validators.js';
 import asyncHandler from '../../../shared/utils/asynchandler.util.js';
 import authMiddleware from '../../../shared/middlewares/auth.middleware.js';
