@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import {
     Mail,
     Lock,
@@ -7,6 +9,9 @@ import {
 } from "lucide-react";
 
 import { FcGoogle } from "react-icons/fc";
+
+import { useSignup } from "../../hooks/useAuth";
+import useGoogleAuth from "../../hooks/useGoogleAuth";
 
 import SignupStructure from "./SignupStrucutre";
 
@@ -23,6 +28,34 @@ import AuthSwitch from "./AuthSwitch";
 import styles from "../css/Signup.module.css";
 
 const Signup = () => {
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+    });
+
+    const signupMutation = useSignup();
+    const { openPopup } = useGoogleAuth();
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        if (formData.password !== formData.confirmPassword) {
+            return;
+        }
+
+        const { confirmPassword, ...submitData } = formData;
+        signupMutation.mutate(submitData);
+    };
+
     return (
         <SignupStructure
             leftContent={
@@ -47,46 +80,48 @@ const Signup = () => {
                         subtitle="Create your account to get started"
                     />
 
-                    <form className={styles.form}>
+                    <form className={styles.form} onSubmit={handleSubmit}>
                         <InputField
                             label="Full Name"
                             icon={User}
+                            name="name"
                             placeholder="John Doe"
+                            value={formData.name}
+                            onChange={handleChange}
                         />
 
                         <InputField
                             label="Email Address"
                             type="email"
                             icon={Mail}
+                            name="email"
                             placeholder="john@example.com"
+                            value={formData.email}
+                            onChange={handleChange}
                         />
 
                         <InputField
                             label="Password"
                             type="password"
                             icon={Lock}
+                            name="password"
                             placeholder="Create password"
+                            value={formData.password}
+                            onChange={handleChange}
                         />
 
                         <InputField
                             label="Confirm Password"
                             type="password"
                             icon={Lock}
+                            name="confirmPassword"
                             placeholder="Confirm password"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
                         />
 
-                        {/* <div className={styles.terms}>
-                            <input type="checkbox" />
-
-                            <span>
-                                I agree to the Terms &
-                                Conditions and Privacy
-                                Policy
-                            </span>
-                        </div> */}
-
-                        <Button type="submit">
-                            Create Account
+                        <Button type="submit" disabled={signupMutation.isPending}>
+                            {signupMutation.isPending ? "Creating Account..." : "Create Account"}
                         </Button>
 
                         <Separator text="OR" />
@@ -94,6 +129,8 @@ const Signup = () => {
                         <Button
                             variant="secondary"
                             icon={<FcGoogle size={24} />}
+                            onClick={openPopup}
+                            type="button"
                         >
                             Continue with Google
                         </Button>

@@ -21,8 +21,12 @@ router.post("/resend-otp", authMiddleware, asyncHandler(authController.resendOTP
 router.post("/logout", authMiddleware, getRefreshToken, asyncHandler(authController.logoutController));
 router.post("/logout-all", authMiddleware, getRefreshToken, asyncHandler(authController.logoutAllController));
 router.post("/refresh", getRefreshToken, asyncHandler(authController.refreshController));
+router.get("/me", getRefreshToken, asyncHandler(authController.meController));
 router.post("/forgot-password", forgotPasswordValidator, validateErrors, asyncHandler(authController.forgetController));
 router.post("/reset-password", resetPasswordValidator, validateErrors, asyncHandler(authController.resetController));
+router.post("/google", asyncHandler(authController.googleAuthController));
+router.get("/google", asyncHandler(authController.googleRedirectController));
+router.get("/google/callback", asyncHandler(authController.googleCallbackController));
 
 
 // exporting the auth router

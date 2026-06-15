@@ -12,7 +12,7 @@ export default function LiveMatches() {
       <div className={styles.header}>
         <div>
           <p className={styles.label}>LIVE MATCHES</p>
-          <h2 className={styles.desc}>What's Happening Now</h2>
+          <h2 className={styles.desc}>What&apos;s Happening Now</h2>
         </div>
 
         <button className={styles.viewButton}>View All Live →</button>

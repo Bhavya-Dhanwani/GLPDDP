@@ -1,0 +1,30 @@
+.wrapper {
+    min-height: 100vh;
+    background: #f8f8f8;
+}
+
+.container {
+    max-width: 650px;
+
+    margin: 4rem auto;
+
+    padding: 3rem;
+
+    background: #ffffff;
+
+    border-radius: 28px;
+
+    border: 1px solid #eaecf0;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.03),
+        0 20px 40px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 2rem 1rem;
+
+        padding: 24px;
+    }
+}

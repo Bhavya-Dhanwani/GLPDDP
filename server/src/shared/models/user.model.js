@@ -20,7 +20,22 @@ const userSchema = new mongoose.Schema(
         },
         password: {
             type: String,
-            required: true
+            required: function() {
+                return this.provider === 'local' || !this.provider;
+            }
+        },
+        provider: {
+            type: String,
+            enum: ['local', 'google'],
+            default: 'local'
+        },
+        googleId: {
+            type: String,
+            default: null
+        },
+        avatar: {
+            type: String,
+            default: null
         },
         role: {
             type: String,
@@ -60,6 +75,7 @@ userSchema.methods.comparePassword = async function (password) {
     const isMatch = await bcrypt.compare(password, this.password);
     return isMatch;
 }
+
 
 // making the model from the schema
 const User = mongoose.model('users', userSchema);

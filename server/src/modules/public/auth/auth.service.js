@@ -1,4 +1,5 @@
 // Importing the modules
+import { OAuth2Client } from "google-auth-library";
 import { generateAccessToken, generateRefreshToken } from "../../../shared/utils/token.util.js";
 import UserRepository from "../../../shared/repositories/user.repository.js";
 import sessionRepository from "../../../shared/repositories/session.repository.js";
@@ -7,6 +8,15 @@ import Conflict from "../../../shared/errors/conflict.error.js";
 import NotFound from "../../../shared/errors/notfound.error.js";
 import Unauthorized from "../../../shared/errors/unauthorized.error.js";
 import TokenService from "../token/token.service.js";
+import envs from "../../../shared/config/env.config.js";
+
+const googleClient = new OAuth2Client(envs.GOOGLE_CLIENT_ID);
+
+const oauth2Client = new OAuth2Client(
+    envs.GOOGLE_CLIENT_ID,
+    envs.GOOGLE_CLIENT_SECRET,
+    envs.GOOGLE_REDIRECT_URI
+);
 
 // class to handle the service logic of the auth module
 class AuthService {
@@ -189,6 +199,152 @@ class AuthService {
         // deleting the reset token
         await this.tokenService.deleteResetToken(user._id);
 
+    }
+
+    async getMeService(userId) {
+
+        // finding the user
+        const user = await this.userRepository.getUserById(userId);
+
+        // if user not found then throw error
+        if (!user) {
+            throw new NotFound("User not found");
+        }
+
+        // generating new access token
+        const accessToken = generateAccessToken(user);
+
+        // sanitizing the user
+        const sanitizedUser = sanitizeUser(user, accessToken);
+
+        // returning the user
+        return sanitizedUser;
+    }
+
+    async googleAuthService(credential) {
+
+        // verifying the google credential
+        const ticket = await googleClient.verifyIdToken({
+            idToken: credential,
+            audience: envs.GOOGLE_CLIENT_ID,
+        });
+
+        const payload = ticket.getPayload();
+        const { sub: googleId, email, name, picture } = payload;
+
+        // finding the user by email
+        let user = await this.userRepository.findUserByEmail(email);
+
+        if (user) {
+            // if user exists but signed up with email/password, link google account
+            if (user.provider === "local" && !user.googleId) {
+                user = await this.userRepository.updateUser(
+                    { _id: user._id },
+                    { googleId, provider: "google", avatar: picture }
+                );
+            }
+        } else {
+            // creating a new user
+            user = await this.userRepository.createUser({
+                name,
+                email,
+                password: "",
+                provider: "google",
+                googleId,
+                avatar: picture,
+                isVerified: true,
+            });
+        }
+
+        // making the access token
+        const accessToken = generateAccessToken(user);
+
+        // making the session token
+        const sessionId = this.sessionRepository.getSessionId();
+
+        // making the refresh token
+        const refreshToken = generateRefreshToken(sessionId, user._id);
+
+        // creating the session
+        await this.sessionRepository.createSession({
+            _id: sessionId,
+            refreshToken,
+            userId: user._id,
+        });
+
+        // sanitizing the user
+        const sanitizedUser = sanitizeUser(user, accessToken);
+
+        return { user: sanitizedUser, refreshToken };
+    }
+
+    getGoogleAuthUrl() {
+        return oauth2Client.generateAuthUrl({
+            access_type: "offline",
+            scope: ["openid", "email", "profile"],
+            prompt: "consent",
+        });
+    }
+
+    async googleCallbackService(code) {
+
+        // exchanging the authorization code for tokens
+        const { tokens } = await oauth2Client.getToken(code);
+        oauth2Client.setCredentials(tokens);
+
+        // getting the user info from Google
+        const ticket = await googleClient.verifyIdToken({
+            idToken: tokens.id_token,
+            audience: envs.GOOGLE_CLIENT_ID,
+        });
+
+        const payload = ticket.getPayload();
+        const { sub: googleId, email, name, picture } = payload;
+
+        // finding the user by email
+        let user = await this.userRepository.findUserByEmail(email);
+
+        if (user) {
+            // if user exists but signed up with email/password, link google account
+            if (user.provider === "local" && !user.googleId) {
+                user = await this.userRepository.updateUser(
+                    { _id: user._id },
+                    { googleId, provider: "google", avatar: picture }
+                );
+            }
+        } else {
+            // creating a new user
+            user = await this.userRepository.createUser({
+                name,
+                email,
+                password: "",
+                provider: "google",
+                googleId,
+                avatar: picture,
+                isVerified: true,
+            });
+        }
+
+        // making the access token
+        const accessToken = generateAccessToken(user);
+
+        // making the session token
+        const sessionId = this.sessionRepository.getSessionId();
+
+        // making the refresh token
+        const refreshToken = generateRefreshToken(sessionId, user._id);
+
+        // creating the session
+        await this.sessionRepository.createSession({
+            _id: sessionId,
+            refreshToken,
+            userId: user._id,
+        });
+
+        // sanitizing the user
+        const sanitizedUser = sanitizeUser(user, accessToken);
+
+        return { user: sanitizedUser, refreshToken };
     }
 }
 

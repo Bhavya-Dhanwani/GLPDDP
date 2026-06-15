@@ -24,7 +24,7 @@ export default function Footer() {
           </p>
         </div>
 
-        <Button variant="secondary"> Join Now - It's Free →</Button>
+        <Button variant="secondary"> Join Now - It&apos;s Free →</Button>
       </div>
 
       {/* Footer Content */}
