@@ -79,7 +79,10 @@ export class MatchRepository {
       .populate("team1", "name shortName logo")
       .populate("team2", "name shortName logo")
       .populate("tossWinner", "name shortName")
-      .populate("winner", "name shortName");
+      .populate("winner", "name shortName")
+      .populate("playingXI.team1.player", "name image role battingStyle bowlingStyle")
+      .populate("playingXI.team2.player", "name image role battingStyle bowlingStyle")
+      .populate("manOfTheMatch", "name image");
   }
 
   // Find Matches by seriesId
