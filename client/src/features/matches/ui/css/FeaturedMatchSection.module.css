@@ -303,6 +303,7 @@
   font-weight: 800;
   cursor: pointer;
   transition: 0.3s ease;
+  color: #111827;
 }
 
 .scorecard:hover {
