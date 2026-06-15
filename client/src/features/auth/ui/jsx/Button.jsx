@@ -5,13 +5,15 @@ const Button = ({
     variant = "primary",
     type = "button",
     icon,
-    onClick
+    onClick,
+    disabled = false
 }) => {
     return (
         <button
             type={type}
             onClick={onClick}
-            className={`${styles.button} ${styles[variant]}`}
+            disabled={disabled}
+            className={`${styles.button} ${styles[variant]} ${disabled ? styles.disabled : ""}`}
         >
             {icon && (
                 <span className={styles.icon}>

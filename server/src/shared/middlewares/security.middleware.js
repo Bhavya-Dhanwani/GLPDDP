@@ -19,8 +19,8 @@ function applySecurityMiddlewares(app) {
 
     // CORS for enabling Cross-Origin Resource Sharing
     app.use(cors({
-        origin: env.NODE_ENV === 'production' ? "" : '*', // Allow all origins in development, restrict in production
-        credentials: true // Allow cookies to be sent in CORS requests
+        origin: env.NODE_ENV === 'production' ? "" : env.FRONTEND_URL,
+        credentials: true
     }));
 
     // Cookie Parser for parsing cookies
@@ -30,12 +30,14 @@ function applySecurityMiddlewares(app) {
     app.use(hpp());
 
     // Rate Limiting to limit repeated requests to public APIs and/or endpoints
-    const limiter = rateLimit({
-        windowMs: 15 * 60 * 1000, // 15 minutes
-        max: env.API_LIMIT,
-        message: 'Too many requests from this IP, please try again after 15 minutes'
-    });
-    app.use(limiter);
+    if (env.NODE_ENV === 'production') {
+        const limiter = rateLimit({
+            windowMs: 15 * 60 * 1000, // 15 minutes
+            max: env.API_LIMIT,
+            message: 'Too many requests from this IP, please try again after 15 minutes'
+        });
+        app.use(limiter);
+    }
 
     // Applying JSON body parser middleware
     app.use(express.json({ limit: '2mb' })); // limit body to 2mb

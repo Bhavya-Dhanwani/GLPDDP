@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 
 import { Mail, Lock } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
+
+import { useLogin } from "../../hooks/useAuth";
 
 import LoginStructure from "./LoginStrucutre";
 
@@ -20,6 +23,25 @@ import AuthSwitch from "./AuthSwitch";
 import styles from "../css/Login.module.css";
 
 const Login = () => {
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    });
+
+    const loginMutation = useLogin();
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        loginMutation.mutate(formData);
+    };
+
     return (
         <LoginStructure
             leftContent={
@@ -43,27 +65,29 @@ const Login = () => {
                         subtitle="Enter your credentials to continue"
                     />
 
-                    <form className={styles.form}>
+                    <form className={styles.form} onSubmit={handleSubmit}>
                         <InputField
                             label="Email Address"
                             type="email"
                             icon={Mail}
+                            name="email"
                             placeholder="john@example.com"
+                            value={formData.email}
+                            onChange={handleChange}
                         />
 
                         <InputField
                             label="Password"
                             type="password"
                             icon={Lock}
+                            name="password"
                             placeholder="Enter password"
+                            value={formData.password}
+                            onChange={handleChange}
                         />
 
                         <div className={styles.options}>
                             <div></div>
-                            {/* <label className={styles.checkbox}>
-                                <input type="checkbox" />
-                                <span>Remember me</span>
-                            </label> */}
 
                             <Link
                                 href="/forgot-password"
@@ -73,8 +97,8 @@ const Login = () => {
                             </Link>
                         </div>
 
-                        <Button type="submit">
-                            Login
+                        <Button type="submit" disabled={loginMutation.isPending}>
+                            {loginMutation.isPending ? "Logging in..." : "Login"}
                         </Button>
 
                         <Separator text="OR" />
