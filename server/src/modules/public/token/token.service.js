@@ -98,7 +98,7 @@ class TokenService {
             expiresAt: new Date(Date.now() + EXPIRY_CONSTANTS.resetToken)
         });
 
-        sendMail(email, "Your Password Reset Token for GLPDDP", `Click to reset your password <a href="${envs.FRONTEND_URL}/resetpassword/${resetToken}">Click here</a>`);
+        sendMail(email, "Your Password Reset Token for GLPDDP", `Click to reset your password <a href="${envs.FRONTEND_URL}/reset-password/${resetToken}">Click here</a>`);
 
         return token;
     }

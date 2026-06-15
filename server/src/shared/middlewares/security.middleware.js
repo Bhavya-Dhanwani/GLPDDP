@@ -19,7 +19,7 @@ function applySecurityMiddlewares(app) {
 
     // CORS for enabling Cross-Origin Resource Sharing
     app.use(cors({
-        origin: env.NODE_ENV === 'production' ? "" : env.FRONTEND_URL,
+        origin: env.FRONTEND_URL,
         credentials: true
     }));
 

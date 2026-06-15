@@ -11,6 +11,7 @@ import {
 import { FcGoogle } from "react-icons/fc";
 
 import { useSignup } from "../../hooks/useAuth";
+import useGoogleAuth from "../../hooks/useGoogleAuth";
 
 import SignupStructure from "./SignupStrucutre";
 
@@ -35,6 +36,7 @@ const Signup = () => {
     });
 
     const signupMutation = useSignup();
+    const { openPopup } = useGoogleAuth();
 
     const handleChange = (e) => {
         setFormData({
@@ -127,6 +129,8 @@ const Signup = () => {
                         <Button
                             variant="secondary"
                             icon={<FcGoogle size={24} />}
+                            onClick={openPopup}
+                            type="button"
                         >
                             Continue with Google
                         </Button>

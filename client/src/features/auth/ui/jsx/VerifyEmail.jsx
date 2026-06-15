@@ -7,34 +7,24 @@ import OtpInput from "./OtpInput";
 
 import VerifyEmailStructure from "./VerifyEmailStrucutre";
 
-import useOtpInput from "../../hooks/useOtpInput";
-import useResendOtp from "../../hooks/useResendOtp";
+import useVerifyEmailForm from "../../hooks/useVerifyEmailForm";
 
 import styles from "../css/VerifyEmail.module.css";
 
 const VerifyEmail = () => {
     const {
+        email,
         otp,
-        otpValue,
         inputRefs,
         handleChange,
         handleKeyDown,
-        handlePaste
-    } = useOtpInput(6);
-
-    const {
-        seconds,
+        handlePaste,
+        handleVerify,
+        handleResend,
+        isVerifying,
         canResend,
-        restart
-    } = useResendOtp(60);
-
-    const handleVerify = () => {
-        console.log(otpValue);
-    };
-
-    const handleResend = () => {
-        restart();
-    };
+        seconds
+    } = useVerifyEmailForm();
 
     return (
         <VerifyEmailStructure>
@@ -57,7 +47,7 @@ const VerifyEmail = () => {
                     styles.email
                 }
             >
-                example@gmail.com
+                {email}
             </span>
 
             <OtpInput
@@ -80,8 +70,9 @@ const VerifyEmail = () => {
                 onClick={
                     handleVerify
                 }
+                disabled={isVerifying}
             >
-                Verify Email
+                {isVerifying ? "Verifying..." : "Verify Email"}
             </Button>
 
             <Separator text="or" />

@@ -1,12 +1,14 @@
 // functions to sanitize the data 
 
 // Function to sanitize user
-export const sanitizeUser = ({ _id, name, email, role, isVerified }, accessToken) => ({
+export const sanitizeUser = ({ _id, name, email, role, isVerified, provider, avatar }, accessToken) => ({
     id: _id,
     name,
     email,
     role,
     isVerified,
+    provider: provider || "local",
+    avatar: avatar || null,
     accessToken
 })
 

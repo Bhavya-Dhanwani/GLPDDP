@@ -25,12 +25,15 @@ export const useLogin = () => {
 
 export const useSignup = () => {
     const router = useRouter();
+    const dispatch = useDispatch();
 
     return useMutation({
         mutationFn: signup,
         onSuccess: (response) => {
+            const { accessToken, ...user } = response.data;
+            dispatch(setUser({ user, accessToken }));
             toast.success(response.message || "Account created successfully");
-            router.push("/login");
+            router.push("/verify-email");
         },
         onError: (error) => {
             toast.error(error.response?.data?.message || "Signup failed");

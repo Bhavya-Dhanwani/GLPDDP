@@ -7,6 +7,7 @@ import { Mail, Lock } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 
 import { useLogin } from "../../hooks/useAuth";
+import useGoogleAuth from "../../hooks/useGoogleAuth";
 
 import LoginStructure from "./LoginStrucutre";
 
@@ -29,6 +30,7 @@ const Login = () => {
     });
 
     const loginMutation = useLogin();
+    const { redirectToGoogle } = useGoogleAuth();
 
     const handleChange = (e) => {
         setFormData({
@@ -106,6 +108,8 @@ const Login = () => {
                         <Button
                             variant="secondary"
                             icon={<FcGoogle size={24} />}
+                            onClick={redirectToGoogle}
+                            type="button"
                         >
                             Continue with Google
                         </Button>

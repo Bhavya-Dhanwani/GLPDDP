@@ -45,16 +45,19 @@ axiosInstance.interceptors.response.use(
             return Promise.reject(error);
         }
 
+        if (originalRequest.url === "/auth/refresh") {
+            return Promise.reject(error);
+        }
+
         originalRequest._retry = true;
 
         try {
-            const { data } = await axios.post(
+            const { data } = await axiosInstance.post(
                 "/auth/refresh",
-                {},
-                { withCredentials: true }
+                {}
             );
 
-            setToken(data.accessToken);
+            setToken(data.data.accessToken);
 
             return axiosInstance(originalRequest);
         } catch (err) {

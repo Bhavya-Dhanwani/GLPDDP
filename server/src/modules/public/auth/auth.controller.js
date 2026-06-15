@@ -3,6 +3,7 @@ import { refreshConstants } from "../../../shared/constants/cookies.constants.js
 import ApiResponse from "../../../shared/utils/ApiResponse.utils.js";
 import { generateAccessToken } from "../../../shared/utils/token.util.js";
 import AuthService from "./auth.service.js";
+import envs from "../../../shared/config/env.config.js";
 
 // class to handle all the controller logic of the auth module
 class AuthController {
@@ -152,6 +153,61 @@ class AuthController {
 
         // returning the response
         return ApiResponse(res, 200, "Password reset successfully");
+    }
+
+    meController = async (req, res) => {
+
+        // accepting the data
+        const userId = req.userId;
+
+        // calling the getMe service
+        const user = await this.authService.getMeService(userId);
+
+        // returning the response
+        return ApiResponse(res, 200, "User fetched successfully", user);
+    }
+
+    googleAuthController = async (req, res) => {
+
+        // accepting the data
+        const { credential } = req.body;
+
+        // calling the google auth service
+        const response = await this.authService.googleAuthService(credential);
+
+        // setting the cookies in the response
+        res.cookie("glpddp_refreshToken", response.refreshToken, refreshConstants);
+
+        // returning the response
+        return ApiResponse(res, 200, "Google auth successful", response.user);
+    }
+
+    googleRedirectController = async (req, res) => {
+
+        // getting the google auth url
+        const url = this.authService.getGoogleAuthUrl();
+
+        // redirecting to google
+        res.redirect(url);
+    }
+
+    googleCallbackController = async (req, res) => {
+
+        // accepting the data
+        const { code, error } = req.query;
+
+        if (error || !code) {
+            return res.redirect(`${envs.FRONTEND_URL}/login?google=failed`);
+        }
+
+        // calling the google callback service
+        const response = await this.authService.googleCallbackService(code);
+
+        // setting the cookies in the response
+        res.cookie("glpddp_refreshToken", response.refreshToken, refreshConstants);
+
+        // redirecting to the frontend
+        res.redirect(envs.FRONTEND_URL);
     }
 }
 

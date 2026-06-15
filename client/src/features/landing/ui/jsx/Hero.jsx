@@ -93,7 +93,7 @@ export default function Hero() {
 
         <div className={`${styles.floatCard} ${styles.sixCard}`}>
           <strong>SIX!</strong>
-          <p>That's out of the ground!</p>
+          <p>That&apos;s out of the ground!</p>
         </div>
 
         <div className={styles.ball}>

@@ -24,7 +24,10 @@ const envSchema = z.object({
     SMTP_PASS: z.string(),
     SMTP_SERVICE: z.string(),
     SMTP_PORT: z.coerce.number(),
-    TRANSACTIONAL_EMAIL: z.string()
+    TRANSACTIONAL_EMAIL: z.string(),
+    GOOGLE_CLIENT_ID: z.string(),
+    GOOGLE_CLIENT_SECRET: z.string(),
+    GOOGLE_REDIRECT_URI: z.string().default("http://localhost:5000/api/auth/google/callback")
 }).strip(); // Strip out any extra environment variables that are not defined in the schema
 
 // Validate environment variables
