@@ -101,11 +101,9 @@ export default class SeriesService {
 
         // Check if any match exists in this series
         const matchExists =
-            await this.matchRepository.findBySeriesId({
-                id,
-            });
+            await this.matchRepository.findBySeriesId(id);
 
-        if (matchExists) {
+        if (matchExists.length) {
             throw new Conflict("Cannot delete series with existing matches");
         }
 

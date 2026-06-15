@@ -19,7 +19,10 @@ class PlayerController {
         const { name, image, country, battingStyle, bowlingStyle, role } = req.body;
     
         // Creating a new player using the service
-        const player = await this.playerService.createPlayer({ name, image, country, battingStyle, bowlingStyle, role });
+        const player = await this.playerService.createPlayer(
+            { name, image, country, battingStyle, bowlingStyle, role },
+            req.user.id
+        );
 
         // Returning the response
         return ApiResponse(res, 201, "Player created successfully", player);
@@ -36,7 +39,11 @@ class PlayerController {
         const { name, image, country, battingStyle, bowlingStyle, role } = req.body;
 
         // Updating a player by ID using the service
-        const updatedPlayer = await this.playerService.updatePlayer(id, { name, image, country, battingStyle, bowlingStyle, role });
+        const updatedPlayer = await this.playerService.updatePlayer(
+            id,
+            { name, image, country, battingStyle, bowlingStyle, role },
+            req.user.id
+        );
 
         // Returning the response
         return ApiResponse(res, 200, "Player updated successfully", updatedPlayer);

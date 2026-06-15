@@ -27,7 +27,10 @@ const envSchema = z.object({
     TRANSACTIONAL_EMAIL: z.string(),
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
-    GOOGLE_REDIRECT_URI: z.string().default("http://localhost:5000/api/auth/google/callback")
+    GOOGLE_REDIRECT_URI: z.string().default("http://localhost:5000/api/auth/google/callback"),
+    IMAGEKIT_PUBLIC_KEY: z.string().optional(),
+    IMAGEKIT_PRIVATE_KEY: z.string().optional(),
+    IMAGEKIT_URL_ENDPOINT: z.string().optional()
 }).strip(); // Strip out any extra environment variables that are not defined in the schema
 
 // Validate environment variables

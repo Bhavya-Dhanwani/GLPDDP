@@ -30,18 +30,6 @@ router.get(
 );
 
 /**
- * @route GET /api/matches/:id
- * @desc Get match by id
- * @access Public 
- */
-router.get(
-  "/:id",
-  getMatchByIdValidator,
-  validateErrors,
-  asyncHandler(matchController.getMatchById)
-);
-
-/**
  * @route GET /api/matches/series/:seriesId
  * @desc Get all matches of a series
  * @access Public
@@ -51,6 +39,18 @@ router.get(
   getMatchesBySeriesValidator,
   validateErrors,
   asyncHandler(matchController.getMatchesBySeriesId)
+);
+
+/**
+ * @route GET /api/matches/:id
+ * @desc Get match by id
+ * @access Public
+ */
+router.get(
+  "/:id",
+  getMatchByIdValidator,
+  validateErrors,
+  asyncHandler(matchController.getMatchById)
 );
 
 export default router;

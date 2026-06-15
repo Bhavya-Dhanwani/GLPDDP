@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setUser } from "../state/authSlice";
+import { finishAuthCheck, setUser } from "../state/authSlice";
 import axiosInstance from "@/lib/axios";
 
 const useAuthInitializer = () => {
@@ -17,6 +17,8 @@ const useAuthInitializer = () => {
                 }
             } catch {
                 // User is not logged in or session expired - do nothing
+            } finally {
+                dispatch(finishAuthCheck());
             }
         };
 

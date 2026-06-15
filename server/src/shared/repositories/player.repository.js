@@ -69,7 +69,7 @@ class PlayerRepository {
         return deletedPlayer;
     }
 
-    async getDeltedPlayers() {
+    async getDeletedPlayers() {
 
         // Fetching all deleted players from the database
         const deletedPlayers = await this.playerModel.find({ isDeleted: true });
