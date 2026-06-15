@@ -84,11 +84,14 @@ export class MatchRepository {
 
   // Find Matches by seriesId
   async findBySeriesId(seriesId) {
-    let { id } = seriesId;
-    return this.matchModel.find({
-      id,
-      isDeleted: false,
-    });
+    return this.matchModel
+      .find({
+        seriesId,
+        isDeleted: false,
+      })
+      .populate("seriesId", "name shortName season")
+      .populate("team1", "name shortName logo")
+      .populate("team2", "name shortName logo");
   }
 
   // Find Matches by status (LIVE, UPCOMING, COMPLETED, etc.)

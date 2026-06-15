@@ -32,11 +32,11 @@ export default function Navbar() {
       </button>
 
       <nav className={`${styles.links} ${isOpen ? styles.showMenu : ""}`}>
-        <a>Home</a>
-        <a>Matches</a>
-        <a>Series</a>
-        <a>Teams</a>
-        <a>Players</a>
+        <Link href="/">Home</Link>
+        <Link href="/matches">Matches</Link>
+        <Link href="/series">Series</Link>
+        <Link href="/teams">Teams</Link>
+        <Link href="/players">Players</Link>
 
         <div className={styles.mobileActions}>
           {isAuthenticated ? (
