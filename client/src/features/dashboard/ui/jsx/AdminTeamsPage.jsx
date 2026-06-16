@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import DashboardShell from "./DashboardShell";
 import { useTeams } from "@/features/cricket/hooks/useCricketQueries";
 import { useDeleteTeam } from "../../hooks/useDashboardMutations";
@@ -9,6 +10,19 @@ import styles from "../css/Dashboard.module.css";
 const AdminTeamsPage = () => {
     const { data = [], isLoading } = useTeams();
     const deleteMutation = useDeleteTeam();
+    const [search, setSearch] = useState("");
+    const [squadFilter, setSquadFilter] = useState("ALL");
+    const filteredTeams = data.filter((item) => {
+        const squadCount = item.squadPlayers?.length || 0;
+        const matchesSearch =
+            !search ||
+            item.name?.toLowerCase().includes(search.toLowerCase()) ||
+            item.shortName?.toLowerCase().includes(search.toLowerCase());
+        const matchesSquad =
+            squadFilter === "ALL" ||
+            (squadFilter === "FULL" ? squadCount >= 11 : squadCount < 11);
+        return matchesSearch && matchesSquad;
+    });
 
     return (
         <DashboardShell>
@@ -22,6 +36,23 @@ const AdminTeamsPage = () => {
                 </Link>
             </div>
             <section className={styles.card}>
+                <div className={styles.filterRow}>
+                    <input
+                        className={`${styles.input} ${styles.filterField}`}
+                        onChange={(event) => setSearch(event.target.value)}
+                        placeholder="Search by team name or short name"
+                        value={search}
+                    />
+                    <select
+                        className={`${styles.select} ${styles.filterSelect}`}
+                        onChange={(event) => setSquadFilter(event.target.value)}
+                        value={squadFilter}
+                    >
+                        <option value="ALL">All squads</option>
+                        <option value="FULL">11+ players</option>
+                        <option value="PARTIAL">Below 11 players</option>
+                    </select>
+                </div>
                 <div className={styles.tableWrap}>
                     <table className={styles.table}>
                         <thead>
@@ -33,7 +64,7 @@ const AdminTeamsPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.map((item) => {
+                            {filteredTeams.map((item) => {
                                 const id = item.id || item._id;
                                 const squadCount = item.squadPlayers?.length || 0;
 
@@ -59,7 +90,7 @@ const AdminTeamsPage = () => {
                     </table>
                 </div>
                 {isLoading && <div className={styles.empty}>Loading teams...</div>}
-                {!isLoading && !data.length && <div className={styles.empty}>No teams yet.</div>}
+                {!isLoading && !filteredTeams.length && <div className={styles.empty}>No teams found.</div>}
             </section>
         </DashboardShell>
     );

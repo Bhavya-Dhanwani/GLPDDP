@@ -7,6 +7,7 @@ import {
     getPlayers,
     getSeries,
     getSeriesById,
+    getTeamById,
     getTeams,
 } from "../api/cricket.api";
 
@@ -19,6 +20,7 @@ export const cricketKeys = {
     players: (params = {}) => ["players", params],
     playerDetail: (id) => ["players", id],
     teams: (params = {}) => ["teams", params],
+    teamDetail: (id) => ["teams", id],
 };
 
 export const useSeries = (params = {}) =>
@@ -71,4 +73,11 @@ export const useTeams = (params = {}) =>
     useQuery({
         queryKey: cricketKeys.teams(params),
         queryFn: () => getTeams(params),
+    });
+
+export const useTeamDetail = (id) =>
+    useQuery({
+        queryKey: cricketKeys.teamDetail(id),
+        queryFn: () => getTeamById(id),
+        enabled: Boolean(id),
     });

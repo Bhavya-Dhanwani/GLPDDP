@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { setToken } from "@/lib/axios";
 import { login, signup, logout, verifyOtp, resendOtp, forgotPassword, resetPassword } from "../api/auth.api";
 import { setUser, clearUser, updateUser } from "../state/authSlice";
 
@@ -50,6 +51,7 @@ export const useLogout = () => {
         mutationFn: logout,
         onSuccess: () => {
             dispatch(clearUser());
+            setToken("");
             toast.success("Logged out successfully");
             queryClient.clear();
             router.push("/login");

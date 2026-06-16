@@ -1,17 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSelector } from "react-redux";
 import {
     CalendarPlus,
     ChevronDown,
     Eye,
     ListPlus,
     LogOut,
+    Menu,
     PlusCircle,
     Trophy,
     UserPlus,
     Users,
+    X,
 } from "lucide-react";
 import { useLogout } from "@/features/auth/hooks/useAuth";
 import DashboardGuard from "./DashboardGuard";
@@ -59,17 +63,38 @@ const groups = [
 
 const DashboardShell = ({ children }) => {
     const pathname = usePathname();
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const logoutMutation = useLogout();
+    const user = useSelector((state) => state.auth.user);
+    const visibleGroups = user?.role === "SUPER_ADMIN"
+        ? [
+            ...groups.slice(0, 4),
+            {
+                title: "Users",
+                icon: Users,
+                items: [{ href: "/dashboard/users", label: "View Users", icon: Eye }],
+            },
+            ...groups.slice(4),
+        ]
+        : groups;
 
     return (
         <DashboardGuard>
-        <div className={styles.layout}>
-            <aside className={styles.sidebar}>
+        <div className={`${styles.layout} ${isSidebarOpen ? styles.sidebarOpen : ""}`}>
+            <aside className={styles.sidebar} aria-label="Dashboard navigation">
                 <Link href="/dashboard" className={styles.brand}>
                     <span className={styles.brandMark}>G</span>
                     <span>GLPDDP Admin</span>
                 </Link>
-                {groups.map((group) => {
+                <button
+                    aria-label="Close navigation"
+                    className={styles.sidebarClose}
+                    onClick={() => setIsSidebarOpen(false)}
+                    type="button"
+                >
+                    <X size={18} />
+                </button>
+                {visibleGroups.map((group) => {
                     const GroupIcon = group.icon;
 
                     return (
@@ -87,6 +112,7 @@ const DashboardShell = ({ children }) => {
                                     key={item.href}
                                     href={item.href}
                                     className={`${styles.navLink} ${isActive ? styles.active : ""}`}
+                                    onClick={() => setIsSidebarOpen(false)}
                                     title={item.label}
                                 >
                                     <Icon size={18} />
@@ -100,6 +126,15 @@ const DashboardShell = ({ children }) => {
             </aside>
             <section className={styles.content}>
                 <header className={styles.topbar}>
+                    <button
+                        aria-expanded={isSidebarOpen}
+                        aria-label="Open navigation"
+                        className={styles.menuButton}
+                        onClick={() => setIsSidebarOpen(true)}
+                        type="button"
+                    >
+                        <Menu size={20} />
+                    </button>
                     <button
                         className={styles.button}
                         onClick={() => logoutMutation.mutate()}

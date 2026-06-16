@@ -1,6 +1,7 @@
 // Importing moduels
 import UserRepository from "../../../shared/repositories/user.repository.js";
 import ROLES from "../../../shared/constants/roles.constants.js";
+import NotFound from "../../../shared/errors/notfound.error.js";
 
 // creating the user service class
 class UserService {
@@ -27,6 +28,10 @@ class UserService {
         // getting the user by id
         const user = await this.userRepository.getUserById(userId);
 
+        if (!user) {
+            throw new NotFound("User not found");
+        }
+
         return user;
     }
 
@@ -34,6 +39,10 @@ class UserService {
 
         // making the user admin
         const user = await this.userRepository.updateUser({ _id: userId }, { role: ROLES.ADMIN });
+
+        if (!user) {
+            throw new NotFound("User not found");
+        }
 
         return user;
     }

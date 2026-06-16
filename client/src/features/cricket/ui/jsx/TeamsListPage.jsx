@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import PublicShell from "./PublicShell";
 import PageHeader from "./PageHeader";
@@ -33,7 +34,7 @@ const TeamsListPage = () => {
             {!isLoading && !isError && (
                 <div className={styles.grid}>
                     {teams.map((team) => (
-                        <article className={`${styles.card} ${styles.teamCard}`} key={team.id || team._id}>
+                        <Link className={`${styles.card} ${styles.teamCard}`} href={`/teams/${team._id || team.id}`} key={team.id || team._id}>
                             <div className={styles.teamCardInner}>
                                 <div className={styles.teamLogo}>
                                     {team.logo ? <img src={team.logo} alt={team.name} /> : <span>{team.shortName}</span>}
@@ -43,7 +44,7 @@ const TeamsListPage = () => {
                                     <p className={styles.muted}>{team.shortName}</p>
                                 </div>
                             </div>
-                        </article>
+                        </Link>
                     ))}
                     {!teams.length && <StateBlock>No teams found.</StateBlock>}
                 </div>

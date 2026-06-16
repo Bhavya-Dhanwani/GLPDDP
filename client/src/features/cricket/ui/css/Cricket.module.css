@@ -59,7 +59,7 @@
 .main {
     width: min(100%, 1440px);
     margin: 0 auto;
-    padding: 44px clamp(18px, 5vw, 72px);
+    padding: 108px clamp(18px, 5vw, 72px) 44px;
 }
 
 .pageHead {
@@ -395,14 +395,30 @@
     border-radius: 16px;
 }
 
+.teamLogoLarge {
+    width: 150px;
+    height: 150px;
+    border-radius: 22px;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.teamLogoLarge img {
+    border-radius: 22px;
+}
+
 .avatar {
     width: 120px;
     height: 120px;
 }
 
 .teamCard {
+    display: block;
     padding: 24px;
+    color: inherit;
     cursor: pointer;
+    text-decoration: none;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
@@ -643,6 +659,56 @@
     font-size: 12px;
 }
 
+.tablePlayer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 220px;
+}
+
+.tableAvatar {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 auto;
+    overflow: hidden;
+    border: 1px solid #dfe6ef;
+    border-radius: 50%;
+    background: #f0f6f3;
+    color: #263654;
+    font-weight: 900;
+}
+
+.tableAvatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.truncateCell {
+    display: inline-block;
+    max-width: min(280px, 42vw);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
+    white-space: nowrap;
+}
+
+.colorValue {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.colorValue i {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #d8e1ec;
+    border-radius: 50%;
+}
+
 .empty,
 .loader {
     padding: 42px;
@@ -677,6 +743,10 @@
     .nav {
         gap: 16px;
         overflow-x: auto;
+    }
+
+    .main {
+        padding-top: 96px;
     }
 
     .seriesCard,
@@ -963,6 +1033,149 @@
     font-size: 19px;
 }
 
+.matchChatPanel {
+    display: grid;
+    gap: 12px;
+    margin-top: 8px;
+    padding: 16px;
+    border: 1px solid #dfe6ef;
+    border-radius: 8px;
+    background: #fbfcfe;
+}
+
+.matchChatPanel header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.matchChatPanel h2 {
+    font-size: 16px;
+    line-height: 1.2;
+}
+
+.matchChatPanel header p,
+.matchChatEmpty {
+    color: #60708d;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.matchChatPanel header span {
+    display: grid;
+    place-items: center;
+    min-width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    background: #e8f7ee;
+    color: #00843d;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.matchChatList {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    max-height: 170px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.matchChatItem {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 10px;
+    min-width: 0;
+}
+
+.matchChatItem > strong {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #009447;
+    color: #ffffff;
+    font-size: 12px;
+}
+
+.matchChatItem h3 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    color: #111827;
+    font-size: 13px;
+    line-height: 1.2;
+}
+
+.matchChatItem h3 span,
+.matchChatItem p {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.matchChatItem time {
+    flex: 0 0 auto;
+    color: #8a99b2;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.matchChatItem p {
+    margin-top: 4px;
+    color: #263654;
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.matchChatForm {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+}
+
+.matchChatForm input {
+    min-width: 0;
+    min-height: 42px;
+    border: 1px solid #d8e1ec;
+    border-radius: 8px;
+    padding: 0 12px;
+    background: #ffffff;
+    color: #111827;
+    font: inherit;
+    outline: 0;
+}
+
+.matchChatForm input:focus {
+    border-color: #009447;
+    box-shadow: 0 0 0 3px rgba(0, 132, 61, 0.1);
+}
+
+.matchChatForm button {
+    min-height: 42px;
+    border: 0;
+    border-radius: 8px;
+    padding: 0 16px;
+    background: #009447;
+    color: #ffffff;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.matchChatForm button:disabled,
+.matchChatForm input:disabled {
+    cursor: not-allowed;
+    opacity: 0.62;
+}
+
+.matchChatPanel small {
+    color: #b91c1c;
+    font-weight: 800;
+}
+
 .lastOverRow {
     display: flex;
     align-items: center;
@@ -1167,11 +1380,75 @@
 }
 
 .fallList,
-.fantasyList,
-.graphList {
+.fantasyList {
     display: grid;
     gap: 14px;
     margin-top: 16px;
+}
+
+.chartGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.chartBox {
+    min-width: 0;
+    border: 1px solid #dfe6ef;
+    border-radius: 8px;
+    padding: 16px;
+    background: #fbfcfe;
+}
+
+.chartBoxWide {
+    grid-column: 1 / -1;
+}
+
+.chartBox header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 8px;
+}
+
+.chartBox span {
+    color: #60708d;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.chartBox strong {
+    color: #009447;
+    font-size: 18px;
+}
+
+.chartSummaryGrid {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.chartSummaryGrid div {
+    display: grid;
+    gap: 8px;
+    border: 1px solid #dfe6ef;
+    border-radius: 8px;
+    padding: 16px;
+    background: #fbfcfe;
+}
+
+.chartSummaryGrid span {
+    color: #60708d;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.chartSummaryGrid strong {
+    color: #111827;
+    font-size: 24px;
 }
 
 .fallList > div {
@@ -1188,8 +1465,7 @@
 }
 
 .fallList p,
-.fantasyList div,
-.graphList div {
+.fantasyList div {
     display: grid;
     align-items: center;
     gap: 12px;
@@ -1217,27 +1493,6 @@
 .fantasyList em {
     color: #60708d;
     font-style: normal;
-}
-
-.graphList div {
-    grid-template-columns: 72px minmax(0, 1fr) 36px;
-}
-
-.graphList span {
-    color: #60708d;
-    font-weight: 800;
-}
-
-.graphList b {
-    display: block;
-    height: 12px;
-    min-width: 8px;
-    border-radius: 999px;
-    background: #009447;
-}
-
-.graphList strong {
-    text-align: right;
 }
 
 .fantasyList div {
@@ -1552,7 +1807,8 @@
         width: min(260px, 100%);
     }
 
-    .scoreTables {
+    .scoreTables,
+    .chartGrid {
         grid-template-columns: 1fr;
     }
 }
@@ -1595,8 +1851,7 @@
     }
 
     .fantasyList div,
-    .fallList p,
-    .graphList div {
+    .fallList p {
         grid-template-columns: 1fr;
     }
 

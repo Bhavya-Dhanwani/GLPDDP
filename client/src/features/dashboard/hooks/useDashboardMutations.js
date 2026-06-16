@@ -9,6 +9,7 @@ import {
     deletePlayer,
     deleteSeries,
     deleteTeam,
+    makeUserAdmin,
     publishMatch,
     updateMatch,
     updatePlayer,
@@ -24,6 +25,7 @@ const invalidateCricket = (queryClient) => {
     queryClient.invalidateQueries({ queryKey: ["matches"] });
     queryClient.invalidateQueries({ queryKey: ["players"] });
     queryClient.invalidateQueries({ queryKey: ["teams"] });
+    queryClient.invalidateQueries({ queryKey: ["users"] });
 };
 
 const useDashboardMutation = (mutationFn, messages) => {
@@ -117,4 +119,10 @@ export const usePublishMatch = () =>
     useDashboardMutation(publishMatch, {
         success: "Match published",
         error: "Unable to publish match",
+    });
+
+export const useMakeUserAdmin = () =>
+    useDashboardMutation(makeUserAdmin, {
+        success: "User made admin",
+        error: "Unable to make user admin",
     });

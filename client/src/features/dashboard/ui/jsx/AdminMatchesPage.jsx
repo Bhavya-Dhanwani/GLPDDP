@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import DashboardShell from "./DashboardShell";
 import { useMatches } from "@/features/cricket/hooks/useCricketQueries";
 import {
@@ -13,6 +14,20 @@ const AdminMatchesPage = () => {
     const matchesQuery = useMatches();
     const deleteMutation = useDeleteMatch();
     const publishMutation = usePublishMatch();
+    const [search, setSearch] = useState("");
+    const [status, setStatus] = useState("ALL");
+    const matches = matchesQuery.data || [];
+    const filteredMatches = matches.filter((item) => {
+        const title = item.title || item.matchNumber || item.matchType || "";
+        const teams = `${item.team1?.name || ""} ${item.team1?.shortName || ""} ${item.team2?.name || ""} ${item.team2?.shortName || ""}`;
+        const matchesSearch =
+            !search ||
+            title.toLowerCase().includes(search.toLowerCase()) ||
+            teams.toLowerCase().includes(search.toLowerCase());
+        const matchesStatus = status === "ALL" || item.status === status;
+        return matchesSearch && matchesStatus;
+    });
+    const statuses = [...new Set(matches.map((item) => item.status).filter(Boolean))];
 
     return (
         <DashboardShell>
@@ -26,6 +41,26 @@ const AdminMatchesPage = () => {
                 </Link>
             </div>
             <section className={styles.card}>
+                <div className={styles.filterRow}>
+                    <input
+                        className={`${styles.input} ${styles.filterField}`}
+                        onChange={(event) => setSearch(event.target.value)}
+                        placeholder="Search by match, team, or type"
+                        value={search}
+                    />
+                    <select
+                        className={`${styles.select} ${styles.filterSelect}`}
+                        onChange={(event) => setStatus(event.target.value)}
+                        value={status}
+                    >
+                        <option value="ALL">All statuses</option>
+                        {statuses.map((item) => (
+                            <option key={item} value={item}>
+                                {item}
+                            </option>
+                        ))}
+                    </select>
+                </div>
                 <div className={styles.tableWrap}>
                     <table className={styles.table}>
                         <thead>
@@ -37,7 +72,7 @@ const AdminMatchesPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {(matchesQuery.data || []).map((item) => {
+                            {filteredMatches.map((item) => {
                                 const id = item.id || item._id;
                                 const title = item.title || item.matchNumber || item.matchType;
                                 const teams = `${item.team1?.shortName || "T1"} vs ${item.team2?.shortName || "T2"}`;
@@ -72,7 +107,7 @@ const AdminMatchesPage = () => {
                     </table>
                 </div>
                 {matchesQuery.isLoading && <div className={styles.empty}>Loading matches...</div>}
-                {!matchesQuery.isLoading && !(matchesQuery.data || []).length && <div className={styles.empty}>No matches yet.</div>}
+                {!matchesQuery.isLoading && !filteredMatches.length && <div className={styles.empty}>No matches found.</div>}
             </section>
         </DashboardShell>
     );

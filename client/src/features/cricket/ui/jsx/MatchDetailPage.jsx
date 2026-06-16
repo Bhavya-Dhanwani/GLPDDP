@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useSelector } from "react-redux";
 import {
     Activity,
     CalendarDays,
@@ -13,6 +14,18 @@ import {
     UserRound,
     UsersRound,
 } from "lucide-react";
+import {
+    CartesianGrid,
+    Legend,
+    Line,
+    LineChart,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
+} from "recharts";
+import { getToken } from "@/lib/axios";
+import getSocket from "@/lib/socket";
 import PublicShell from "./PublicShell";
 import StateBlock from "./StateBlock";
 import StatusBadge from "./StatusBadge";
@@ -97,6 +110,14 @@ const getStrikeRate = (runs = 0, balls = 0) => (balls ? ((runs * 100) / balls).t
 
 const getEconomy = (runs = 0, legalBalls = 0) => (legalBalls ? ((runs * 6) / legalBalls).toFixed(2) : "0.00");
 
+const formatChatTime = (value) =>
+    value
+        ? new Intl.DateTimeFormat("en-IN", {
+              hour: "2-digit",
+              minute: "2-digit",
+          }).format(new Date(value))
+        : "";
+
 const getInningsTitle = (match, innings) => {
     const team = getTeamById(match, innings?.battingTeamId);
     const suffix = innings?.inningsNumber ? ` Innings ${innings.inningsNumber}` : " Innings";
@@ -139,13 +160,36 @@ const getFallOfWickets = (snapshot) => {
     });
 };
 
-const getOverGraph = (deliveries = []) => {
-    const overs = new Map();
-    deliveries.forEach((delivery) => {
-        const over = Math.floor((delivery.legalBallsBefore || 0) / 6) + 1;
-        overs.set(over, (overs.get(over) || 0) + Number(delivery.totalRuns || 0));
+const getMatchProgressGraph = (deliveries = [], inningsList = [], match) => {
+    const inningsById = new Map((inningsList || []).map((innings) => [idOf(innings), innings]));
+    const series = {
+        team1Runs: new Map([[0, 0]]),
+        team2Runs: new Map([[0, 0]]),
+    };
+    const totals = { team1Runs: 0, team2Runs: 0 };
+    const balls = new Set([0]);
+
+    [...deliveries].sort((a, b) => a.sequenceNumber - b.sequenceNumber).forEach((delivery) => {
+        const innings = inningsById.get(idOf(delivery.inningsId));
+        const battingTeamId = idOf(innings?.battingTeamId);
+        const teamKey = battingTeamId === idOf(match?.team1) ? "team1Runs" : battingTeamId === idOf(match?.team2) ? "team2Runs" : "";
+        if (!teamKey) return;
+
+        totals[teamKey] += Number(delivery.totalRuns || 0);
+        const ball = Number(delivery.legalBallsBefore || 0) + (delivery.isLegalDelivery ? 1 : 0);
+        balls.add(ball);
+        series[teamKey].set(ball, totals[teamKey]);
     });
-    return [...overs.entries()].sort((a, b) => a[0] - b[0]).map(([over, runs]) => ({ over, runs }));
+
+    return {
+        data: [...balls].sort((a, b) => a - b).map((ball) => ({
+            ball,
+            over: formatOvers(ball),
+            team1Runs: series.team1Runs.has(ball) ? series.team1Runs.get(ball) : null,
+            team2Runs: series.team2Runs.has(ball) ? series.team2Runs.get(ball) : null,
+        })),
+        totals,
+    };
 };
 
 const getFantasyRows = (inningsList = []) => {
@@ -308,7 +352,11 @@ const TeamSummary = ({ team, align = "left", tone, label }) => (
 
 const MatchDetailPage = () => {
     const [activeTab, setActiveTab] = useState("Live");
+    const [chatText, setChatText] = useState("");
+    const [chatMessages, setChatMessages] = useState([]);
+    const [chatError, setChatError] = useState("");
     const { id } = useParams();
+    const { isAuthenticated, user } = useSelector((state) => state.auth);
     const { data: match, isLoading, isError } = useMatchDetail(id);
     const { data: liveSnapshot, connectionState, isLoading: isLiveSnapshotLoading } = useLiveMatch(id, { enabled: Boolean(id) });
     const displayMatch = liveSnapshot?.match || match;
@@ -357,9 +405,48 @@ const MatchDetailPage = () => {
     const topBatter = [...battingRows].sort((a, b) => (b.runs || 0) - (a.runs || 0))[0];
     const topBowler = [...bowlingRows].sort((a, b) => (b.wickets || 0) - (a.wickets || 0))[0];
     const fallOfWickets = getFallOfWickets(displaySnapshot);
-    const overGraph = getOverGraph(liveSnapshot?.deliveries || []);
-    const maxOverRuns = Math.max(...overGraph.map((item) => item.runs), 1);
+    const matchProgressGraph = getMatchProgressGraph(liveSnapshot?.deliveries || [], scorecardInnings, displayMatch);
+    const matchProgressData = matchProgressGraph.data;
     const fantasyRows = getFantasyRows(scorecardInnings);
+
+    useEffect(() => {
+        if (!id) return undefined;
+
+        const socket = getSocket();
+        const handleChatMessage = (message) => {
+            if (idOf(message.matchId) !== String(id)) return;
+            setChatMessages((current) => [...current, message].slice(-50));
+        };
+
+        socket.on("chat:message", handleChatMessage);
+        return () => {
+            socket.off("chat:message", handleChatMessage);
+        };
+    }, [id]);
+
+    const sendChatMessage = (event) => {
+        event.preventDefault();
+        const text = chatText.trim();
+
+        if (!isAuthenticated) {
+            setChatError("Login required to chat.");
+            return;
+        }
+        if (!text) {
+            setChatError("Message is required.");
+            return;
+        }
+
+        const socket = getSocket();
+        setChatError("");
+        socket.emit("chat:send", { matchId: String(id), text, token: getToken() }, (ack) => {
+            if (!ack?.success) {
+                setChatError(ack?.error || "Unable to send message.");
+                return;
+            }
+            setChatText("");
+        });
+    };
 
     return (
         <PublicShell contentClassName={styles.matchDetailMain}>
@@ -425,6 +512,44 @@ const MatchDetailPage = () => {
                                     </div>
                                 </div>
                             </div>
+
+                            <section className={styles.matchChatPanel}>
+                                <header>
+                                    <div>
+                                        <h2>Match Chat</h2>
+                                        <p>{isAuthenticated ? `Posting as ${user?.name || "Fan"}` : "Login to join the conversation"}</p>
+                                    </div>
+                                    <span>{chatMessages.length}</span>
+                                </header>
+                                <div className={styles.matchChatList}>
+                                    {chatMessages.map((message) => (
+                                        <article className={styles.matchChatItem} key={message.id}>
+                                            <strong>{message.name?.charAt(0) || "F"}</strong>
+                                            <div>
+                                                <h3>
+                                                    <span>{message.name || "Fan"}</span>
+                                                    <time>{formatChatTime(message.createdAt)}</time>
+                                                </h3>
+                                                <p>{message.text}</p>
+                                            </div>
+                                        </article>
+                                    ))}
+                                    {!chatMessages.length && <p className={styles.matchChatEmpty}>No messages yet.</p>}
+                                </div>
+                                <form className={styles.matchChatForm} onSubmit={sendChatMessage}>
+                                    <input
+                                        disabled={!isAuthenticated}
+                                        maxLength={280}
+                                        onChange={(event) => setChatText(event.target.value)}
+                                        placeholder={isAuthenticated ? "Send a message..." : "Login required"}
+                                        value={chatText}
+                                    />
+                                    <button disabled={!isAuthenticated || !chatText.trim()} type="submit">
+                                        Send
+                                    </button>
+                                </form>
+                                {chatError && <small>{chatError}</small>}
+                            </section>
 
                             <div className={styles.lastOverRow}>
                                 <span>This Over</span>
@@ -653,16 +778,56 @@ const MatchDetailPage = () => {
 
                         {activeTab === "Graph" && (
                             <section className={`${styles.card} ${styles.tabPanel}`}>
-                                <h2>Graph</h2>
-                                <div className={styles.graphList}>
-                                    {overGraph.map((item) => (
-                                        <div key={item.over}>
-                                            <span>Over {item.over}</span>
-                                            <b style={{ width: `${Math.max((item.runs / maxOverRuns) * 100, 8)}%` }} />
-                                            <strong>{item.runs}</strong>
-                                        </div>
-                                    ))}
-                                    {!overGraph.length && <StateBlock>Run graph will appear once balls are scored.</StateBlock>}
+                                <h2>Match Run Progression</h2>
+                                <div className={styles.chartGrid}>
+                                    {matchProgressData.length > 1 && (
+                                        <>
+                                            <div className={`${styles.chartBox} ${styles.chartBoxWide}`}>
+                                                <header>
+                                                    <span>Runs by ball</span>
+                                                    <strong>{formatOvers(matchProgressData.at(-1)?.ball || 0)} ov</strong>
+                                                </header>
+                                                <ResponsiveContainer width="100%" height={330}>
+                                                    <LineChart data={matchProgressData} margin={{ top: 16, right: 18, left: -12, bottom: 4 }}>
+                                                        <CartesianGrid stroke="#edf1f6" vertical={false} />
+                                                        <XAxis dataKey="over" axisLine={false} tickLine={false} tick={{ fill: "#60708d", fontSize: 12 }} />
+                                                        <YAxis allowDecimals={false} axisLine={false} tickLine={false} tick={{ fill: "#60708d", fontSize: 12 }} />
+                                                        <Tooltip contentStyle={{ border: "1px solid #dfe6ef", borderRadius: 8 }} labelFormatter={(label) => `${label} overs`} />
+                                                        <Legend verticalAlign="top" height={34} />
+                                                        <Line
+                                                            type="monotone"
+                                                            dataKey="team1Runs"
+                                                            name={displayMatch.team1?.shortName || displayMatch.team1?.name || "Team 1"}
+                                                            stroke="#009447"
+                                                            strokeWidth={3}
+                                                            dot={false}
+                                                            activeDot={{ r: 6 }}
+                                                        />
+                                                        <Line
+                                                            type="monotone"
+                                                            dataKey="team2Runs"
+                                                            name={displayMatch.team2?.shortName || displayMatch.team2?.name || "Team 2"}
+                                                            stroke="#263654"
+                                                            strokeWidth={3}
+                                                            dot={false}
+                                                            activeDot={{ r: 6 }}
+                                                        />
+                                                    </LineChart>
+                                                </ResponsiveContainer>
+                                            </div>
+                                            <div className={styles.chartSummaryGrid}>
+                                                <div>
+                                                    <span>{displayMatch.team1?.shortName || "Team 1"}</span>
+                                                    <strong>{matchProgressGraph.totals.team1Runs || 0}</strong>
+                                                </div>
+                                                <div>
+                                                    <span>{displayMatch.team2?.shortName || "Team 2"}</span>
+                                                    <strong>{matchProgressGraph.totals.team2Runs || 0}</strong>
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
+                                    {matchProgressData.length <= 1 && <StateBlock>Run graph will appear once balls are scored.</StateBlock>}
                                 </div>
                             </section>
                         )}

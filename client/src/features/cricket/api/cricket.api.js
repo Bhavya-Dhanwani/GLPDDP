@@ -42,6 +42,11 @@ export const getTeams = async (params = {}) => {
     return unwrap(response);
 };
 
+export const getTeamById = async (id) => {
+    const response = await axiosInstance.get(`/teams/${id}`);
+    return unwrap(response);
+};
+
 export const getLiveSnapshot = async (matchId) => {
     const response = await axiosInstance.get(`/live/matches/${matchId}`);
     return unwrap(response);

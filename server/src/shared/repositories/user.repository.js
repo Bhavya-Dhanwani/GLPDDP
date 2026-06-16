@@ -26,7 +26,7 @@ class UserRepository {
     async updateUser(filter, update) {
 
         // updating the user
-        const user = await this.userModel.findOneAndUpdate(filter, update, { returnDocument: "after"  });
+        const user = await this.userModel.findOneAndUpdate(filter, update, { returnDocument: "after"  }).select("-password");
         
         // returning the updated user
         return user;
@@ -35,7 +35,7 @@ class UserRepository {
     async getAllusers() {
 
         // getting all the non deleted users
-        const users = await this.userModel.find({ isDeleted: false });
+        const users = await this.userModel.find({ isDeleted: false }).select("-password");
         
         return users;
 
@@ -44,7 +44,7 @@ class UserRepository {
     async getUserById(userId) {
 
         // getting the user by id
-        const user = await this.userModel.findOne({ _id: userId, isDeleted: false });
+        const user = await this.userModel.findOne({ _id: userId, isDeleted: false }).select("-password");
 
 
         return user;
@@ -54,7 +54,7 @@ class UserRepository {
     async deleteUser(filter) {
 
         // deleting the user
-        const user = await this.userModel.findOneAndUpdate(filter, { isDeleted: true }, { returnDocument: "after" });
+        const user = await this.userModel.findOneAndUpdate(filter, { isDeleted: true }, { returnDocument: "after" }).select("-password");
 
         return user;
     }
@@ -62,7 +62,7 @@ class UserRepository {
     async getUser(data) {
 
         // getting the user by email or id
-        const user = await this.userModel.find(data);
+        const user = await this.userModel.find(data).select("-password");
 
         return user;
 

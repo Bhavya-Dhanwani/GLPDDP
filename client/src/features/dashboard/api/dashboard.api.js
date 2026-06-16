@@ -125,3 +125,13 @@ export const addManualCommentary = async ({ matchId, payload }) => {
     const response = await axiosInstance.post(`/scoring/matches/${matchId}/commentary`, payload);
     return unwrap(response);
 };
+
+export const getUsers = async () => {
+    const response = await axiosInstance.get("/users");
+    return unwrap(response);
+};
+
+export const makeUserAdmin = async (id) => {
+    const response = await axiosInstance.put(`/users/make-admin/${id}`);
+    return unwrap(response);
+};

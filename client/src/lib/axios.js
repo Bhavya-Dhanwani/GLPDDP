@@ -6,6 +6,8 @@ const setToken = (newToken) => {
     token = newToken;
 };
 
+const getToken = () => token;
+
 const axiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000/api",
     headers: {
@@ -66,6 +68,6 @@ axiosInstance.interceptors.response.use(
     }
 );
 
-export { setToken };
+export { getToken, setToken };
 
 export default axiosInstance;

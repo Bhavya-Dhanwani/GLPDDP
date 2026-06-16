@@ -1,6 +1,6 @@
 // Importing modules 
 import UserService from "./user.service.js";
-import ApiResponse from "../../../shared/utils/apiResponse.util.js";
+import ApiResponse from "../../../shared/utils/ApiResponse.utils.js";
 
 // creating the user controller class
 class UserController {

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import DashboardShell from "./DashboardShell";
 import { usePlayers } from "@/features/cricket/hooks/useCricketQueries";
 import { useDeletePlayer } from "../../hooks/useDashboardMutations";
@@ -9,6 +10,19 @@ import styles from "../css/Dashboard.module.css";
 const AdminPlayersPage = () => {
     const { data = [], isLoading } = usePlayers();
     const deleteMutation = useDeletePlayer();
+    const [search, setSearch] = useState("");
+    const [role, setRole] = useState("ALL");
+    const filteredPlayers = data.filter((item) => {
+        const roles = (item.role || []).join(", ");
+        const matchesSearch =
+            !search ||
+            item.name?.toLowerCase().includes(search.toLowerCase()) ||
+            item.country?.toLowerCase().includes(search.toLowerCase()) ||
+            roles.toLowerCase().includes(search.toLowerCase());
+        const matchesRole = role === "ALL" || (item.role || []).includes(role);
+        return matchesSearch && matchesRole;
+    });
+    const roles = [...new Set(data.flatMap((item) => item.role || []))];
 
     return (
         <DashboardShell>
@@ -22,6 +36,26 @@ const AdminPlayersPage = () => {
                 </Link>
             </div>
             <section className={styles.card}>
+                <div className={styles.filterRow}>
+                    <input
+                        className={`${styles.input} ${styles.filterField}`}
+                        onChange={(event) => setSearch(event.target.value)}
+                        placeholder="Search by name, country, or role"
+                        value={search}
+                    />
+                    <select
+                        className={`${styles.select} ${styles.filterSelect}`}
+                        onChange={(event) => setRole(event.target.value)}
+                        value={role}
+                    >
+                        <option value="ALL">All roles</option>
+                        {roles.map((item) => (
+                            <option key={item} value={item}>
+                                {item}
+                            </option>
+                        ))}
+                    </select>
+                </div>
                 <div className={styles.tableWrap}>
                     <table className={styles.table}>
                         <thead>
@@ -33,7 +67,7 @@ const AdminPlayersPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.map((item) => {
+                            {filteredPlayers.map((item) => {
                                 const id = item.id || item._id;
                                 const roles = (item.role || []).join(", ");
 
@@ -67,7 +101,7 @@ const AdminPlayersPage = () => {
                     </table>
                 </div>
                 {isLoading && <div className={styles.empty}>Loading players...</div>}
-                {!isLoading && !data.length && <div className={styles.empty}>No players yet.</div>}
+                {!isLoading && !filteredPlayers.length && <div className={styles.empty}>No players found.</div>}
             </section>
         </DashboardShell>
     );

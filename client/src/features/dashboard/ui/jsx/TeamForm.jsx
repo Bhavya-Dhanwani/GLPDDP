@@ -36,7 +36,18 @@ const TeamForm = ({ initialValues, players = [], onSubmit, isSubmitting }) => {
     const [form, setForm] = useState(normalizeInitialValues(initialValues));
     const [file, setFile] = useState(null);
     const [uploading, setUploading] = useState(false);
+    const [playerSearch, setPlayerSearch] = useState("");
     const selectedPlayers = useMemo(() => new Set(form.squadPlayers), [form.squadPlayers]);
+    const filteredPlayers = players.filter((player) => {
+        const roles = (player.role || []).join(", ");
+        const query = playerSearch.toLowerCase();
+        return (
+            !query ||
+            player.name?.toLowerCase().includes(query) ||
+            player.country?.toLowerCase().includes(query) ||
+            roles.toLowerCase().includes(query)
+        );
+    });
 
     const update = (field, value) => {
         setForm((current) => ({ ...current, [field]: value }));
@@ -100,8 +111,14 @@ const TeamForm = ({ initialValues, players = [], onSubmit, isSubmitting }) => {
                 onChange={setFile}
             />
             <FormField label={`Squad Players (${form.squadPlayers.length}/15)`} full>
+                <input
+                    className={styles.input}
+                    onChange={(event) => setPlayerSearch(event.target.value)}
+                    placeholder="Search players by name, country, or role"
+                    value={playerSearch}
+                />
                 <div className={styles.pickGrid}>
-                    {players.map((player) => {
+                    {filteredPlayers.map((player) => {
                         const playerId = idOf(player);
                         const active = selectedPlayers.has(playerId);
                         return (
@@ -117,8 +134,9 @@ const TeamForm = ({ initialValues, players = [], onSubmit, isSubmitting }) => {
                         );
                     })}
                     {!players.length && <div className={styles.empty}>Create players before creating teams.</div>}
+                    {!!players.length && !filteredPlayers.length && <div className={styles.empty}>No players match this search.</div>}
                 </div>
-                <p className={styles.muted}>Select 11 to 15 players for the team squad.</p>
+                <p className={`${styles.muted} ${styles.helperText}`}>Select 11 to 15 players for the team squad.</p>
             </FormField>
             <div className={styles.actions}>
                 <button

@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 import env from "../shared/config/env.config.js";
 import logger from "../shared/config/logger.config.js";
+import { decodeAccessToken } from "../shared/utils/token.util.js";
 
 let io;
 
@@ -15,8 +16,10 @@ const initializeSocket = (server) => {
   io.on("connection", (socket) => {
     logger.info({ socketId: socket.id }, "Socket connected");
 
-    socket.on("match:join", ({ matchId }, callback) => {
-      if (typeof matchId === "string" && matchId.length > 0) {
+    socket.on("match:join", (payload = {}, callback) => {
+      const matchId = typeof payload.matchId === "string" ? payload.matchId.trim() : "";
+
+      if (matchId.length > 0) {
         socket.join(`match:${matchId}`);
         logger.info({ socketId: socket.id, matchId }, "Socket joined match room");
         if (typeof callback === "function") {
@@ -37,19 +40,20 @@ const initializeSocket = (server) => {
         if (typeof callback === "function") {
           callback({ success: true });
         }
-      } else {
-        if (typeof callback === "function") {
-          callback({ success: false, error: "Invalid matchId" });
-        }
+      } else if (typeof callback === "function") {
+        callback({ success: false, error: "Invalid matchId" });
       }
     });
 
     socket.on("chat:send", (payload = {}, callback) => {
       const matchId = typeof payload.matchId === "string" ? payload.matchId.trim() : "";
       const text = typeof payload.text === "string" ? payload.text.trim().slice(0, 280) : "";
-      const name = typeof payload.name === "string" && payload.name.trim()
-        ? payload.name.trim().slice(0, 40)
-        : "Fan";
+      const token = typeof payload.token === "string"
+        ? payload.token
+        : typeof socket.handshake.auth?.token === "string"
+          ? socket.handshake.auth.token
+          : "";
+      const user = decodeAccessToken(token);
 
       if (!matchId || !text) {
         if (typeof callback === "function") {
@@ -58,12 +62,20 @@ const initializeSocket = (server) => {
         return;
       }
 
+      if (!user) {
+        if (typeof callback === "function") {
+          callback({ success: false, error: "Login required to chat" });
+        }
+        return;
+      }
+
       const message = {
         id: `${Date.now()}-${socket.id}`,
         matchId,
-        name,
+        userId: user.id,
+        name: (user.name || "Fan").slice(0, 40),
+        role: user.role,
         text,
-        likes: 0,
         createdAt: new Date().toISOString(),
       };
 
@@ -83,7 +95,7 @@ const initializeSocket = (server) => {
 
 export const emitMatchEvent = (matchId, event, payload) => {
   if (!io) {
-    logger.warn({ matchId, event }, "Socket not initialized — event dropped");
+    logger.warn({ matchId, event }, "Socket not initialized - event dropped");
     return;
   }
   io.to(`match:${matchId}`).emit(event, payload);

@@ -8,6 +8,7 @@ import matchRouter from './match.router.js'
 import uploadRouter from '../../modules/private/upload/upload.route.js';
 import scoringRouter from './scoring.router.js';
 import publicScoringRouter from '../../modules/public/scoring/scoring.route.js';
+import userRouter from '../../modules/private/user/user.route.js';
 
 // making the main router
 const router = express.Router();
@@ -21,6 +22,7 @@ router.use('/matches',matchRouter)
 router.use('/uploads', uploadRouter);
 router.use('/scoring', scoringRouter);
 router.use('/live', publicScoringRouter);
+router.use('/users', userRouter);
 
 // exporting the main router
 export default router; 
