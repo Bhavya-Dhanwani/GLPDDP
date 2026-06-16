@@ -18,7 +18,7 @@ const teamSchema = new mongoose.Schema(
         },
         logo: {
             type: String,
-            required: true
+            default: ""
         },
         primaryColor: String,
         squadPlayers: [

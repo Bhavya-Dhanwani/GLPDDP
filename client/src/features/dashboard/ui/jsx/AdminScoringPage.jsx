@@ -72,6 +72,17 @@ const idOf = (value) => {
 const nameOf = (value, fallback = "Unknown") => value?.name || value?.shortName || fallback;
 const oversOf = (legalBalls = 0) => `${Math.floor(legalBalls / 6)}.${legalBalls % 6}`;
 const messageFromError = (error, fallback) => error.response?.data?.message || fallback;
+const uniqueById = (items = []) => {
+    const seen = new Set();
+    return items.filter((item) => {
+        const itemId = idOf(item?.value ?? item?.player ?? item);
+        if (!itemId || seen.has(itemId)) {
+            return false;
+        }
+        seen.add(itemId);
+        return true;
+    });
+};
 
 const getTossBattingTeamId = (match) => {
     const tossWinnerId = idOf(match?.tossWinner);
@@ -156,7 +167,11 @@ const AdminScoringPage = () => {
     const [manualCommentary, setManualCommentary] = useState("");
 
     const teams = useMemo(
-        () => [match?.team1, match?.team2].filter(Boolean).map((team) => ({ value: idOf(team), label: nameOf(team) })),
+        () =>
+            uniqueById([match?.team1, match?.team2].filter(Boolean)).map((team) => ({
+                value: idOf(team),
+                label: nameOf(team),
+            })),
         [match]
     );
     const canStartInnings = !isLiveStateLoading && ["LIVE", "INNINGS_BREAK"].includes(match?.status) && !liveInnings && innings.length < 2;
@@ -172,8 +187,14 @@ const AdminScoringPage = () => {
     const team2XIPlayers = match?.playingXI?.team2?.map((item) => item.player).filter(Boolean) || [];
     const team1SquadPlayers = match?.team1?.squadPlayers?.length ? match.team1.squadPlayers : team1Detail?.squadPlayers || [];
     const team2SquadPlayers = match?.team2?.squadPlayers?.length ? match.team2.squadPlayers : team2Detail?.squadPlayers || [];
-    const team1Players = team1XIPlayers.length ? team1XIPlayers : team1SquadPlayers;
-    const team2Players = team2XIPlayers.length ? team2XIPlayers : team2SquadPlayers;
+    const team1Players = useMemo(
+        () => uniqueById(team1XIPlayers.length ? team1XIPlayers : team1SquadPlayers),
+        [team1XIPlayers, team1SquadPlayers]
+    );
+    const team2Players = useMemo(
+        () => uniqueById(team2XIPlayers.length ? team2XIPlayers : team2SquadPlayers),
+        [team2XIPlayers, team2SquadPlayers]
+    );
     const hasPlayingXI = team1XIPlayers.length === 11 && team2XIPlayers.length === 11;
     const hasSquadXI = team1SquadPlayers.length >= 11 && team2SquadPlayers.length >= 11;
     const canStartFromPlayers = hasPlayingXI || hasSquadXI;
@@ -198,16 +219,24 @@ const AdminScoringPage = () => {
             ? team1Players
             : team2Players
         : [];
-    const battingOptions = battingPlayers.map((player) => ({ value: idOf(player), label: nameOf(player) }));
-    const bowlingOptions = bowlingPlayers.map((player) => ({ value: idOf(player), label: nameOf(player) }));
+    const battingOptions = useMemo(
+        () => uniqueById(battingPlayers).map((player) => ({ value: idOf(player), label: nameOf(player) })),
+        [battingPlayers]
+    );
+    const bowlingOptions = useMemo(
+        () => uniqueById(bowlingPlayers).map((player) => ({ value: idOf(player), label: nameOf(player) })),
+        [bowlingPlayers]
+    );
     const activeBatterIds = new Set(
         (currentInnings?.battingScorecard || [])
             .filter((row) => !row.isOut)
             .map((row) => idOf(row.player))
     );
     const isFinalTeamWicket = ball.wicket && ball.dismissalType !== "RETIRED_HURT" && (currentInnings?.wickets || 0) + 1 >= 10;
-    const availableNextBatters = battingPlayers.filter(
-        (player) => !(currentInnings?.battingScorecard || []).some((row) => idOf(row.player) === idOf(player))
+    const availableNextBatters = uniqueById(
+        battingPlayers.filter(
+            (player) => !(currentInnings?.battingScorecard || []).some((row) => idOf(row.player) === idOf(player))
+        )
     );
     const invalidateLive = () => {
         queryClient.invalidateQueries({ queryKey: ["live-match", String(matchId)] });

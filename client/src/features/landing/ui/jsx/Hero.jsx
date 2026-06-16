@@ -1,20 +1,15 @@
+import Link from "next/link";
 import Image from "next/image";
 import styles from "../css/Hero.module.css";
-import {
-  Route,
-  BarChart3,
-  Trophy,
-  Users,
-} from "lucide-react";
+import { Route, BarChart3, Trophy, Users } from "lucide-react";
 import Button from "@/features/shared/ui/jsx/Button";
 import heroimage from "@/assets/images/heroimage.png";
-
 
 export default function Hero() {
   return (
     <section className={styles.hero}>
       <div className={styles.left}>
-        <p className={styles.badge}>● LIVE CRICKET. REAL TIME.</p>
+        <p className={styles.badge}>LIVE CRICKET. REAL TIME.</p>
 
         <h1>
           Live Cricket <br />
@@ -28,8 +23,12 @@ export default function Hero() {
         </p>
 
         <div className={styles.buttons}>
-          <Button variant="primary">Explore Live Matches </Button>
-          <Button variant="secondary">View Series</Button>
+          <Link href="/matches">
+            <Button variant="primary">Explore Live Matches</Button>
+          </Link>
+          <Link href="/series">
+            <Button variant="secondary">View Series</Button>
+          </Link>
         </div>
 
         <div className={styles.features}>
@@ -61,9 +60,9 @@ export default function Hero() {
           </div>
 
           <div className={styles.score}>
-            <span>🇮🇳 IND</span>
+            <span>IND</span>
             <h2>278/6</h2>
-            <span>AUS 🇦🇺</span>
+            <span>AUS</span>
           </div>
 
           <p className={styles.overs}>(45.2 Overs)</p>

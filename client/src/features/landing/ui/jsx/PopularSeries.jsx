@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Image from "next/image";
 import styles from "../css/PopularSeries.module.css";
 
@@ -37,7 +38,7 @@ export default function PopularSeries() {
           <h2 className={styles.desc}>Follow Your Favorite Series</h2>
         </div>
 
-        <button className={styles.viewButton}>View All Series →</button>
+        <Link href="/series" className={styles.viewButton}>View All Series →</Link>
       </div>
 
       <div className={styles.cards}>

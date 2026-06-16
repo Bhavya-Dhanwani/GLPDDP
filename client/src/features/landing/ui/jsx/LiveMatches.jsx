@@ -1,10 +1,6 @@
+import Link from "next/link";
 import styles from "../css/LiveMatches.module.css";
-import {
-  Network,
-  Calendar,
-  Globe,
-  Users,
-} from "lucide-react";
+import { Network, Calendar, Globe, Users } from "lucide-react";
 
 export default function LiveMatches() {
   return (
@@ -15,12 +11,12 @@ export default function LiveMatches() {
           <h2 className={styles.desc}>What&apos;s Happening Now</h2>
         </div>
 
-        <button className={styles.viewButton}>View All Live →</button>
+        <Link href="/matches" className={styles.viewButton}>View All Live →</Link>
       </div>
 
       <div className={styles.matchCard}>
         <div className={styles.matchInfo}>
-          <span className={styles.liveBadge}>● LIVE</span>
+          <span className={styles.liveBadge}>LIVE</span>
           <span>2nd ODI</span>
           <span>•</span>
           <span>Adelaide Oval</span>
@@ -28,7 +24,7 @@ export default function LiveMatches() {
 
         <div className={styles.scoreRow}>
           <div className={styles.team}>
-            <span className={styles.flag}>🇮🇳</span>
+            <span className={styles.flag}>IND</span>
             <strong>IND</strong>
           </div>
 
@@ -48,7 +44,7 @@ export default function LiveMatches() {
 
           <div className={styles.team}>
             <strong>AUS</strong>
-            <span className={styles.flag}>🇦🇺</span>
+            <span className={styles.flag}>AUS</span>
           </div>
         </div>
       </div>

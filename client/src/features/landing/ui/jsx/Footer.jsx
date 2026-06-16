@@ -1,20 +1,43 @@
-import styles from "../css/Footer.module.css";
-import {
-  FaApple,
-  FaGooglePlay,
-  FaFacebook,
-  FaInstagram,
-  FaYoutube,
-  FaTwitter,
-} from "react-icons/fa6";
-import Button from "@/features/shared/ui/jsx/Button";
+import Link from "next/link";
 import Image from "next/image";
+import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa6";
+import styles from "../css/Footer.module.css";
+import buttonStyles from "@/features/shared/ui/css/Button.module.css";
 import logo from "@/assets/images/logo.png";
+
+const footerSections = [
+  {
+    title: "EXPLORE",
+    links: [
+      { href: "/matches", label: "Matches" },
+      { href: "/series", label: "Series" },
+      { href: "/teams", label: "Teams" },
+      { href: "/players", label: "Players" },
+    ],
+  },
+  {
+    title: "ACCOUNT",
+    links: [
+      { href: "/login", label: "Login" },
+      { href: "/signup", label: "Sign Up" },
+      { href: "/forgot-password", label: "Forgot Password" },
+      { href: "/verify-email", label: "Verify Email" },
+    ],
+  },
+  {
+    title: "MORE",
+    links: [
+      { href: "/", label: "Home" },
+      { href: "/matches", label: "Live Matches" },
+      { href: "/teams", label: "Browse Teams" },
+      { href: "/players", label: "Browse Players" },
+    ],
+  },
+];
 
 export default function Footer() {
   return (
     <footer className={styles.footer}>
-      {/* CTA Banner */}
       <div className={styles.ctaBanner}>
         <div>
           <h2>Never Miss a Moment</h2>
@@ -24,10 +47,11 @@ export default function Footer() {
           </p>
         </div>
 
-        <Button variant="secondary"> Join Now - It&apos;s Free →</Button>
+        <Link href="/login" className={`${buttonStyles.secondary} ${styles.ctaLink}`}>
+          Join Now - It&apos;s Free →
+        </Link>
       </div>
 
-      {/* Footer Content */}
       <div className={styles.footerContent}>
         <div className={styles.brand}>
           <h2><Image src={logo} alt="Logo" width={100} /></h2>
@@ -41,40 +65,18 @@ export default function Footer() {
           </div>
         </div>
 
-        <div>
-          <h4>COMPANY</h4>
-          <ul>
-            <li>About Us</li>
-            <li>Careers</li>
-            <li>Contact</li>
-          </ul>
-        </div>
-
-        <div>
-          <h4>SUPPORT</h4>
-          <ul>
-            <li>FAQs</li>
-            <li>Feedback</li>
-            <li>Terms of Service</li>
-          </ul>
-        </div>
-
-        <div>
-          <h4>QUICK LINKS</h4>
-          <ul>
-            <li>Matches</li>
-            <li>Series</li>
-            <li>Teams</li>
-            <li>Players</li>
-          </ul>
-        </div>
-
-        <div>
-          <h4>GET THE APP</h4>
-          <p className={styles.coming}>Coming Soon</p>
-
-          
-        </div>
+        {footerSections.map((section) => (
+          <div key={section.title}>
+            <h4>{section.title}</h4>
+            <ul>
+              {section.links.map((link) => (
+                <li key={`${section.title}-${link.href}`}>
+                  <Link href={link.href}>{link.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
 
       <div className={styles.bottom}>
