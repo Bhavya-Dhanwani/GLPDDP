@@ -1,6 +1,6 @@
 import { body, param } from "express-validator";
 import mongoose from "mongoose";
-import { MATCH_TYPES } from "../../../shared/constants/match.constatnts.js";
+import { MATCH_STATUS, MATCH_TYPES } from "../../../shared/constants/match.constatnts.js";
 
 /**
  * Common MongoDB ObjectId validator
@@ -79,6 +79,11 @@ export const updateMatchValidator = [
   body("city").optional().trim(),
 
   body("country").optional().trim(),
+
+  body("status")
+    .optional()
+    .isIn(Object.values(MATCH_STATUS))
+    .withMessage("Invalid match status"),
 
   body("startTime")
     .optional()

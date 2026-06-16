@@ -4,6 +4,7 @@ import ApiResponse from "../../../shared/utils/ApiResponse.utils.js";
 import { generateAccessToken } from "../../../shared/utils/token.util.js";
 import AuthService from "./auth.service.js";
 import envs from "../../../shared/config/env.config.js";
+import logger from "../../../shared/config/logger.config.js";
 
 // class to handle all the controller logic of the auth module
 class AuthController {
@@ -159,6 +160,8 @@ class AuthController {
 
         // accepting the data
         const userId = req.userId;
+
+        logger.info(userId)
 
         // calling the getMe service
         const user = await this.authService.getMeService(userId);

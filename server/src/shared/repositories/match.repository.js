@@ -76,8 +76,16 @@ export class MatchRepository {
         isDeleted: false,
       })
       .populate("seriesId", "name shortName season")
-      .populate("team1", "name shortName logo")
-      .populate("team2", "name shortName logo")
+      .populate({
+        path: "team1",
+        select: "name shortName logo squadPlayers",
+        populate: { path: "squadPlayers", select: "name image role battingStyle bowlingStyle" },
+      })
+      .populate({
+        path: "team2",
+        select: "name shortName logo squadPlayers",
+        populate: { path: "squadPlayers", select: "name image role battingStyle bowlingStyle" },
+      })
       .populate("tossWinner", "name shortName")
       .populate("winner", "name shortName")
       .populate("playingXI.team1.player", "name image role battingStyle bowlingStyle")

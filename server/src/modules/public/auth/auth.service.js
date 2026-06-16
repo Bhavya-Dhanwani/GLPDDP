@@ -9,6 +9,7 @@ import NotFound from "../../../shared/errors/notfound.error.js";
 import Unauthorized from "../../../shared/errors/unauthorized.error.js";
 import TokenService from "../token/token.service.js";
 import envs from "../../../shared/config/env.config.js";
+import logger from "../../../shared/config/logger.config.js";
 
 const googleClient = new OAuth2Client(envs.GOOGLE_CLIENT_ID);
 
@@ -210,6 +211,8 @@ class AuthService {
         if (!user) {
             throw new NotFound("User not found");
         }
+
+        logger.info(user);
 
         // generating new access token
         const accessToken = generateAccessToken(user);

@@ -3,6 +3,7 @@ import asyncHandler from "../../../shared/utils/asynchandler.util.js";
 import validateErrors from "../../../shared/middlewares/validateErrors.middleware.js";
 import ScoringController from "./scoring.controller.js";
 import {
+  manualCommentaryValidator,
   recordDeliveryValidator,
   startInningsValidator,
   updateCurrentPlayersValidator,
@@ -30,6 +31,13 @@ router.patch(
   updateCurrentPlayersValidator,
   validateErrors,
   asyncHandler(controller.updateCurrentPlayers)
+);
+
+router.post(
+  "/matches/:matchId/commentary",
+  manualCommentaryValidator,
+  validateErrors,
+  asyncHandler(controller.addManualCommentary)
 );
 
 export default router;

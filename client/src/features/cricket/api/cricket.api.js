@@ -41,3 +41,13 @@ export const getTeams = async (params = {}) => {
     const response = await axiosInstance.get("/teams", { params });
     return unwrap(response);
 };
+
+export const getLiveSnapshot = async (matchId) => {
+    const response = await axiosInstance.get(`/live/matches/${matchId}`);
+    return unwrap(response);
+};
+
+export const getLiveCommentary = async (matchId, params = {}) => {
+    const response = await axiosInstance.get(`/live/matches/${matchId}/commentary`, { params });
+    return unwrap(response);
+};

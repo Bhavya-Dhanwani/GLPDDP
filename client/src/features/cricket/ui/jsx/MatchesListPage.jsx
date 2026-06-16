@@ -7,6 +7,7 @@ import MatchCard from "./MatchCard";
 import StateBlock from "./StateBlock";
 import Tabs from "./Tabs";
 import { useMatches } from "../../hooks/useCricketQueries";
+import { useLiveMatchRooms } from "../../hooks/useLiveMatchSocket";
 import styles from "../css/Cricket.module.css";
 
 const tabs = [
@@ -16,14 +17,47 @@ const tabs = [
     { label: "Completed", value: "COMPLETED" },
 ];
 
+const idOf = (value) => {
+    if (!value) return "";
+    if (typeof value === "string" || typeof value === "number") return String(value);
+    if (value.$oid) return String(value.$oid);
+    if (value.id) return idOf(value.id);
+    if (value._id) return idOf(value._id);
+    return "";
+};
+
 const MatchesListPage = () => {
     const [search, setSearch] = useState("");
     const [status, setStatus] = useState("ALL");
     const { data = [], isLoading, isError } = useMatches(search ? { title: search } : {});
 
+    const matchIds = useMemo(() => data.map((item) => idOf(item)), [data]);
+    const liveSnapshots = useLiveMatchRooms(matchIds, { enabled: !isLoading && !isError });
+
+    const snapshotsByMatchId = useMemo(
+        () =>
+            new Map(
+                (liveSnapshots || [])
+                    .map((snapshot) => [idOf(snapshot?.match), snapshot])
+                    .filter(([matchId]) => Boolean(matchId))
+            ),
+        [liveSnapshots]
+    );
+    const displayMatches = useMemo(
+        () =>
+            data.map((item) => {
+                const liveSnapshot = snapshotsByMatchId.get(idOf(item)) || item.liveSnapshot;
+                return {
+                    ...item,
+                    ...(liveSnapshot?.match || {}),
+                    liveSnapshot,
+                };
+            }),
+        [data, snapshotsByMatchId]
+    );
     const matches = useMemo(
-        () => data.filter((item) => status === "ALL" || item.status === status),
-        [data, status]
+        () => displayMatches.filter((item) => status === "ALL" || item.status === status),
+        [displayMatches, status]
     );
 
     return (
@@ -41,7 +75,7 @@ const MatchesListPage = () => {
             {!isLoading && !isError && (
                 <div className={styles.stack}>
                     {matches.map((item) => (
-                        <MatchCard key={item.id || item._id} match={item} />
+                        <MatchCard key={idOf(item)} match={item} />
                     ))}
                     {!matches.length && <StateBlock>No matches found.</StateBlock>}
                 </div>

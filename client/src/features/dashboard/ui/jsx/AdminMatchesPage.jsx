@@ -57,6 +57,7 @@ const AdminMatchesPage = () => {
                                         <td>{item.status}</td>
                                         <td>
                                             <div className={styles.rowActions}>
+                                                <Link className={`${styles.button} ${styles.primary}`} href={`/dashboard/scoring/${id}`}>Score</Link>
                                                 <Link className={styles.button} href={`/dashboard/matches/add?edit=${id}`}>Edit</Link>
                                                 {item.status === "DRAFT" && (
                                                     <button className={styles.button} onClick={() => publishMutation.mutate(id)} type="button">Publish</button>

@@ -267,6 +267,101 @@
     column-gap: 28px;
 }
 
+.simpleMatchCard {
+    position: relative;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 18px;
+    padding: 34px 24px 26px;
+    text-align: center;
+}
+
+.matchStatusTag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 6px;
+    padding: 5px 9px;
+    background: #fff2df;
+    color: #d76b00;
+    font-size: 11px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.matchStatusLIVE {
+    background: #e8f7ee;
+    color: #00843d;
+}
+
+.matchStatusCOMPLETED {
+    background: #eef2f7;
+    color: #263654;
+}
+
+.matchStatusUPCOMING {
+    background: #fff2df;
+    color: #d76b00;
+}
+
+.matchupRow {
+    display: grid;
+    grid-template-columns: minmax(96px, 1fr) auto minmax(96px, 1fr);
+    align-items: center;
+    gap: clamp(18px, 6vw, 76px);
+    width: min(520px, 100%);
+}
+
+.matchupTeam {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.matchupLogo {
+    display: grid;
+    place-items: center;
+    width: 92px;
+    height: 92px;
+    overflow: hidden;
+    border: 1px solid #dfe6ef;
+    border-radius: 16px;
+    background: #f0f6f3;
+    color: #263654;
+    font-weight: 900;
+}
+
+.matchupLogo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.matchupTeam strong {
+    max-width: 126px;
+    color: #111827;
+    font-size: 18px;
+    line-height: 1.15;
+}
+
+.matchupVs {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #e8f7ee;
+    color: #00843d;
+    font-weight: 900;
+}
+
+.simpleMatchCard .button {
+    min-width: 164px;
+}
+
 .team {
     display: flex;
     align-items: center;
@@ -286,19 +381,53 @@
     place-items: center;
     flex: 0 0 auto;
     overflow: hidden;
-    border-radius: 50%;
     background: #f0f6f3;
     border: 1px solid #dfe6ef;
 }
 
 .teamLogo {
-    width: 64px;
-    height: 64px;
+    width: 90px;
+    height: 90px;
+    border-radius: 16px;
+}
+
+.teamLogo img {
+    border-radius: 16px;
 }
 
 .avatar {
     width: 120px;
     height: 120px;
+}
+
+.teamCard {
+    padding: 24px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.teamCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1);
+}
+
+.teamCardInner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.teamCardInfo h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 4px;
+    color: #0f172a;
+}
+
+.teamCardInfo .muted {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: 0;
 }
 
 .centerScore {
@@ -317,6 +446,53 @@
 .centerScore h3 {
     font-size: clamp(16px, 1.3vw, 19px);
     line-height: 1.2;
+}
+
+.liveCardScore {
+    display: inline-flex;
+    justify-content: center;
+    margin-top: 4px;
+    color: #009447;
+    font-size: 18px;
+}
+
+.teamScoreLine {
+    display: block;
+    margin-top: 6px;
+    color: #111827;
+    font-size: 17px;
+    line-height: 1.2;
+}
+
+.matchCurrentPlayers {
+    display: grid;
+    gap: 6px;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.matchCurrentPlayers p {
+    display: grid;
+    grid-template-columns: 74px minmax(0, 1fr);
+    gap: 8px;
+    align-items: center;
+    min-width: 0;
+    color: #415173;
+    font-size: 12px;
+}
+
+.matchCurrentPlayers span {
+    color: #60708d;
+    font-weight: 800;
+}
+
+.matchCurrentPlayers strong {
+    min-width: 0;
+    overflow: hidden;
+    color: #111827;
+    font-weight: 800;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .seriesCard h2,
@@ -528,7 +704,7 @@
 
 .matchDetailLayout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px) minmax(280px, 350px);
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
     gap: 16px;
     align-items: start;
     width: 100%;
@@ -569,12 +745,27 @@
     color: #263654;
 }
 
+.socketState {
+    border-radius: 6px;
+    padding: 5px 8px;
+    background: #e8f7ee;
+    color: #00843d !important;
+    font-size: 11px;
+    font-weight: 900;
+}
+
 .liveScoreGrid {
     display: grid;
-    grid-template-columns: minmax(170px, 1fr) minmax(190px, 0.85fr) minmax(170px, 1fr) minmax(140px, auto);
+    grid-template-columns: minmax(220px, 1fr) minmax(190px, 0.7fr) minmax(240px, 0.95fr) minmax(140px, auto);
     align-items: center;
     gap: clamp(14px, 1.6vw, 26px);
     padding: 34px 0 22px;
+    min-width: 0;
+}
+
+.liveTeamStack {
+    display: grid;
+    gap: 26px;
     min-width: 0;
 }
 
@@ -587,8 +778,24 @@
 }
 
 .matchTeam h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
     font-size: 20px;
     line-height: 1.15;
+}
+
+.teamStateLabel {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 6px;
+    padding: 4px 7px;
+    background: #e8f7ee;
+    color: #00843d;
+    font-size: 11px;
+    font-weight: 900;
+    line-height: 1;
 }
 
 .matchTeamRight {
@@ -664,6 +871,67 @@
     margin-top: 14px;
     color: #ff0000;
     font-weight: 900;
+}
+
+.liveScoreCenter .matchResultText {
+    color: #00843d;
+}
+
+.matchResultPanel {
+    display: grid;
+    gap: 8px;
+    padding: 18px;
+    border: 1px solid #bfe9cf;
+    border-radius: 8px;
+    background: #e8f7ee;
+    color: #263654;
+}
+
+.matchResultPanel span {
+    color: #00843d;
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.matchResultPanel strong {
+    color: #111827;
+    font-size: 18px;
+    line-height: 1.25;
+}
+
+.currentBatters {
+    display: grid;
+    gap: 10px;
+    min-width: 0;
+}
+
+.currentBatters div {
+    display: grid;
+    gap: 7px;
+    padding: 14px 16px;
+    border: 1px solid #dfe6ef;
+    border-radius: 8px;
+    background: #fbfcfe;
+}
+
+.currentBatters span {
+    color: #60708d;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.currentBatters strong {
+    min-width: 0;
+    color: #111827;
+    font-size: 17px;
+    overflow-wrap: anywhere;
+}
+
+.currentBatters p {
+    color: #009447;
+    font-size: 13px;
+    font-weight: 800;
 }
 
 .rateBox {
@@ -772,7 +1040,8 @@
 .matchInfoPanel,
 .probabilityPanel,
 .keyPlayersPanel,
-.globalChatPanel {
+.globalChatPanel,
+.tabPanel {
     padding: 20px;
     min-width: 0;
     overflow: hidden;
@@ -783,7 +1052,8 @@
 .matchInfoPanel h2,
 .probabilityPanel h2,
 .keyPlayersPanel h2,
-.globalChatPanel h2 {
+.globalChatPanel h2,
+.tabPanel h2 {
     font-size: 18px;
     line-height: 1.2;
 }
@@ -808,6 +1078,187 @@
     gap: 18px;
     margin-top: 16px;
     min-width: 0;
+}
+
+.inningsStack {
+    display: grid;
+    gap: 22px;
+    margin-top: 16px;
+}
+
+.inningsScorecard {
+    display: grid;
+    gap: 14px;
+    min-width: 0;
+}
+
+.inningsScorecard + .inningsScorecard {
+    padding-top: 20px;
+    border-top: 1px solid #dfe6ef;
+}
+
+.inningsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    color: #263654;
+}
+
+.inningsHeader h3 {
+    min-width: 0;
+    font-size: 16px;
+    line-height: 1.25;
+}
+
+.inningsHeader strong {
+    flex: 0 0 auto;
+    color: #009447;
+    font-size: 16px;
+}
+
+.inningsMeta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: #60708d;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.inningsMeta strong {
+    color: #263654;
+}
+
+.liveTabGrid,
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+}
+
+.liveTabGrid div,
+.statsGrid div {
+    display: grid;
+    gap: 8px;
+    padding: 16px;
+    border: 1px solid #dfe6ef;
+    border-radius: 8px;
+    background: #fbfcfe;
+}
+
+.liveTabGrid span,
+.statsGrid span {
+    color: #60708d;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.liveTabGrid strong,
+.statsGrid strong {
+    color: #111827;
+    font-size: 18px;
+}
+
+.liveTabGrid p {
+    color: #415173;
+    line-height: 1.4;
+}
+
+.fallList,
+.fantasyList,
+.graphList {
+    display: grid;
+    gap: 14px;
+    margin-top: 16px;
+}
+
+.fallList > div {
+    display: grid;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid #dfe6ef;
+    border-radius: 8px;
+}
+
+.fallList h3 {
+    color: #263654;
+    font-size: 15px;
+}
+
+.fallList p,
+.fantasyList div,
+.graphList div {
+    display: grid;
+    align-items: center;
+    gap: 12px;
+}
+
+.fallList p {
+    grid-template-columns: 72px minmax(0, 1fr) auto;
+    color: #415173;
+}
+
+.fallList p strong,
+.fantasyList b {
+    color: #009447;
+}
+
+.fallList p span,
+.fantasyList span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fallList p em,
+.fantasyList em {
+    color: #60708d;
+    font-style: normal;
+}
+
+.graphList div {
+    grid-template-columns: 72px minmax(0, 1fr) 36px;
+}
+
+.graphList span {
+    color: #60708d;
+    font-weight: 800;
+}
+
+.graphList b {
+    display: block;
+    height: 12px;
+    min-width: 8px;
+    border-radius: 999px;
+    background: #009447;
+}
+
+.graphList strong {
+    text-align: right;
+}
+
+.fantasyList div {
+    grid-template-columns: 32px minmax(120px, 0.7fr) minmax(0, 1fr) 56px;
+    padding: 12px 0;
+    border-bottom: 1px solid #edf1f6;
+}
+
+.fantasyList div:last-child {
+    border-bottom: 0;
+}
+
+.fantasyList div > strong {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #e8f7ee;
+    color: #00843d;
+    font-size: 12px;
 }
 
 .scoreTables .tableWrap {
@@ -1058,11 +1509,21 @@
 
 .chatForm input {
     min-width: 0;
-    border: 1px solid #dfe6ef;
+    border: 1px solid #1a2332;
     border-radius: 8px;
     padding: 12px;
-    color: #111827;
+    color: #e2e8f0;
+    background: #1a2332;
     font: inherit;
+}
+
+.chatForm input::placeholder {
+    color: #8899aa;
+}
+
+.chatForm input:focus {
+    outline: none;
+    border-color: #009447;
 }
 
 .chatForm button {
@@ -1080,33 +1541,9 @@
     line-height: 1.45;
 }
 
-@media (max-width: 1240px) {
-    .matchDetailLayout {
-        grid-template-columns: minmax(0, 1fr) minmax(290px, 340px);
-    }
-
-    .globalChatPanel {
-        position: static;
-        grid-column: 1 / -1;
-        min-height: 0;
-    }
-}
-
-@media (max-width: 1500px) {
-    .matchDetailLayout {
-        grid-template-columns: minmax(0, 1fr) minmax(270px, 330px);
-    }
-
-    .globalChatPanel {
-        position: static;
-        grid-column: 1 / -1;
-        min-height: 0;
-    }
-}
-
 @media (max-width: 1320px) {
     .liveScoreGrid {
-        grid-template-columns: minmax(170px, 1fr) minmax(190px, 0.9fr) minmax(170px, 1fr);
+        grid-template-columns: minmax(220px, 1fr) minmax(190px, 0.9fr) minmax(220px, 1fr);
     }
 
     .rateBox {
@@ -1117,6 +1554,12 @@
 
     .scoreTables {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 1240px) {
+    .matchDetailLayout {
+        grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
     }
 }
 
@@ -1142,6 +1585,21 @@
         width: min(260px, 100%);
     }
 
+    .inningsHeader,
+    .inningsMeta,
+    .matchHeroMeta,
+    .lastOverRow {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .fantasyList div,
+    .fallList p,
+    .graphList div {
+        grid-template-columns: 1fr;
+    }
+
     .matchTeamRight {
         flex-direction: row;
         text-align: left;
@@ -1154,6 +1612,31 @@
 }
 
 @media (max-width: 560px) {
+    .simpleMatchCard {
+        padding: 22px 16px;
+    }
+
+    .matchupRow {
+        grid-template-columns: minmax(76px, 1fr) auto minmax(76px, 1fr);
+        gap: 14px;
+    }
+
+    .matchupLogo {
+        width: 74px;
+        height: 74px;
+        border-radius: 14px;
+    }
+
+    .matchupTeam strong {
+        max-width: 90px;
+        font-size: 15px;
+    }
+
+    .matchupVs {
+        width: 40px;
+        height: 40px;
+    }
+
     .liveHeroCard,
     .scorecardPanel,
     .commentaryPanel,
