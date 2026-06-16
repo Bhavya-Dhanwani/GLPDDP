@@ -20,6 +20,13 @@ export class MatchService {
 
     //   Create a new match
     async createMatch(payload, userId) {
+        if (payload.playingXI?.team1?.length || payload.playingXI?.team2?.length) {
+            await this.validatePlayingXI(
+                { team1: payload.team1, team2: payload.team2 },
+                payload.playingXI
+            );
+        }
+
         const matchData = {
             ...payload,
             oversPerInnings: payload.oversPerInnings ?? MATCH_OVERS[payload.matchType],
@@ -40,6 +47,16 @@ export class MatchService {
 
         if (!match) {
             throw new NotFoundError("Match not found");
+        }
+
+        if (payload.playingXI?.team1?.length || payload.playingXI?.team2?.length) {
+            await this.validatePlayingXI(
+                {
+                    team1: payload.team1 || match.team1,
+                    team2: payload.team2 || match.team2,
+                },
+                payload.playingXI
+            );
         }
 
         const updateData = {

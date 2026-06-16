@@ -31,12 +31,12 @@ class TeamController {
     updateController = async (req, res) => {
 
         // accepting the data
-        const { name, shortName, logo, primaryColor } = req.body;
+        const { name, shortName, logo, primaryColor, squadPlayers } = req.body;
         const teamId = req.params.id;
         const userId = req.user.id;
 
         // updating a team
-        const team = await this.teamService.updateTeam(teamId, { name, shortName, logo, primaryColor, updatedBy: userId });
+        const team = await this.teamService.updateTeam(teamId, { name, shortName, logo, primaryColor, squadPlayers, updatedBy: userId });
 
         // sending the response
         return ApiResponse(res, 200, "Team updated successfully", team);
