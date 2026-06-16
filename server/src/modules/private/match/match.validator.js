@@ -12,6 +12,33 @@ const objectIdValidator = (field) =>
     .custom((value) => mongoose.Types.ObjectId.isValid(value))
     .withMessage(`Invalid ${field}`);
 
+const playingXIValidator = [
+  body("playingXI.team1")
+    .optional()
+    .isArray({ min: 11, max: 11 })
+    .withMessage("Team 1 Playing XI must contain exactly 11 players"),
+
+  body("playingXI.team2")
+    .optional()
+    .isArray({ min: 11, max: 11 })
+    .withMessage("Team 2 Playing XI must contain exactly 11 players"),
+
+  body("playingXI.team1.*.player")
+    .optional()
+    .isMongoId()
+    .withMessage("Every Team 1 player must have a valid player ID"),
+
+  body("playingXI.team2.*.player")
+    .optional()
+    .isMongoId()
+    .withMessage("Every Team 2 player must have a valid player ID"),
+
+  body("playingXI.team1.*.isCaptain").optional().isBoolean(),
+  body("playingXI.team2.*.isCaptain").optional().isBoolean(),
+  body("playingXI.team1.*.isWicketKeeper").optional().isBoolean(),
+  body("playingXI.team2.*.isWicketKeeper").optional().isBoolean(),
+];
+
 /**
  * Create Match
  */
@@ -62,6 +89,8 @@ export const createMatchValidator = [
     .optional()
     .isInt({ min: 1, max: 50 })
     .withMessage("Overs per innings must be between 1 and 50"),
+
+  ...playingXIValidator,
 ];
 
 /**
@@ -94,6 +123,8 @@ export const updateMatchValidator = [
     .optional()
     .isISO8601()
     .withMessage("Invalid end time"),
+
+  ...playingXIValidator,
 ];
 
 /**

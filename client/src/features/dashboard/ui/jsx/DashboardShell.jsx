@@ -43,6 +43,14 @@ const groups = [
         ],
     },
     {
+        title: "Teams",
+        icon: Users,
+        items: [
+            { href: "/dashboard/teams", label: "View Teams", icon: Eye },
+            { href: "/dashboard/teams/add", label: "Add Team", icon: PlusCircle },
+        ],
+    },
+    {
         title: "Site",
         icon: Users,
         items: [{ href: "/", label: "Public Website", icon: Users }],

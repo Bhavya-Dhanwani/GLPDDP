@@ -33,6 +33,21 @@ export const deletePlayer = async (id) => {
     return unwrap(response);
 };
 
+export const createTeam = async (payload) => {
+    const response = await axiosInstance.post("/teams", payload);
+    return unwrap(response);
+};
+
+export const updateTeam = async ({ id, payload }) => {
+    const response = await axiosInstance.patch(`/teams/${id}`, payload);
+    return unwrap(response);
+};
+
+export const deleteTeam = async (id) => {
+    const response = await axiosInstance.delete(`/teams/${id}`);
+    return unwrap(response);
+};
+
 export const createMatch = async (payload) => {
     const response = await axiosInstance.post("/matches", payload);
     return unwrap(response);

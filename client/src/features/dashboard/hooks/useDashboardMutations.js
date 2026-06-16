@@ -4,13 +4,16 @@ import {
     createMatch,
     createPlayer,
     createSeries,
+    createTeam,
     deleteMatch,
     deletePlayer,
     deleteSeries,
+    deleteTeam,
     publishMatch,
     updateMatch,
     updatePlayer,
     updateSeries,
+    updateTeam,
 } from "../api/dashboard.api";
 
 const messageFromError = (error, fallback) =>
@@ -20,6 +23,7 @@ const invalidateCricket = (queryClient) => {
     queryClient.invalidateQueries({ queryKey: ["series"] });
     queryClient.invalidateQueries({ queryKey: ["matches"] });
     queryClient.invalidateQueries({ queryKey: ["players"] });
+    queryClient.invalidateQueries({ queryKey: ["teams"] });
 };
 
 const useDashboardMutation = (mutationFn, messages) => {
@@ -71,6 +75,24 @@ export const useDeletePlayer = () =>
     useDashboardMutation(deletePlayer, {
         success: "Player deleted",
         error: "Unable to delete player",
+    });
+
+export const useCreateTeam = () =>
+    useDashboardMutation(createTeam, {
+        success: "Team created",
+        error: "Unable to create team",
+    });
+
+export const useUpdateTeam = () =>
+    useDashboardMutation(updateTeam, {
+        success: "Team updated",
+        error: "Unable to update team",
+    });
+
+export const useDeleteTeam = () =>
+    useDashboardMutation(deleteTeam, {
+        success: "Team deleted",
+        error: "Unable to delete team",
     });
 
 export const useCreateMatch = () =>
