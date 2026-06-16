@@ -92,6 +92,23 @@ class PlayerRepository {
 
     }
 
+    async applyInningsStats(updates = []) {
+        const operations = updates
+            .filter((item) => item.playerId)
+            .map((item) => ({
+                updateOne: {
+                    filter: { _id: item.playerId, isDeleted: false },
+                    update: {
+                        $inc: item.inc || {},
+                        ...(item.max ? { $max: item.max } : {}),
+                    },
+                },
+            }));
+
+        if (!operations.length) return null;
+        return this.playerModel.bulkWrite(operations);
+    }
+
 }
 
 export default PlayerRepository;

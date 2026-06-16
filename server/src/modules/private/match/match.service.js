@@ -176,17 +176,41 @@ export class MatchService {
             throw new NotFoundError("Match not found");
         }
 
-        if (match.status !== MATCH_STATUS.PLAYING_XI_SELECTED) {
+        const team1XI = match.playingXI?.team1 || [];
+        const team2XI = match.playingXI?.team2 || [];
+        const hasPlayingXI = team1XI.length === 11 && team2XI.length === 11;
+        const buildXIFromSquad = (team) =>
+            (team?.squadPlayers || []).slice(0, 11).map((player, index) => ({
+                player: player._id ?? player,
+                isCaptain: index === 0,
+                isWicketKeeper: index === 1,
+            }));
+        const team1SquadXI = buildXIFromSquad(match.team1);
+        const team2SquadXI = buildXIFromSquad(match.team2);
+        const canUseSquadXI = team1SquadXI.length === 11 && team2SquadXI.length === 11;
+
+        if (
+            match.status !== MATCH_STATUS.PLAYING_XI_SELECTED &&
+            !(match.status === MATCH_STATUS.TOSS_COMPLETED && (hasPlayingXI || canUseSquadXI))
+        ) {
             throw new ConflictError(
-                "Playing XI must be selected before starting the match"
+                "Playing XI must be selected before starting the match. Add at least 11 squad players to both teams."
             );
         }
 
-        let updatedMatch = await this.matchRepository.updateById(matchId, {
+        const updateData = {
             status: MATCH_STATUS.LIVE,
             currentInnings: 1,
             updatedBy: userId
-        });
+        };
+        if (!hasPlayingXI && canUseSquadXI) {
+            updateData.playingXI = {
+                team1: team1SquadXI,
+                team2: team2SquadXI,
+            };
+        }
+
+        let updatedMatch = await this.matchRepository.updateById(matchId, updateData);
         // sanitizing match data
         let sanitizedMatch = sanitizeMatch(updatedMatch);
 
@@ -237,7 +261,7 @@ export class MatchService {
             throw new NotFoundError("Match not found");
         }
 
-        if (match.status !== MATCH_STATUS.INNINGS_BREAK || match.currentInnings !== 1) {
+        if (match.status !== MATCH_STATUS.INNINGS_BREAK || ![1, 2].includes(match.currentInnings)) {
             throw new ConflictError(
                 "Match is not currently in innings break"
             );

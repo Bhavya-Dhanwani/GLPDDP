@@ -43,6 +43,7 @@ const deliverySchema = new mongoose.Schema(
     },
     extras: { type: extrasSchema, default: () => ({}) },
     wicket: { type: wicketSchema, default: () => ({}) },
+    nextBatterId: { type: mongoose.Schema.Types.ObjectId, ref: "players" },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "users", required: true },
   },
   { timestamps: true }

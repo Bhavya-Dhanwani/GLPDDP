@@ -11,6 +11,10 @@ export class CommentaryRepository {
       .limit(limit);
   }
 
+  findLatestByInnings(inningsId) {
+    return Commentary.findOne({ inningsId }).sort({ sequenceNumber: -1 });
+  }
+
   findByMatch(matchId, { beforeSequence, limit = 30 } = {}) {
     const query = { matchId };
     if (beforeSequence) query.sequenceNumber = { $lt: beforeSequence };

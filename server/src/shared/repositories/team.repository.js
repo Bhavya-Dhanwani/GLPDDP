@@ -25,7 +25,9 @@ class TeamRepository {
     async getAllTeams(filters) {
 
         // getting all teams
-        const teams = await this.teamModel.find({ ...filters, isDeleted: false }).populate('squadPlayers', 'name position');
+        const teams = await this.teamModel
+            .find({ ...filters, isDeleted: false })
+            .populate('squadPlayers', 'name image role battingStyle bowlingStyle');
 
         // returning the teams
         return teams;
@@ -35,7 +37,9 @@ class TeamRepository {
     async getTeamById(teamId) {
 
         // getting a team by id
-        const team = await this.teamModel.findOne({ _id: teamId, isDeleted: false }).populate('squadPlayers', 'name position');
+        const team = await this.teamModel
+            .findOne({ _id: teamId, isDeleted: false })
+            .populate('squadPlayers', 'name image role battingStyle bowlingStyle');
 
         // returning the team
         return team;

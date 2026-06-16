@@ -318,6 +318,187 @@
     gap: 20px;
 }
 
+.scoringLayout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+    gap: 20px;
+    align-items: start;
+}
+
+.scorePanel {
+    display: grid;
+    gap: 18px;
+    padding: 22px;
+}
+
+.scorePanel h2 {
+    font-size: 18px;
+}
+
+.scoreHero {
+    display: grid;
+    gap: 8px;
+    padding: 22px;
+    border-radius: 8px;
+    border: 1px solid #bfe7cf;
+    background: linear-gradient(135deg, #f3fbf6 0%, #e6f6ed 100%);
+    color: #101827;
+}
+
+.scoreHero span,
+.scoreHero p {
+    color: #3d6f56;
+    font-weight: 700;
+}
+
+.scoreHero strong {
+    color: #00843d;
+    font-size: clamp(38px, 5vw, 58px);
+    line-height: 1;
+}
+
+.scoreStatus {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    border-radius: 8px;
+    padding: 0 12px;
+    background: #e8f7ee;
+    color: #00843d;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.scoringForm {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.scorerStack {
+    display: grid;
+    gap: 18px;
+}
+
+.runGrid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(48px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.runButton {
+    display: grid;
+    place-items: center;
+    min-height: 58px;
+    border: 1px solid #d8e1ec;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #111827;
+    font-size: 22px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.runButton:hover,
+.runButtonActive {
+    border-color: #00843d;
+    background: #eaf7ef;
+    color: #00843d;
+}
+
+.quickGrid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(130px, 1fr));
+    gap: 10px;
+}
+
+.wicketBox {
+    display: grid;
+    gap: 14px;
+    border: 1px solid #fee2e2;
+    border-radius: 8px;
+    padding: 16px;
+    background: #fffafa;
+}
+
+.checkLine {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 900;
+}
+
+.checkLine input {
+    width: 18px;
+    height: 18px;
+    accent-color: #b91c1c;
+}
+
+.checkLine span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pickGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.pickCard {
+    display: grid;
+    gap: 6px;
+    min-height: 78px;
+    border: 1px solid #d8e1ec;
+    border-radius: 8px;
+    padding: 12px;
+    background: #ffffff;
+    color: #111827;
+    text-align: left;
+    cursor: pointer;
+}
+
+.pickCard strong {
+    overflow-wrap: anywhere;
+}
+
+.pickCard span {
+    color: #60708d;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.pickCardActive {
+    border-color: #00843d;
+    background: #eaf7ef;
+}
+
+.currentGrid {
+    display: grid;
+    gap: 12px;
+}
+
+.currentGrid div {
+    display: grid;
+    gap: 5px;
+    border: 1px solid #edf1f6;
+    border-radius: 8px;
+    padding: 14px;
+}
+
+.currentGrid span {
+    color: #60708d;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.currentGrid strong {
+    overflow-wrap: anywhere;
+}
+
 .empty {
     padding: 32px;
     text-align: center;
@@ -327,7 +508,14 @@
 @media (max-width: 980px) {
     .layout,
     .split,
+    .scoringLayout,
     .form {
+        grid-template-columns: 1fr;
+    }
+
+    .scoringForm,
+    .quickGrid,
+    .runGrid {
         grid-template-columns: 1fr;
     }
 

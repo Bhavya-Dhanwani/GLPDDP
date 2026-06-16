@@ -33,12 +33,16 @@ const TeamsListPage = () => {
             {!isLoading && !isError && (
                 <div className={styles.grid}>
                     {teams.map((team) => (
-                        <article className={`${styles.card} ${styles.playerCard}`} key={team.id || team._id}>
-                            <div className={styles.teamLogo}>
-                                {team.logo ? <img src={team.logo} alt={team.name} /> : team.shortName}
+                        <article className={`${styles.card} ${styles.teamCard}`} key={team.id || team._id}>
+                            <div className={styles.teamCardInner}>
+                                <div className={styles.teamLogo}>
+                                    {team.logo ? <img src={team.logo} alt={team.name} /> : <span>{team.shortName}</span>}
+                                </div>
+                                <div className={styles.teamCardInfo}>
+                                    <h2>{team.name}</h2>
+                                    <p className={styles.muted}>{team.shortName}</p>
+                                </div>
                             </div>
-                            <h2>{team.name}</h2>
-                            <p className={styles.muted}>{team.shortName}</p>
                         </article>
                     ))}
                     {!teams.length && <StateBlock>No teams found.</StateBlock>}

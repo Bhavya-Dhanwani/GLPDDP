@@ -5,7 +5,7 @@ const commentarySchema = new mongoose.Schema(
   {
     matchId: { type: mongoose.Schema.Types.ObjectId, ref: "Match", required: true },
     inningsId: { type: mongoose.Schema.Types.ObjectId, ref: "Innings", required: true },
-    deliveryId: { type: mongoose.Schema.Types.ObjectId, ref: "Delivery", required: true },
+    deliveryId: { type: mongoose.Schema.Types.ObjectId, ref: "Delivery" },
     sequenceNumber: { type: Number, required: true, min: 1 },
     text: { type: String, required: true, trim: true },
     types: [{

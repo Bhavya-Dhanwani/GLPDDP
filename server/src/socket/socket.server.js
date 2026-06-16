@@ -44,6 +44,35 @@ const initializeSocket = (server) => {
       }
     });
 
+    socket.on("chat:send", (payload = {}, callback) => {
+      const matchId = typeof payload.matchId === "string" ? payload.matchId.trim() : "";
+      const text = typeof payload.text === "string" ? payload.text.trim().slice(0, 280) : "";
+      const name = typeof payload.name === "string" && payload.name.trim()
+        ? payload.name.trim().slice(0, 40)
+        : "Fan";
+
+      if (!matchId || !text) {
+        if (typeof callback === "function") {
+          callback({ success: false, error: "Message is required" });
+        }
+        return;
+      }
+
+      const message = {
+        id: `${Date.now()}-${socket.id}`,
+        matchId,
+        name,
+        text,
+        likes: 0,
+        createdAt: new Date().toISOString(),
+      };
+
+      io.to(`match:${matchId}`).emit("chat:message", message);
+      if (typeof callback === "function") {
+        callback({ success: true, message });
+      }
+    });
+
     socket.on("disconnect", () => {
       logger.info({ socketId: socket.id }, "Socket disconnected");
     });

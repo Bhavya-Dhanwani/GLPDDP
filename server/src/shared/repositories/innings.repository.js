@@ -20,4 +20,8 @@ export class InningsRepository {
   findByMatchAndNumber(matchId, inningsNumber) {
     return Innings.findOne({ matchId, inningsNumber });
   }
+
+  findLiveByMatch(matchId) {
+    return Innings.findOne({ matchId, status: "LIVE" }).sort({ inningsNumber: -1 });
+  }
 }

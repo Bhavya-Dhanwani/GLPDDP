@@ -32,4 +32,13 @@ export default class ScoringController {
     );
     return ApiResponse(res, 200, "Current players updated successfully", innings);
   };
+
+  addManualCommentary = async (req, res) => {
+    const commentary = await this.scoringService.addManualCommentary(
+      req.params.matchId,
+      req.body,
+      req.user.id
+    );
+    return ApiResponse(res, 201, "Commentary added successfully", commentary);
+  };
 }

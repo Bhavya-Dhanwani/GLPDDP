@@ -61,6 +61,7 @@ const inningsSchema = new mongoose.Schema(
     revision: { type: Number, default: 0, min: 0 },
     startedAt: { type: Date, default: Date.now },
     completedAt: Date,
+    statsApplied: { type: Boolean, default: false },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
     updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
   },

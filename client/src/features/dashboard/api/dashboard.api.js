@@ -48,8 +48,23 @@ export const deleteMatch = async (id) => {
     return unwrap(response);
 };
 
+export const getDashboardMatchById = async (id) => {
+    const response = await axiosInstance.get(`/matches/${id}`);
+    return unwrap(response);
+};
+
 export const publishMatch = async (id) => {
     const response = await axiosInstance.patch(`/matches/${id}/publish`);
+    return unwrap(response);
+};
+
+export const updateToss = async ({ id, payload }) => {
+    const response = await axiosInstance.patch(`/matches/${id}/toss`, payload);
+    return unwrap(response);
+};
+
+export const startMatch = async (id) => {
+    const response = await axiosInstance.patch(`/matches/${id}/start`);
     return unwrap(response);
 };
 
@@ -74,4 +89,24 @@ export const uploadImage = async (file, folder = "/glpddp") => {
 
     const response = await axios.post(auth.uploadUrl, formData);
     return response.data?.url;
+};
+
+export const startInnings = async ({ matchId, payload }) => {
+    const response = await axiosInstance.post(`/scoring/matches/${matchId}/innings`, payload);
+    return unwrap(response);
+};
+
+export const recordDelivery = async ({ inningsId, payload }) => {
+    const response = await axiosInstance.post(`/scoring/innings/${inningsId}/deliveries`, payload);
+    return unwrap(response);
+};
+
+export const updateCurrentPlayers = async ({ inningsId, payload }) => {
+    const response = await axiosInstance.patch(`/scoring/innings/${inningsId}/current-players`, payload);
+    return unwrap(response);
+};
+
+export const addManualCommentary = async ({ matchId, payload }) => {
+    const response = await axiosInstance.post(`/scoring/matches/${matchId}/commentary`, payload);
+    return unwrap(response);
 };

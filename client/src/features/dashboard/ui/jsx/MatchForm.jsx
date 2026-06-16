@@ -13,9 +13,22 @@ const emptyForm = {
     country: "",
     startTime: "",
     matchType: "T20",
+    status: "DRAFT",
     team1: "",
     team2: "",
 };
+
+const matchStatuses = [
+    "DRAFT",
+    "UPCOMING",
+    "TOSS_COMPLETED",
+    "PLAYING_XI_SELECTED",
+    "LIVE",
+    "INNINGS_BREAK",
+    "COMPLETED",
+    "ABANDONED",
+    "NO_RESULT",
+];
 
 const formatLabel = (value) =>
     value
@@ -90,6 +103,19 @@ const MatchForm = ({ initialValues, series = [], teams = [], onSubmit, isSubmitt
                     ))}
                 </select>
             </FormField>
+            {initialValues && (
+                <FormField label="Status">
+                    <select
+                        className={styles.select}
+                        value={form.status}
+                        onChange={(event) => update("status", event.target.value)}
+                    >
+                        {matchStatuses.map((status) => (
+                            <option key={status} value={status}>{formatLabel(status)}</option>
+                        ))}
+                    </select>
+                </FormField>
+            )}
             <FormField label="Title">
                 <input className={styles.input} value={form.title} onChange={(event) => update("title", event.target.value)} />
             </FormField>
