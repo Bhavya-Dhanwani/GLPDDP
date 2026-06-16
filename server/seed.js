@@ -127,7 +127,7 @@ async function upsertPlayer(teamName, player) {
             },
         },
         {
-            new: true,
+            returnDocument: "after",
             upsert: true,
             runValidators: true,
             setDefaultsOnInsert: true,
@@ -164,7 +164,7 @@ async function seed() {
                 },
             },
             {
-                new: true,
+                returnDocument: "after",
                 upsert: true,
                 runValidators: true,
                 setDefaultsOnInsert: true,
