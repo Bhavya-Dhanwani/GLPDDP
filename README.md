@@ -1,37 +1,83 @@
 # GLPDDP
 
-GLPDDP is a cricket match management and live scoring platform. It provides a public cricket experience similar to a lightweight live-score site, plus an admin dashboard for managing series, teams, players, matches, toss, innings, score entry, scorecards, commentary, and match results.
+GLPDDP is a cricket platform for two kinds of users:
 
-The project is split into two apps:
+- fans who want live scores, match details, team pages, player pages, commentary, and score trends
+- admins/scorers who need to create the cricket data, manage matches, and score live innings ball by ball
+
+It is split into two apps:
 
 - `client/` - Next.js frontend
-- `server/` - Express, MongoDB, and Socket.IO backend
+- `server/` - Express + MongoDB + Socket.IO backend
 
-## Tech Stack
+## What You Get
 
-| Layer | Technology |
+- public cricket home page with live-focused landing sections
+- public pages for matches, series, teams, and players
+- match detail pages with scorecards, commentary, graph, and live chat
+- admin dashboard for series, teams, players, matches, and users
+- live scoring console with toss, innings start, player updates, wickets, extras, and commentary
+- real-time updates over Socket.IO
+- a backend seed script to quickly load 4 international teams and 60 players
+
+## Stack
+
+| Layer | Tech |
 | --- | --- |
 | Frontend | Next.js 16, React 19, CSS Modules |
-| Data fetching | Axios, TanStack React Query |
-| State | Redux Toolkit where needed |
+| Client state/data | React Query, Redux Toolkit, Axios |
 | Backend | Node.js, Express 5 |
-| Database | MongoDB with Mongoose |
+| Database | MongoDB, Mongoose |
 | Realtime | Socket.IO |
-| Auth | JWT access and refresh tokens, cookies |
-| Validation | express-validator, Zod for env validation |
-| Uploads | ImageKit integration |
+| Charts | Recharts |
+| Validation | express-validator, Zod |
+| Auth | JWT access/refresh flow |
+| Uploads | ImageKit |
+
+## Project Shape
+
+```text
+glpddp/
++-- README.md
++-- client/
+|   +-- package.json
+|   +-- src/
+|       +-- app/                 # Next.js routes
+|       +-- components/          # shared layout pieces
+|       +-- features/
+|           +-- auth/            # auth UI + hooks
+|           +-- cricket/         # public cricket pages
+|           +-- dashboard/       # admin dashboard + scoring
+|           +-- landing/         # homepage sections
++-- server/
+    +-- package.json
+    +-- seed.js                  # database seed script
+    +-- server.js                # backend entrypoint
+    +-- src/
+        +-- app.js
+        +-- modules/
+        |   +-- private/         # protected/admin APIs
+        |   +-- public/          # public APIs
+        +-- shared/
+        |   +-- config/
+        |   +-- constants/
+        |   +-- middlewares/
+        |   +-- models/
+        |   +-- repositories/
+        |   +-- routers/
+        |   +-- utils/
+        +-- socket/
+```
 
 ## Local Setup
 
 ### 1. Prerequisites
 
-Install these before starting:
-
-- Node.js 20 or newer
+- Node.js 20+
 - npm
-- MongoDB local server or MongoDB Atlas URI
+- MongoDB local instance or Atlas URI
 
-### 2. Clone the repo
+### 2. Clone
 
 ```bash
 git clone <repo-url>
@@ -40,7 +86,7 @@ cd glpddp
 
 ### 3. Install dependencies
 
-There is no root `package.json`, so install dependencies inside both apps.
+There is no root `package.json`, so install inside both apps.
 
 ```bash
 cd server
@@ -50,9 +96,9 @@ cd ../client
 npm install
 ```
 
-### 4. Configure backend environment
+## Environment
 
-Create `server/.env`.
+### Backend: `server/.env`
 
 ```env
 PORT=5000
@@ -81,35 +127,61 @@ IMAGEKIT_PRIVATE_KEY=
 IMAGEKIT_URL_ENDPOINT=
 ```
 
-### 5. Configure frontend environment
-
-Create `client/.env`.
+### Frontend: `client/.env`
 
 ```env
 NEXT_PUBLIC_BASE_URL=http://localhost:5000/api
 NEXT_PUBLIC_SOCKET_URL=http://localhost:5000
 ```
 
-### 6. Start development servers
+## Run It
 
-Terminal 1:
+### Start backend
 
 ```bash
 cd server
 npm run dev
 ```
 
-Terminal 2:
+### Start frontend
 
 ```bash
 cd client
 npm run dev
 ```
 
-Open:
+### Open
 
-- Frontend: `http://localhost:3000`
-- Backend health check: `http://localhost:5000/health`
+- frontend: `http://localhost:3000`
+- backend health check: `http://localhost:5000/health`
+
+## Seed the Database
+
+The backend now includes a seed script:
+
+```bash
+cd server
+npm run seed
+```
+
+What it seeds:
+
+- `4` international teams
+- `15` players per team
+- `60` players total
+
+Seed notes:
+
+- player `image` is stored as `""`
+- team `logo` is stored as `""`
+- rerunning the seed updates existing seeded records instead of duplicating them
+
+Current seeded teams:
+
+- India
+- Australia
+- England
+- New Zealand
 
 ## Useful Commands
 
@@ -117,364 +189,253 @@ Open:
 
 ```bash
 cd client
-npm run dev      # start Next.js development server
-npm run build    # production build
-npm run start    # run production build
-npm run lint     # run ESLint
+npm run dev
+npm run build
+npm run start
+npm run lint
 ```
 
 ### Server
 
 ```bash
 cd server
-npm run dev      # start API with nodemon
-npm start        # start API with node
-npm test         # placeholder test command
+npm run dev
+npm start
+npm run seed
+npm test
 ```
 
-## Application Pages
+## App Routes
 
-### Public
+### Public Routes
 
-| Route | Purpose |
+| Route | What it does |
 | --- | --- |
 | `/` | Landing page |
-| `/matches` | Public match list with filters for all, live, upcoming, completed |
-| `/matches/[id]` | Match detail page with live score, scorecard, commentary, fall of wickets, stats, graph, fantasy |
-| `/series` | Public series list |
+| `/matches` | Match list |
+| `/matches/[id]` | Match detail with score, commentary, graph, fantasy tab, and live chat |
+| `/series` | Series list |
 | `/series/[id]` | Series detail |
-| `/teams` | Public teams list |
-| `/players` | Public players list |
-| `/players/[id]` | Player profile |
+| `/teams` | Team list |
+| `/teams/[id]` | Team detail |
+| `/players` | Player list |
+| `/players/[id]` | Player detail |
 | `/login` | Login |
 | `/signup` | Signup |
 | `/forgot-password` | Forgot password |
 | `/reset-password/[token]` | Reset password |
-| `/verify-email` | Email verification |
+| `/verify-email` | Verify email |
 
-### Dashboard
+### Dashboard Routes
 
-| Route | Purpose |
+| Route | What it does |
 | --- | --- |
-| `/dashboard` | Admin overview |
+| `/dashboard` | Dashboard overview |
 | `/dashboard/series` | Manage series |
-| `/dashboard/series/add` | Create or edit series |
-| `/dashboard/teams` | Manage teams, if enabled in navigation |
+| `/dashboard/series/add` | Add/edit series |
+| `/dashboard/teams` | Manage teams |
+| `/dashboard/teams/add` | Add/edit team |
 | `/dashboard/players` | Manage players |
-| `/dashboard/players/add` | Create or edit players |
+| `/dashboard/players/add` | Add/edit player |
 | `/dashboard/matches` | Manage matches |
-| `/dashboard/matches/add` | Create or edit matches |
+| `/dashboard/matches/add` | Add/edit match |
 | `/dashboard/scoring/[matchId]` | Live scoring console |
+| `/dashboard/users` | User management for `SUPER_ADMIN` |
 
-## API Overview
+## Recently Added Product Bits
 
-All API routes are mounted under `/api`.
+- team detail page at `/teams/[id]`
+- clickable team cards from the teams listing
+- live global match chat on `/matches/[id]` for logged-in users
+- live run progression graph for both teams using `recharts`
+- mobile dashboard sidebar drawer behavior
+- filters/search across dashboard listing pages
+- searchable selection in team creation
+- searchable team selection in match creation
+- playing XI role cycle in match creation:
+  - player
+  - wicketkeeper
+  - captain
+  - both
+  - unselect
 
-### Auth
+## Realtime
 
-| Method | Route | Purpose |
-| --- | --- | --- |
-| `POST` | `/api/auth/signup` | Create account |
-| `POST` | `/api/auth/login` | Login and issue tokens |
-| `POST` | `/api/auth/verify` | Verify account OTP |
-| `POST` | `/api/auth/resend-otp` | Resend verification OTP |
-| `POST` | `/api/auth/logout` | Logout current session |
-| `POST` | `/api/auth/logout-all` | Logout all sessions |
-| `POST` | `/api/auth/refresh` | Refresh access token |
-| `GET` | `/api/auth/me` | Get current user |
-| `POST` | `/api/auth/forgot-password` | Request password reset |
-| `POST` | `/api/auth/reset-password` | Reset password |
-| `POST` | `/api/auth/google` | Google auth token flow |
-| `GET` | `/api/auth/google` | Google redirect start |
-| `GET` | `/api/auth/google/callback` | Google callback |
-
-### Series
-
-| Method | Route | Purpose |
-| --- | --- | --- |
-| `GET` | `/api/series` | Public list of series |
-| `GET` | `/api/series/:id` | Public series detail |
-| `POST` | `/api/series` | Create series, admin only |
-| `PATCH` | `/api/series/:id` | Update series, admin only |
-| `DELETE` | `/api/series/:id` | Delete series, admin only |
-
-### Teams
-
-| Method | Route | Purpose |
-| --- | --- | --- |
-| `GET` | `/api/teams` | Public list of teams |
-| `GET` | `/api/teams/:id` | Public team detail |
-| `POST` | `/api/teams` | Create team |
-| `PATCH` | `/api/teams/:id` | Update team |
-| `DELETE` | `/api/teams/:id` | Delete team |
-
-### Players
-
-| Method | Route | Purpose |
-| --- | --- | --- |
-| `GET` | `/api/players` | Public list of players |
-| `GET` | `/api/players/:id` | Public player detail |
-| `POST` | `/api/players` | Create player |
-| `PUT` | `/api/players/:id` | Update player |
-| `DELETE` | `/api/players/:id` | Delete player |
-
-### Matches
-
-| Method | Route | Purpose |
-| --- | --- | --- |
-| `GET` | `/api/matches` | Public match list with filters |
-| `GET` | `/api/matches/:id` | Public match detail |
-| `GET` | `/api/matches/series/:seriesId` | Matches for a series |
-| `POST` | `/api/matches` | Create match, admin only |
-| `PATCH` | `/api/matches/:id` | Update match details and status, admin only |
-| `DELETE` | `/api/matches/:id` | Soft delete match, admin only |
-| `PATCH` | `/api/matches/:id/publish` | Move draft match to upcoming |
-| `PATCH` | `/api/matches/:id/toss` | Save toss winner and decision |
-| `PATCH` | `/api/matches/:id/playing-xi` | Save both teams' Playing XI |
-| `PATCH` | `/api/matches/:id/start` | Make match live |
-| `PATCH` | `/api/matches/:id/innings-break` | Move to innings break |
-| `PATCH` | `/api/matches/:id/second-innings` | Start second innings |
-| `PATCH` | `/api/matches/:id/abandon` | Mark abandoned |
-| `PATCH` | `/api/matches/:id/no-result` | Mark no result |
-| `PATCH` | `/api/matches/:id/complete` | Complete match manually |
-
-### Live Scoring
-
-| Method | Route | Purpose |
-| --- | --- | --- |
-| `GET` | `/api/live/matches/:matchId` | Public live snapshot |
-| `GET` | `/api/live/matches/:matchId/commentary` | Public commentary feed |
-| `POST` | `/api/scoring/matches/:matchId/innings` | Start innings, admin only |
-| `POST` | `/api/scoring/innings/:inningsId/deliveries` | Record one ball, admin only |
-| `PATCH` | `/api/scoring/innings/:inningsId/current-players` | Update striker, non-striker, bowler |
-
-### Uploads
-
-| Method | Route | Purpose |
-| --- | --- | --- |
-| `GET` | `/api/uploads/imagekit-auth` | Get ImageKit auth params |
-
-## Realtime Events
-
-Socket.IO is initialized by the backend and clients join match rooms with:
+Clients join a match room like this:
 
 ```js
 socket.emit("match:join", { matchId });
 ```
 
-Important emitted events:
+Useful events:
 
 | Event | Purpose |
 | --- | --- |
-| `match:updated` | Match metadata/status changed |
-| `innings:started` | New innings created |
-| `score:updated` | Ball recorded and live snapshot changed |
+| `match:updated` | Match metadata or status changed |
+| `innings:started` | A new innings started |
+| `score:updated` | Score changed after a delivery |
 | `innings:completed` | Innings finished |
 | `match:completed` | Match finished |
-| `players:updated` | Current striker/non-striker/bowler changed |
-| `commentary:added` | Manual commentary added |
+| `players:updated` | Striker, non-striker, or bowler changed |
+| `commentary:added` | Commentary feed updated |
+| `chat:message` | Match chat message broadcast |
 
-## Database
+Chat note:
 
-The project uses MongoDB. Main collections are created from Mongoose models in `server/src/shared/models`.
+- chat messages are broadcast in the match room
+- they are not stored in MongoDB
+- only authenticated users can send them
 
-| Model | Collection Purpose |
+## API Snapshot
+
+All backend routes are mounted under `/api`.
+
+### Auth
+
+| Method | Route |
 | --- | --- |
-| `users` | Admin/user accounts, auth profile, verification |
-| `sessions` | Refresh/session tracking |
-| `tokens` | Verification and reset tokens |
-| `Series` | Tournament/series data |
-| `teams` | Teams, logos, colors, squad players |
-| `players` | Player profile and career/stat data |
-| `Match` | Fixture, status, teams, toss, Playing XI, result |
-| `Innings` | Innings totals, current players, batting and bowling scorecards |
-| `Delivery` | Ball-by-ball delivery data |
-| `Commentary` | Ball and manual commentary |
+| `POST` | `/api/auth/signup` |
+| `POST` | `/api/auth/login` |
+| `POST` | `/api/auth/verify` |
+| `POST` | `/api/auth/resend-otp` |
+| `POST` | `/api/auth/logout` |
+| `POST` | `/api/auth/logout-all` |
+| `POST` | `/api/auth/refresh` |
+| `GET` | `/api/auth/me` |
+| `POST` | `/api/auth/forgot-password` |
+| `POST` | `/api/auth/reset-password` |
+| `POST` | `/api/auth/google` |
+| `GET` | `/api/auth/google` |
+| `GET` | `/api/auth/google/callback` |
 
-### Match Status Flow
+### Series
 
-Common lifecycle:
+| Method | Route |
+| --- | --- |
+| `GET` | `/api/series` |
+| `GET` | `/api/series/:id` |
+| `POST` | `/api/series` |
+| `PATCH` | `/api/series/:id` |
+| `DELETE` | `/api/series/:id` |
+
+### Teams
+
+| Method | Route |
+| --- | --- |
+| `GET` | `/api/teams` |
+| `GET` | `/api/teams/:id` |
+| `POST` | `/api/teams` |
+| `PATCH` | `/api/teams/:id` |
+| `DELETE` | `/api/teams/:id` |
+
+### Players
+
+| Method | Route |
+| --- | --- |
+| `GET` | `/api/players` |
+| `GET` | `/api/players/:id` |
+| `POST` | `/api/players` |
+| `PUT` | `/api/players/:id` |
+| `DELETE` | `/api/players/:id` |
+
+### Matches
+
+| Method | Route |
+| --- | --- |
+| `GET` | `/api/matches` |
+| `GET` | `/api/matches/:id` |
+| `GET` | `/api/matches/series/:seriesId` |
+| `POST` | `/api/matches` |
+| `PATCH` | `/api/matches/:id` |
+| `DELETE` | `/api/matches/:id` |
+| `PATCH` | `/api/matches/:id/publish` |
+| `PATCH` | `/api/matches/:id/toss` |
+| `PATCH` | `/api/matches/:id/playing-xi` |
+| `PATCH` | `/api/matches/:id/start` |
+| `PATCH` | `/api/matches/:id/innings-break` |
+| `PATCH` | `/api/matches/:id/second-innings` |
+| `PATCH` | `/api/matches/:id/abandon` |
+| `PATCH` | `/api/matches/:id/no-result` |
+| `PATCH` | `/api/matches/:id/complete` |
+
+### Live Scoring
+
+| Method | Route |
+| --- | --- |
+| `GET` | `/api/live/matches/:matchId` |
+| `GET` | `/api/live/matches/:matchId/commentary` |
+| `POST` | `/api/scoring/matches/:matchId/innings` |
+| `POST` | `/api/scoring/innings/:inningsId/deliveries` |
+| `PATCH` | `/api/scoring/innings/:inningsId/current-players` |
+
+### Uploads
+
+| Method | Route |
+| --- | --- |
+| `GET` | `/api/uploads/imagekit-auth` |
+
+## Match Lifecycle
+
+Common happy-path flow:
 
 ```text
 DRAFT -> UPCOMING -> TOSS_COMPLETED -> PLAYING_XI_SELECTED -> LIVE
 LIVE -> INNINGS_BREAK -> LIVE -> COMPLETED
 ```
 
-Other terminal statuses:
+Other terminal states:
 
 ```text
 ABANDONED
 NO_RESULT
 ```
 
-### Scoring Data Flow
+## Scoring Flow
 
-1. Create teams and players.
-2. Add squad players to both teams.
+1. Create players and teams, or run the seed.
+2. Make sure both teams have at least 11 squad players.
 3. Create a match.
-4. Publish the match or set status to `UPCOMING`.
-5. Save toss data.
-6. Select Playing XI or let the scorer use the first 11 squad players.
-7. Make match live.
-8. Start innings.
-9. Record deliveries.
-10. Innings and match completion are calculated from wickets, overs, and target.
+4. Publish the match.
+5. Save toss details.
+6. Select playing XI.
+7. Start the match.
+8. Start the innings.
+9. Score deliveries live.
+10. Let innings and result state progress.
 
-## Folder Structure
+## Data Model Snapshot
 
-```text
-glpddp/
-+-- README.md
-+-- client/
-|   +-- package.json
-|   +-- next.config.mjs
-|   +-- src/
-|       +-- app/                         # Next.js app routes
-|       +-- features/
-|       |   +-- auth/                    # Login, signup, verification UI/API
-|       |   +-- cricket/                 # Public cricket pages, live match UI
-|       |   +-- dashboard/               # Admin dashboard and scoring console
-|       |   +-- landing/                 # Landing page sections
-|       +-- lib/                         # Axios and Socket.IO clients
-|       +-- store/                       # Redux store
-+-- server/
-    +-- package.json
-    +-- server.js                        # API entry point
-    +-- src/
-        +-- app.js                       # Express app setup
-        +-- modules/
-        |   +-- private/                 # Admin-only modules
-        |   |   +-- match/
-        |   |   +-- player/
-        |   |   +-- scoring/
-        |   |   +-- series/
-        |   |   +-- teams/
-        |   |   +-- upload/
-        |   |   +-- user/
-        |   +-- public/                  # Public API modules
-        |       +-- auth/
-        |       +-- match/
-        |       +-- player/
-        |       +-- scoring/
-        |       +-- series/
-        |       +-- teams/
-        |       +-- token/
-        +-- shared/
-        |   +-- config/                  # Env, DB, logger
-        |   +-- constants/               # Statuses, roles, scoring constants
-        |   +-- errors/                  # Custom errors
-        |   +-- middlewares/             # Auth, security, validation, errors
-        |   +-- models/                  # Mongoose models
-        |   +-- repositories/            # DB access layer
-        |   +-- routers/                 # Main route mounting
-        |   +-- utils/                   # API response and async helpers
-        +-- socket/                      # Socket.IO server setup
-```
+Main collections come from Mongoose models in `server/src/shared/models`.
 
-## Backend Architecture
+| Model | Purpose |
+| --- | --- |
+| `users` | Accounts, roles, auth profile |
+| `sessions` | Refresh/session tracking |
+| `tokens` | Verification and reset tokens |
+| `teams` | Team profile, colors, squad |
+| `players` | Player profile and stats |
+| `Match` | Match metadata, status, toss, XI, result |
+| `Innings` | Innings snapshot and scorecards |
+| `Delivery` | Ball-by-ball scoring |
+| `Commentary` | Commentary feed |
 
-Most backend modules follow this pattern:
+## Backend Pattern
+
+Most backend features follow:
 
 ```text
 route -> validator -> controller -> service -> repository -> model
 ```
 
-| Layer | Responsibility |
-| --- | --- |
-| Route | Defines HTTP method/path and middleware |
-| Validator | Validates params/body/query |
-| Controller | Reads request and sends response |
-| Service | Business logic and rules |
-| Repository | Database queries |
-| Model | Mongoose schema |
+That keeps request validation, business logic, and database access from getting tangled into one giant file of regret.
 
-## Frontend Architecture
+## Final Note
 
-Feature folders usually follow:
+This repo is already more than a demo site. It has a public cricket experience, a working admin/scoring surface, realtime match updates, and enough seeded data support to get a local environment moving fast.
 
-```text
-feature/
-+-- api/        # Axios API functions
-+-- hooks/      # React Query and feature hooks
-+-- state/      # Redux slices when needed
-+-- ui/
-    +-- jsx/    # React components
-    +-- css/    # CSS modules
-```
-
-Rules:
-
-- Keep API calls in `api/`.
-- Keep React Query logic in `hooks/`.
-- Keep presentational components in `ui/jsx`.
-- Keep feature styles in `ui/css/*.module.css`.
-- Use existing components and CSS patterns before adding new abstractions.
-
-## Authentication Notes
-
-Private routes require authentication and role authorization. Admin-only APIs are protected by:
-
-- `authMiddleware`
-- `authorize(ROLES.SUPER_ADMIN, ROLES.ADMIN)`
-
-Auth uses access and refresh tokens. The frontend Axios client handles API requests through `client/src/lib/axios.js`.
-
-## Common Development Workflow
+If you are hopping in fresh, the fastest path is:
 
 ```bash
-# Start backend
-cd server
-npm run dev
-
-# Start frontend in another terminal
-cd client
-npm run dev
-
-# Build frontend before pushing
-cd client
-npm run build
+cd server && npm install && npm run seed && npm run dev
+cd client && npm install && npm run dev
 ```
-
-## Troubleshooting
-
-### Backend fails on env validation
-
-Check `server/.env`. Required values include JWT secrets, SMTP config, Google OAuth config, and `MONGO_URI`.
-
-### Frontend cannot call API
-
-Check `client/.env`.
-
-```env
-NEXT_PUBLIC_BASE_URL=http://localhost:5000/api
-NEXT_PUBLIC_SOCKET_URL=http://localhost:5000
-```
-
-### Live score does not update
-
-Confirm:
-
-- Backend server is running.
-- `NEXT_PUBLIC_SOCKET_URL` points to the backend server.
-- Match is joined through the live match hook.
-- Match status is `LIVE`.
-
-### Scorer dropdowns are empty
-
-Confirm:
-
-- Both teams have squad players.
-- Each team has at least 11 players for auto Playing XI fallback.
-- Match has toss data and is live before starting innings.
-
-## Git Workflow
-
-```bash
-git checkout -b your-branch
-git pull origin main
-git add .
-git commit -m "Describe your change"
-git push origin your-branch
-```
-
-Open a pull request after pushing your branch.
