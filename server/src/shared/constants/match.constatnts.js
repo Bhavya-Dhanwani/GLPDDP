@@ -11,10 +11,11 @@ export const MATCH_STATUS = {
 };
 
 export const MATCH_TYPES = {
-    TEST : "TEST",
     ODI: "ODI",
     T20: "T20",
-    T10: "T10",
-    FIRST_CLASS: "FIRST_CLASS",
-    LIST_A: "LIST_A",
+}
+
+export const MATCH_OVERS = {
+    [MATCH_TYPES.ODI]: 50,
+    [MATCH_TYPES.T20]: 20,
 }

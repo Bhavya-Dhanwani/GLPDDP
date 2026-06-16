@@ -5,7 +5,7 @@ const playingXIPlayerSchema = new mongoose.Schema(
   {
     player: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Player",
+      ref: "players",
       required: true,
     },
 
@@ -116,12 +116,14 @@ const matchSchema = new mongoose.Schema(
 
     manOfTheMatch: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Player",
+      ref: "players",
     },
 
     oversPerInnings: {
       type: Number,
       default: 20,
+      min: 1,
+      max: 50,
     },
 
     currentInnings: {

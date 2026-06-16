@@ -85,7 +85,7 @@ const MatchForm = ({ initialValues, series = [], teams = [], onSubmit, isSubmitt
                     value={form.matchType}
                     onChange={(event) => update("matchType", event.target.value)}
                 >
-                    {["TEST", "ODI", "T20", "T10", "FIRST_CLASS", "LIST_A"].map((type) => (
+                    {["ODI", "T20"].map((type) => (
                         <option key={type} value={type}>{formatLabel(type)}</option>
                     ))}
                 </select>

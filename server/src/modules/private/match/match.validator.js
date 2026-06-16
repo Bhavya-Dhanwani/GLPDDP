@@ -57,6 +57,11 @@ export const createMatchValidator = [
     .withMessage("Match type is required")
     .isIn(Object.values(MATCH_TYPES))
     .withMessage("Invalid match type"),
+
+  body("oversPerInnings")
+    .optional()
+    .isInt({ min: 1, max: 50 })
+    .withMessage("Overs per innings must be between 1 and 50"),
 ];
 
 /**
@@ -132,6 +137,34 @@ export const selectPlayingXIValidator = [
   body("team2")
     .isArray({ min: 11, max: 11 })
     .withMessage("Team 2 Playing XI must contain exactly 11 players"),
+
+  body("team1.*.player")
+    .isMongoId()
+    .withMessage("Every Team 1 player must have a valid player ID"),
+
+  body("team2.*.player")
+    .isMongoId()
+    .withMessage("Every Team 2 player must have a valid player ID"),
+
+  body("team1.*.isCaptain")
+    .optional()
+    .isBoolean()
+    .withMessage("Team 1 captain flag must be boolean"),
+
+  body("team2.*.isCaptain")
+    .optional()
+    .isBoolean()
+    .withMessage("Team 2 captain flag must be boolean"),
+
+  body("team1.*.isWicketKeeper")
+    .optional()
+    .isBoolean()
+    .withMessage("Team 1 wicketkeeper flag must be boolean"),
+
+  body("team2.*.isWicketKeeper")
+    .optional()
+    .isBoolean()
+    .withMessage("Team 2 wicketkeeper flag must be boolean"),
 ];
 
 /**

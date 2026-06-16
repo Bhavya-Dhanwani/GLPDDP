@@ -3,17 +3,26 @@ import ConflictError from "../../../shared/errors/conflict.error.js";
 import { MatchRepository } from "../../../shared/repositories/match.repository.js";
 import { sanitizeMatch } from "./match.sanitize.js";
 import { MATCH_STATUS } from "../../../shared/constants/match.constatnts.js";
+import { MATCH_OVERS } from "../../../shared/constants/match.constatnts.js";
+import BadRequest from "../../../shared/errors/badrequest.error.js";
+import TeamRepository from "../../../shared/repositories/team.repository.js";
+import { InningsRepository } from "../../../shared/repositories/innings.repository.js";
+import { emitMatchEvent } from "../../../socket/socket.server.js";
+import { INNINGS_STATUS } from "../../../shared/constants/scoring.constants.js";
 
 
 export class MatchService {
     constructor() {
         this.matchRepository = new MatchRepository();
+        this.teamRepository = new TeamRepository();
+        this.inningsRepository = new InningsRepository();
     }
 
     //   Create a new match
     async createMatch(payload, userId) {
         const matchData = {
             ...payload,
+            oversPerInnings: payload.oversPerInnings ?? MATCH_OVERS[payload.matchType],
             createdBy: userId,
         }
 
@@ -43,6 +52,7 @@ export class MatchService {
         // sanitizing match data
         let sanitizedMatch = sanitizeMatch(updatedMatch);
 
+        emitMatchEvent(matchId, "match:updated", sanitizedMatch);
         return sanitizedMatch;
     }
 
@@ -84,12 +94,15 @@ export class MatchService {
         // sanitizing match data
         let sanitizedMatch = sanitizeMatch(updatedMatch);
 
+        emitMatchEvent(matchId, "match:updated", sanitizedMatch);
         return sanitizedMatch;
     }
 
     //   Update the toss information for a match with toss winner and toss Decision
     async updateToss(matchId, payload, userId) {
         const match = await this.matchRepository.findById(matchId);
+        console.log(userId);
+        
 
         if (!match) {
             throw new NotFoundError("Match not found");
@@ -101,6 +114,14 @@ export class MatchService {
             );
         }
 
+        // const matchTeamIds = [
+        //     String(match.team1?._id ?? match.team1),
+        //     String(match.team2?._id ?? match.team2),
+        // ];
+        // if (!matchTeamIds.includes(String(payload.tossWinner))) {
+        //     throw new BadRequest("Toss winner must be one of the match teams");
+        // }
+
         let updatedMatch = await this.matchRepository.updateById(matchId, {
             tossWinner: payload.tossWinner,
             tossDecision: payload.tossDecision,
@@ -111,6 +132,7 @@ export class MatchService {
         // sanitizing match data
         let sanitizedMatch = sanitizeMatch(updatedMatch);
 
+        emitMatchEvent(matchId, "match:updated", sanitizedMatch);
         return sanitizedMatch;
     }
 
@@ -128,6 +150,8 @@ export class MatchService {
             );
         }
 
+        await this.validatePlayingXI(match, payload);
+
         let updatedMatch = await this.matchRepository.updateById(matchId, {
             playingXI: {
                 team1: payload.team1,
@@ -140,6 +164,7 @@ export class MatchService {
         // sanitizing match data
         let sanitizedMatch = sanitizeMatch(updatedMatch);
 
+        emitMatchEvent(matchId, "match:updated", sanitizedMatch);
         return sanitizedMatch;
     }
 
@@ -160,11 +185,12 @@ export class MatchService {
         let updatedMatch = await this.matchRepository.updateById(matchId, {
             status: MATCH_STATUS.LIVE,
             currentInnings: 1,
-            updateById: userId
+            updatedBy: userId
         });
         // sanitizing match data
         let sanitizedMatch = sanitizeMatch(updatedMatch);
 
+        emitMatchEvent(matchId, "match:updated", sanitizedMatch);
         return sanitizedMatch;
     }
 
@@ -176,10 +202,19 @@ export class MatchService {
             throw new NotFoundError("Match not found");
         }
 
+        if (match.status === MATCH_STATUS.INNINGS_BREAK) {
+            return sanitizeMatch(match);
+        }
+
         if (match.status !== MATCH_STATUS.LIVE) {
             throw new ConflictError(
                 "Only live matches can enter innings break"
             );
+        }
+
+        const firstInnings = await this.inningsRepository.findByMatchAndNumber(matchId, 1);
+        if (!firstInnings || firstInnings.status !== INNINGS_STATUS.COMPLETED) {
+            throw new ConflictError("First innings must be completed before innings break");
         }
 
         let updatedMatch = await this.matchRepository.updateById(matchId, {
@@ -190,6 +225,7 @@ export class MatchService {
         // sanitizing match data
         let sanitizedMatch = sanitizeMatch(updatedMatch);
 
+        emitMatchEvent(matchId, "match:updated", sanitizedMatch);
         return sanitizedMatch;
     }
 
@@ -201,10 +237,15 @@ export class MatchService {
             throw new NotFoundError("Match not found");
         }
 
-        if (match.status !== MATCH_STATUS.INNINGS_BREAK && match.currentInnings !== 1) {
+        if (match.status !== MATCH_STATUS.INNINGS_BREAK || match.currentInnings !== 1) {
             throw new ConflictError(
                 "Match is not currently in innings break"
             );
+        }
+
+        const firstInnings = await this.inningsRepository.findByMatchAndNumber(matchId, 1);
+        if (!firstInnings || firstInnings.status !== INNINGS_STATUS.COMPLETED) {
+            throw new ConflictError("First innings must be completed before starting the second innings");
         }
 
         let updatedMatch = await this.matchRepository.updateById(matchId, {
@@ -216,7 +257,57 @@ export class MatchService {
         // sanitizing match data
         let sanitizedMatch = sanitizeMatch(updatedMatch);
 
+        emitMatchEvent(matchId, "match:updated", sanitizedMatch);
         return sanitizedMatch;
+    }
+
+    async validatePlayingXI(match, payload) {
+        const team1Id = match.team1._id ?? match.team1;
+        const team2Id = match.team2._id ?? match.team2;
+        const [team1, team2] = await Promise.all([
+            this.teamRepository.getTeamById(team1Id),
+            this.teamRepository.getTeamById(team2Id),
+        ]);
+
+        if (!team1 || !team2) {
+            throw new NotFoundError("One or both match teams were not found");
+        }
+
+        this.validateTeamPlayingXI(payload.team1, team1, "Team 1");
+        this.validateTeamPlayingXI(payload.team2, team2, "Team 2");
+
+        const team1Players = new Set(payload.team1.map(({ player }) => String(player)));
+        if (payload.team2.some(({ player }) => team1Players.has(String(player)))) {
+            throw new BadRequest("A player cannot be selected for both Playing XIs");
+        }
+    }
+
+    validateTeamPlayingXI(playingXI, team, label) {
+        const playerIds = playingXI.map(({ player }) => String(player));
+        const uniquePlayerIds = new Set(playerIds);
+
+        if (uniquePlayerIds.size !== 11) {
+            throw new BadRequest(`${label} Playing XI must contain 11 unique players`);
+        }
+
+        const squadPlayerIds = new Set(
+            team.squadPlayers.map((player) => String(player._id ?? player))
+        );
+
+        if (playerIds.some((playerId) => !squadPlayerIds.has(playerId))) {
+            throw new BadRequest(`${label} Playing XI contains a player outside the team squad`);
+        }
+
+        const captainCount = playingXI.filter(({ isCaptain }) => isCaptain).length;
+        const wicketKeeperCount = playingXI.filter(({ isWicketKeeper }) => isWicketKeeper).length;
+
+        if (captainCount !== 1) {
+            throw new BadRequest(`${label} Playing XI must contain exactly one captain`);
+        }
+
+        if (wicketKeeperCount !== 1) {
+            throw new BadRequest(`${label} Playing XI must contain exactly one wicketkeeper`);
+        }
     }
 
     // Update the status of a match to "ABANDONED" if it cannot be completed or cancelled due to unforeseen circumstances
@@ -244,6 +335,7 @@ export class MatchService {
         // sanitizing match data
         let sanitizedMatch = sanitizeMatch(updatedMatch);
 
+        emitMatchEvent(matchId, "match:updated", sanitizedMatch);
         return sanitizedMatch;
     }
 
@@ -272,6 +364,7 @@ export class MatchService {
         // sanitizing match data
         let sanitizedMatch = sanitizeMatch(updatedMatch);
 
+        emitMatchEvent(matchId, "match:updated", sanitizedMatch);
         return sanitizedMatch;
     }
 
@@ -292,6 +385,16 @@ export class MatchService {
             );
         }
 
+        const secondInnings = await this.inningsRepository.findByMatchAndNumber(matchId, 2);
+        if (!secondInnings || secondInnings.status !== INNINGS_STATUS.COMPLETED) {
+            throw new ConflictError("Second innings must be completed before completing the match");
+        }
+
+        const matchTeamIds = [String(match.team1._id ?? match.team1), String(match.team2._id ?? match.team2)];
+        if (!matchTeamIds.includes(String(payload.winner))) {
+            throw new BadRequest("Winner must be one of the match teams");
+        }
+
         let updatedMatch = await this.matchRepository.updateById(matchId, {
             winner: payload.winner,
             result: payload.result,
@@ -303,6 +406,8 @@ export class MatchService {
         // sanitizing match data
         let sanitizedMatch = sanitizeMatch(updatedMatch);
 
+        emitMatchEvent(matchId, "match:updated", sanitizedMatch);
+        emitMatchEvent(matchId, "match:completed", sanitizedMatch);
         return sanitizedMatch;
     }
 }
